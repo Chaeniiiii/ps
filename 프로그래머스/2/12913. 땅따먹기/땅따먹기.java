@@ -1,26 +1,17 @@
 import java.util.*;
 
 class Solution {
-    int solution(int[][] land) {
+    int solution(int[][] board) {
         
-        int [][] dp = new int[land.length][4];
-        dp[0] = land[0].clone();
-
-        for(int i = 1; i<land.length; i++){
-            for(int j = 0; j<4; j++){
-                for(int k = 0; k<4; k++){
-                    if(j == k) continue;
-                    dp[i][j] = Math.max(dp[i][j],land[i][j] + dp[i-1][k]);
-                }
-            }
+        int size = board.length;
+        
+        for(int i=1; i<size; i++) {
+            board[i][0] += Math.max(board[i-1][1], Math.max(board[i-1][2], board[i-1][3]));
+            board[i][1] += Math.max(board[i-1][0], Math.max(board[i-1][2], board[i-1][3]));
+            board[i][2] += Math.max(board[i-1][0], Math.max(board[i-1][1], board[i-1][3]));
+            board[i][3] += Math.max(board[i-1][0], Math.max(board[i-1][1], board[i-1][2]));
         }
-        
-        int result = 0;
-        for(int i = 0; i<4; i++){
-            result = Math.max(result,dp[land.length-1][i]);
-        }
-        
-        return result;
+        return Math.max(board[size-1][0], Math.max(board[size-1][1], Math.max(board[size-1][2], board[size-1][3])));
         
     }
 }
