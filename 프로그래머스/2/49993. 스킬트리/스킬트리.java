@@ -3,37 +3,29 @@ import java.util.*;
 class Solution {
     public int solution(String skill, String[] skill_trees) {
         
-        boolean [] chr = new boolean[26];
-        for(char c : skill.toCharArray()) chr[(int)(c-'A')] = true;
-        
         int cnt = 0;
+        
         for(String s : skill_trees){
             
-            Deque<Character> deque = new ArrayDeque<>();
-            for(char c : s.toCharArray()) deque.add(c);
-            
-            int idx = 0;
             boolean check = false;
-            while(!deque.isEmpty()){
+            int idx = 0;
+            for(int i = 0; i<s.length(); i++){
                 
-                if(idx == skill.length()) break;
+                int now = s.charAt(i);
                 
-                char now = deque.poll();
-                
-                if(now != skill.charAt(idx) && chr[(int)(now-'A')]){
+                if(skill.indexOf(now) == -1) continue;
+                if(idx == skill.indexOf(now)) idx ++;
+                else{
                     check = true;
-                    break;
+                    break;    
                 }
-                
-                if(now == skill.charAt(idx)) idx ++;
                 
             }
             
-            if(!check) cnt++;
+            if(!check) cnt ++;
             
         }
         
         return cnt;
-        
     }
 }
