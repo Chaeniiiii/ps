@@ -2,6 +2,8 @@ import java.util.*;
 
 class Solution {
     
+    private static final int MAX = 65536;
+    
     public int solution(String str1, String str2) {
     
         Map<String,Integer> map1 = new HashMap<>();
@@ -29,8 +31,8 @@ class Solution {
             if(map1.get(key) == null) union+=map2.get(key);
         }
         
-        if(itsec == 0 && union == 0 ) return 65536;
-        return (int) (((double) itsec / union) * 65536);
+        if(itsec == 0 && union == 0 ) return MAX;
+        return (int) (((double) itsec / union) * MAX);
         
     }
     
