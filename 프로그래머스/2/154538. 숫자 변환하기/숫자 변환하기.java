@@ -3,37 +3,23 @@ import java.util.*;
 class Solution {
     
     private static final int MAX = 1000001;
-    
     public int solution(int x, int y, int n) {
         
-        Deque<Integer> deque = new ArrayDeque<>();
-        deque.add(x);
         
-        boolean [] visited = new boolean[MAX];
+        int [] dp = new int[y+1];
+        Arrays.fill(dp,MAX);
+        dp[x] = 0;
         
-        int cnt = 0;
-        while(!deque.isEmpty()){
-        
-            int size = deque.size();
+        for(int i = x; i<=y; i++){
             
-            for(int i = 0; i<size; i++){
-                
-                int num = deque.poll();
-                if(num == y) return cnt; 
-                
-                for(int next : new int []{num*2,num*3,num+n}){
-                    if(next > y || visited[next] ) continue;
-                    visited[next] = true;
-                    deque.add(next);
-                }
-                
-            }
-            
-            cnt ++;
+            for(int num : new int[]{i*2,i*3,i+n}){
+                if(num > y) continue;
+                dp[num] = Math.min(dp[num],dp[i]+1);
+             }
             
         }
         
-        return -1;
+        return dp[y] == MAX ? -1 : dp[y];
         
     }
 }
