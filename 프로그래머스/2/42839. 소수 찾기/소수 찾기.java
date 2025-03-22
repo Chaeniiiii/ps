@@ -29,7 +29,6 @@ class Solution {
     }
     
     private static void dfs(int n, int dep){
-        // System.out.println(n);
         if(dep <= size){
             if(!set.contains(n)){
                 //소수 판별 
@@ -38,7 +37,7 @@ class Solution {
             }
         }
         
-        if(dep == size) return;
+        // if(dep == size) return;
         
         for(int i = 0 ; i<size; i++){
             
