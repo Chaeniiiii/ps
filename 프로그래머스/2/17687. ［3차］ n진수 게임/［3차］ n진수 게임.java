@@ -1,28 +1,29 @@
 class Solution {
     public String solution(int n, int t, int m, int p) {
         
-        String number = "";
-        String answer = "";
+        StringBuilder sb = new StringBuilder();
+        
         int idx = 0;
         
-        while(number.length() < t*m){
-            number += Integer.toString(idx,n).toUpperCase();
+        while(sb.toString().length() < t*m){
+            sb.append(Integer.toString(idx,n).toUpperCase());
             idx ++;
         }
         
-        // System.out.println(number);
+        String number = sb.toString();
+        sb = new StringBuilder();
         
         idx = p-1;
-        while(answer.length() < t){
+        while(sb.toString().length() < t){
             
             if(idx >= number.length()) break;
 
-            answer+=number.charAt(idx);
+            sb.append(number.charAt(idx));
             idx += m;
             
         }
         
-        return answer;
+        return sb.toString();
         
     }
 }
