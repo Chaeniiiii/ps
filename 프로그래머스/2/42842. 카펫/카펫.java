@@ -6,7 +6,7 @@ class Solution {
         int bCol = 1, bRow = total;
         int yCol = bCol-2, yRow = bRow-2;
         
-        while(bCol != total){
+        while(bCol < bRow ){
             
             if(bCol * bRow == total) {
                 if(yCol>0 && bRow>0){
