@@ -21,10 +21,10 @@ class Solution {
             int idx = 0;
             long f = getFactorial(num);
             
-            if(f <= k){
-                idx += (int)(k/f);
-                if(k % f == 0) idx--;
-            }
+            
+            idx += (int)(k/f);
+            if(k % f == 0) idx--;
+            
             
             if(idx >= arr.size()){
                 result[i] = arr.get(0);
