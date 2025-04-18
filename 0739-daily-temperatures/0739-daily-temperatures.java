@@ -19,7 +19,7 @@ class Solution {
 
         int [] result = new int[temperatures.length];
         
-        for(int i = 0; i<temperatures.length; i++){
+        for(int i = 1; i<temperatures.length; i++){
             
             Temp temp = new Temp(i,temperatures[i]);
             
