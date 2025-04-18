@@ -17,9 +17,7 @@ class Solution {
     public int[] solution(int[] prices) {
         
         Deque<Num> deque = new ArrayDeque<>();
-        
         int [] result = new int[prices.length];
-        // Arrays.fill(result,1);
         
         for(int i = 0; i<prices.length; i++){
             
