@@ -1,35 +1,39 @@
 import java.util.*;
 
 class Solution {
-    private static final int SUCCESS = 100;
     public int[] solution(int[] progresses, int[] speeds) {
         
+        Deque<Integer> deque = new ArrayDeque<>();
         ArrayList<Integer> arr = new ArrayList<>();
-        int max = (SUCCESS-progresses[0])/speeds[0];
-        if((SUCCESS-progresses[0])%speeds[0] != 0) max++;
         
-        int cnt = 1;
-        
-        for(int i = 1 ; i<progresses.length; i++){
-            int num = (SUCCESS-progresses[i])/speeds[i];
-            int div = (SUCCESS-progresses[i])%speeds[i];
+        for(int i = 0; i<progresses.length; i++){
             
-            if(div != 0) num++;
+            int day = (100-progresses[i])/speeds[i];
+            int divide = (100-progresses[i])%speeds[i];
             
-            if(num <= max) cnt ++;
-            else{
-                arr.add(cnt);
-                max = num;
-                cnt = 1;
-            }
+            if(divide != 0) deque.add(day+1);
+            else deque.add(day);
+            
         }
         
-        arr.add(cnt);
+        while(!deque.isEmpty()){
+            
+            int now = deque.poll();
+            int cnt = 1;
+            
+            while(!deque.isEmpty() && now >= deque.peek()){
+                deque.poll();
+                cnt++;
+            }
+            
+            arr.add(cnt);
+            
+        }
         
         int [] result = new int[arr.size()];
-        for(int i = 0; i<arr.size(); i++) result[i] = arr.get(i);
+        for(int i = 0; i<result.length; i++) result[i] = arr.get(i);
         
         return result;
-       
+        
     }
 }
