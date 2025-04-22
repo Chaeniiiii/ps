@@ -5,24 +5,29 @@ class Solution {
         
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         
-        for(int num : scoville) pq.add(num);
+        for(int scv : scoville) pq.add(scv);
         
+        int score = 0;
         int cnt = 0;
-        while(pq.size() > 1){
-    
-            int num = pq.peek();
+        
+        while(!pq.isEmpty()){
             
-            if(num < K){
-                num = pq.poll() + pq.poll()*2;
-                pq.add(num);
-                cnt ++;
+            if(pq.peek() >= K) return cnt;
+            
+            for(int i = 0; i<2; i++){
+                if(pq.isEmpty()) return score >= K ? cnt : -1;
+                if(i == 1) {
+                    score +=(pq.poll()*2);
+                    pq.add(score);
+                    cnt ++;
+                    score = 0;
+                }
+                else score+=pq.poll();
             }
-            else{
-                break;
-            }
+            
         }
         
-        return pq.peek() >= K ? cnt : -1;
+        return pq.peek() < K ? -1 : cnt;
         
     }
 }
