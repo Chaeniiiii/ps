@@ -6,18 +6,23 @@ class Solution {
         int len = citations.length;
         Arrays.sort(citations);
         
-        int cnt = 0;
-        int result = 0;
+        int hIdx = len;
         
-        for(int i = 0; i<len; i++){
-            while(cnt <= citations[i]){
-                if(cnt <= (len-i) ) result = Math.max(result,cnt);    
-                cnt++;
+        while(hIdx >= 0){
+            
+            for(int i = 0; i<len; i++){
+                if(citations[i] >= hIdx){
+                    if(i <= hIdx && (len-i) >= hIdx) return hIdx;
+                    break;
+                }
             }
+            
+            hIdx --;
+             
             
         }
         
-        return result;
+        return hIdx;
         
     }
 }
