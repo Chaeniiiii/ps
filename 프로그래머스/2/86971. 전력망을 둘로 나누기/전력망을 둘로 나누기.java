@@ -1,56 +1,64 @@
 import java.util.*;
 
 class Solution {
-
-    private static int[] parent;
-
-    private static void union(int x, int y) {
-        int rootX = find(x);
-        int rootY = find(y);
-
-        if (rootX != rootY) {
-            parent[rootY] = rootX;
+    
+    private static int [] parent;
+    
+    private static void union(int x, int y){
+        
+        x = find(x);
+        y = find(y);
+        
+        if(x != y){
+            if(x < y) parent[y] = x;
+            else parent[x] = y;
         }
+        
     }
-
+    
     private static int find(int x) {
-        if (parent[x] != x) {
-            parent[x] = find(parent[x]); 
-        }
-        return parent[x];
+        
+        if(parent[x] == x) return x;
+        return parent[x] = find(parent[x]);
+        
     }
-
+    
     public int solution(int n, int[][] wires) {
-        int minDiff = Integer.MAX_VALUE;
+        
+        int idx = 0;
+        int result = Integer.MAX_VALUE ;
+        
+        while(idx < n){
+            
+            parent = new int[n+1];
+            Map<Integer,Integer> map = new HashMap<>();
 
-        for (int i = 0; i < wires.length; i++) {
-            parent = new int[n + 1];
-            for (int j = 1; j <= n; j++) {
-                parent[j] = j;
+            //부모 초기화 
+            for(int i = 1; i<=n; i++) parent[i] = i;
+           
+            for(int i = 0; i< wires.length; i++){
+               if(idx == i) continue;
+               union(wires[i][0],wires[i][1]);
+           }   
+            
+            
+            for(int i = 1; i<=n; i ++){
+                int key = find(i);
+                map.put(key, map.getOrDefault(key,0)+1);
+            }        
+        
+            int cnt = 0;
+            for(int key : map.keySet()) {
+                cnt = Math.abs(cnt-map.get(key));
             }
-
-            for (int j = 0; j < wires.length; j++) {
-                if (i == j) continue;
-                union(wires[j][0], wires[j][1]);
-            }
-
-            int[] groupCount = new int[n + 1];
-            for (int j = 1; j <= n; j++) {
-                int root = find(j);
-                groupCount[root]++;
-            }
-
-            ArrayList<Integer> counts = new ArrayList<>();
-            for (int count : groupCount) {
-                if (count > 0) counts.add(count);
-            }
-
-            if (counts.size() == 2) {
-                int diff = Math.abs(counts.get(0) - counts.get(1));
-                minDiff = Math.min(minDiff, diff);
-            }
+            
+            result = Math.min(result,cnt);
+            idx ++ ;
+            
         }
-
-        return minDiff;
+        
+        
+        return result;
+        
     }
 }
