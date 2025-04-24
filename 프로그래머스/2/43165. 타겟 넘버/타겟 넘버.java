@@ -2,31 +2,28 @@ import java.util.*;
 
 class Solution {
     
-    private static int len, cnt;
+    private static int len;
     
     public int solution(int[] numbers, int target) {
         
-        cnt = 0;
         len = numbers.length;
+        int total = dfs(numbers,target,0,0,0);
         
-        dfs(0,numbers[0],target,numbers);
-        dfs(0,-numbers[0],target,numbers);
-        
-        return cnt;
-        
+        return total;
     }
     
-    private static void dfs(int dep, int num, int target, int [] numbers){
+    private static int dfs(int[] numbers, int target, int st, int cnt, int dep){
         
-        if(dep == len-1 && num == target){
-            cnt ++;
-            return;
+        if(dep == len){
+            if(cnt == target) return 1;
+            return 0;
         }
         
-        if(dep >= len-1) return;
+        for(int i = st; i<len; i++){
+            return dfs(numbers,target,i+1,cnt+numbers[i],dep+1) + dfs(numbers,target,i+1,cnt-numbers[i],dep+1);
+        }
         
-        dfs(dep+1,num+numbers[dep+1],target,numbers);
-        dfs(dep+1,num-numbers[dep+1],target,numbers);
+        return 0;
         
     }
 }
