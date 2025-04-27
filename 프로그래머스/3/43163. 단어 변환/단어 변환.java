@@ -2,9 +2,6 @@ import java.util.*;
 
 class Solution {
     
-    private static Map<Integer,Set<Character>> map;
-    private static ArrayList<String> arr;
-    
     private static class Node {
         String word;
         int cnt;
@@ -17,46 +14,21 @@ class Solution {
     
     public int solution(String begin, String target, String[] words) {
         
-        arr = new ArrayList<>();
-        map = new HashMap<>();
-        
-        //문자열을 이루고 있는 문자와 인덱스를 value, key값으로 저장
-        for(String word : words){
-            for(int i = 0; i < word.length(); i++){
-                map.computeIfAbsent(i,v -> new HashSet<>()).add(word.charAt(i));
-            }
-            arr.add(word);
-        }
-        
-        if(!arr.contains(target)) return 0;
-        return bfs(begin, target);
-        
-    }
-    
-    private static int bfs(String begin, String target) {
-       
-        ArrayList<String> visited = new ArrayList<>();
         Deque<Node> deque = new ArrayDeque<>();
         deque.add(new Node(begin,0));
         
+        int len = words.length;
+        boolean [] visited = new boolean[len];
+        
         while(!deque.isEmpty()){
-
-            Node now = deque.poll();
             
+            Node now = deque.poll();
             if(now.word.equals(target)) return now.cnt;
             
-            for(int i = 0; i<now.word.length(); i++){
-                for(char c : map.get(i)){
-                    char [] str = now.word.toCharArray();    
-                    str[i] = c;
-                    
-                    String newStr = new String(str);
-                    if(arr.indexOf(newStr) == -1 || visited.contains(newStr)) continue;
-                    visited.add(newStr);
-                    deque.add(new Node(newStr,now.cnt+1));
-                    
-                }
-                       
+            for(int i = 0; i<len; i++){
+                if(!isCorrect(words[i],now.word) || visited[i]) continue;
+                visited[i] = true;
+                deque.add(new Node(words[i],now.cnt+1));
             }
             
         }
@@ -64,4 +36,17 @@ class Solution {
         return 0;
         
     }
+    
+    private static boolean isCorrect(String nextStr, String begin){
+        
+        int idx = 0;
+        
+        for(int i = 0; i<nextStr.length(); i++){
+            if(nextStr.charAt(i) != begin.charAt(i)) idx++;
+            if(idx > 1) return false;
+        }
+        
+        return true;
+    }
+    
 }
