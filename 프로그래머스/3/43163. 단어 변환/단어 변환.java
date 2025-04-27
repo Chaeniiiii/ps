@@ -3,16 +3,22 @@ import java.util.*;
 class Solution {
     
     private static Map<Integer,Set<Character>> map;
-    
     private static ArrayList<String> arr;
-    private static boolean [] visited;
     
-    private static int result;
+    private static class Node {
+        String word;
+        int cnt;
+        
+        private Node (String word, int cnt){
+            this.word = word;
+            this.cnt = cnt;
+        }
+    }
     
     public int solution(String begin, String target, String[] words) {
         
-        map = new HashMap<>();
         arr = new ArrayList<>();
+        map = new HashMap<>();
         
         //문자열을 이루고 있는 문자와 인덱스를 value, key값으로 저장
         for(String word : words){
@@ -23,41 +29,39 @@ class Solution {
         }
         
         if(!arr.contains(target)) return 0;
-        
-        result = Integer.MAX_VALUE;
-        visited = new boolean [arr.size()];
-        
-        dfs(begin, target, 0);
-        
-        return result;
+        return bfs(begin, target);
         
     }
     
-    private static void dfs(String begin, String target, int cnt){
+    private static int bfs(String begin, String target) {
+       
+        ArrayList<String> visited = new ArrayList<>();
+        Deque<Node> deque = new ArrayDeque<>();
+        deque.add(new Node(begin,0));
         
-        if(begin.length() > target.length()) return;
-        
-        if(begin.equals(target)){
-            result = Math.min(result,cnt);
-            return;
-        }
-        
-        for(int i = 0; i < begin.length(); i++){
-            for(char c : map.get(i)){
-                char [] str = begin.toCharArray();
-                str[i] = c;
-                
-                String nextStr = new String(str);
-                int idx = arr.indexOf(nextStr);
+        while(!deque.isEmpty()){
+
+            Node now = deque.poll();
             
-                if(idx == -1 || visited[idx]) continue;
-                
-                visited[idx] = true;
-                dfs(new String(str),target,cnt+1);    
-                visited[idx] = false;
-                
+            if(now.word.equals(target)) return now.cnt;
+            
+            for(int i = 0; i<now.word.length(); i++){
+                for(char c : map.get(i)){
+                    char [] str = now.word.toCharArray();    
+                    str[i] = c;
+                    
+                    String newStr = new String(str);
+                    if(arr.indexOf(newStr) == -1 || visited.contains(newStr)) continue;
+                    visited.add(newStr);
+                    deque.add(new Node(newStr,now.cnt+1));
+                    
+                }
+                       
             }
+            
         }
+        
+        return 0;
         
     }
 }
