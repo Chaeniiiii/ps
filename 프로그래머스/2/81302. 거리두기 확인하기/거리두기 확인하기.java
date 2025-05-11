@@ -4,6 +4,11 @@ class Solution {
     
     private static final int SIZE = 5;
     
+    private static final int [] dx = {-1,1,0,0};
+    private static final int [] dy = {0,0,-1,1};
+    
+    private static boolean [][] visited;
+    
     private static class Pos {
         
         int x;
@@ -22,86 +27,60 @@ class Solution {
         int [] result = new int[tc];
         
         for(int t = 0; t<tc; t++){
-            
-            result[t] = simulate(places[t]);
-            
+            result[t] = simulate(t, places[t]);
         }
         
         return result;
         
     }
     
-    private static int simulate(String [] place){
+    private static int simulate(int idx, String [] place){
         
-        boolean [][] visited = new boolean[SIZE][SIZE];
-            
-        int [] dx = new int[]{-1,1,0,0,1,1,-1,-1};
-        int [] dy = new int[]{0,0,-1,1,1,-1,1,-1};
-
+        visited = new boolean[SIZE][SIZE];
+        
         for(int i = 0; i<SIZE; i++){
             for(int j = 0; j<SIZE; j++){
-
-                if(place[i].charAt(j) != 'P' || visited[i][j]) continue;
-
-                Deque<Pos> deque = new ArrayDeque<>();
-                deque.add(new Pos(i,j));
-                visited[i][j] = true;
-
-                while(!deque.isEmpty()){
-
-                    Pos pos = deque.poll();
-
-                    //상하좌우 -> 맨해튼 거리가 2이하인 위치 확인
-                    for(int k = 0; k<4; k++){
-
-                        int mvX = pos.x + dx[k];
-                        int mvY = pos.y + dy[k];
-
-                        if(!isVisited(visited,mvX,mvY)) continue;
-
-                        char c = place[mvX].charAt(mvY);
-                        if(c == 'P') return 0;
-
-                        //맨해튼거리 2인 곳 확인
-                        int nxtX = mvX + dx[k];
-                        int nxtY = mvY + dy[k];
-
-                        if(!isVisited(visited,nxtX,nxtY)) continue;
-                        if(place[nxtX].charAt(nxtY) == 'P' && c == 'O') return 0;
-                        if(place[nxtX].charAt(nxtY) == 'P' && c == 'X'){
-                            deque.add(new Pos(nxtX,nxtY));
-                        visited[nxtX][nxtY] = true;
-                        }
-                        
-                    }
-
-                    //응시자의 대각선 확인 
-                    for(int k = 4; k<8; k++){
-                        int mvX = pos.x + dx[k];
-                        int mvY = pos.y + dy[k];
-
-                        if(!isVisited(visited,mvX,mvY)) continue;
-                        if(place[mvX].charAt(mvY) != 'P') continue;
-                        
-                        if(!isVisited(visited,mvX,pos.y) || !isVisited(visited,pos.x,mvY)) continue;
-                        if(place[mvX].charAt(pos.y) != 'X' || place[pos.x].charAt(mvY) != 'X') return 0;
-
-                        deque.add(new Pos(mvX,mvY));
-                        visited[mvY][mvY] = true;
-                    }
-
+                if(place[i].charAt(j) == 'P' && !visited[i][j]){
+                    visited[i][j] = true;
+                    if(bfs(place,visited,new Pos(i,j)) == 0) return 0;
                 }
-
             }
         }
         
         return 1;
     }
     
-    private static boolean isVisited(boolean [][] visited, int x, int y){
+    private static int bfs(String [] place, boolean [][] visited, Pos pos){
         
-        if(x < 0 || y < 0 || x >= SIZE || y >= SIZE || visited[x][y]) return false;
-        return true;
+        Deque<Pos> deque = new ArrayDeque<Pos>();
+        deque.add(pos);
+        
+        while(!deque.isEmpty()){
+            
+            Pos mv = deque.poll();
+            
+            for(int i = 0; i<4; i++){
+                
+                int mvX = mv.x + dx[i];
+                int mvY = mv.y + dy[i];
+                
+                if(mvX < 0 || mvY < 0 || mvX >= SIZE || mvY >= SIZE || visited[mvX][mvY] 
+                        || place[mvX].charAt(mvY) == 'X') continue;
+                if(place[mvX].charAt(mvY) == 'P') return 0;
+                
+                if(Math.abs(pos.x - mvX) + Math.abs(pos.y - mvY) >= 2) continue;
+                
+                deque.add(new Pos(mvX,mvY));
+                visited[mvX][mvY] = true;
+                   
+            }
+            
+        }
+        
+        return 1;
+        
         
     }
+    
+    
 }
