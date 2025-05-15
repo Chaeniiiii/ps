@@ -57,7 +57,7 @@ public class Main {
 
         Pos start = new Pos(x, y);
 
-        //승객 위치 및 초기 택시와의 거리 계산
+        //승객 위치 입력받기
         ArrayList<Psg> passenger = new ArrayList<>();
         for(int i = 0; i<m; i++){
             st = new StringTokenizer(br.readLine());
@@ -74,8 +74,14 @@ public class Main {
         
         //손님 태우기
         while(m-- > 0){
+		        //현재 택시로부터 최단 거리에 위치한 손님 먼저 태우기
             for(Psg psg : passenger){
-                psg.dist = bfs(start, psg.str ,board,false , true);
+                psg.dist = bfs(start, psg.str ,board); //거리 계산
+                /**
+                 * 거리가 짧은 승객 태우기
+                 * 그런 손님이 여러명이라면 행 번호가 작은 손님을 태우기
+                 * 그런 손님도 여러명이라면 열 번호가 작은 손님을 태우기
+                 */
                 if(psg.dist < minDist.dist) minDist = psg;
                 else if(psg.dist == minDist.dist){
                     if(psg.str.x == minDist.str.x){
@@ -86,12 +92,18 @@ public class Main {
                     }
                 }
             }
-
-            if(bfs(start, minDist.str , board, false, false) == 1){
-                if(bfs(minDist.str, minDist.en, board, true, false) == 1) {
-                    passenger.remove(minDist);
-                    start = minDist.en;
-                    minDist = new Psg(new Pos(0,0), new Pos(0,0), Integer.MAX_VALUE);
+						
+            //택시 -> 승객 위치 방문
+            if(minDist.dist != MAX){
+                fuel -= minDist.dist;
+                //승객 위치 -> 목적지 방문
+                int nextDist = bfs(minDist.str, minDist.en, board);
+                if(nextDist != MAX) {
+                    fuel -= nextDist;
+                    fuel += nextDist*2;
+                    passenger.remove(minDist); // 목적지까지 내려준 손님은 삭제
+                    start = minDist.en; // 택시 위치 변경
+                    minDist = new Psg(new Pos(0,0), new Pos(0,0), MAX);
                     continue;
                 }
             }
@@ -105,7 +117,7 @@ public class Main {
 
     }
 
-    private static int bfs(Pos st, Pos en, int [][] board, boolean dest, boolean calc){
+    private static int bfs(Pos st, Pos en, int [][] board){
 
         // System.out.printf("%d %d\n",st.x,st.y);
         // System.out.printf("%d %d\n",en.x,en.y);
@@ -125,17 +137,10 @@ public class Main {
             for(int i = 0; i<size; i++){
 
                 Pos mv = deque.poll();
-                if(mv.x == en.x && mv.y == en.y){
-                    if(calc) return cnt;
-                    else {
-                        if(cnt > fuel) return MAX;
-                        fuel-=cnt;
-                        if(dest) fuel += cnt*2;
-                        return 1;
-                    }
-                    
-                }
                 if(cnt > fuel) return MAX;
+                if(mv.x == en.x && mv.y == en.y){
+                    return cnt;
+                }
 
                 for(int k = 0; k<4; k ++){
                     
@@ -152,68 +157,10 @@ public class Main {
 
             cnt ++;
 
-
         }
 
         return MAX;
         
     }
-
-    // private static int setDist(Pos st, Pos en, int [][] board){
-        
-    //     Deque<Pos> deque = new ArrayDeque<>();
-    //     deque.add(st);
-
-    //     boolean [][] visited = new boolean[n+1][n+1];
-    //     visited[st.x][st.y] = true;
-
-    //     int dist = 0;
-    //     while(!deque.isEmpty()){
-
-    //         int size = deque.size();
-
-    //         for(int i = 0; i<size; i++){
-
-    //             Pos mv = deque.poll();
-    //             if(mv.x == en.x && mv.y == en.y) return dist;
-                
-    //             for(int k = 0;k <4; k++){
-    //                 int mvX = mv.x + dx[k];
-    //                 int mvY = mv.y + dy[k];
-
-    //                 if(mvX <= 0 || mvY <= 0 || mvX > n || mvY > n || visited[mvX][mvY] || board[mvX][mvY] == 1) continue;
-    //                 deque.add(new Pos(mvX,mvY));
-    //                 visited[mvX][mvY] = true;
-    //             }
-
-    //         }
-
-    //         dist ++;
-
-    //     }
-
-    //     return Integer.MAX_VALUE;
-
-    // }
-
-    // private static ArrayList<Psg> sortArr(ArrayList<Psg> passenger){
-
-    //     /**
-    //      * 택시 - 승객 거리 순으로 정렬
-    //      * 거리가 같다면 행 번호가 작은 승객을 먼저 태우기
-    //      * 행 번호도 같다면 열 번호가 작은 승객을 먼저 태우기
-    //      */
-    //     passenger.sort((a,b) -> {
-    //         if(a.dist == b.dist){
-    //             if(a.str.x == b.str.x) return a.str.y - b.str.y; //열 번호 오름차순 정렬
-    //             return a.str.x - b.str.x; //행 번호 오름차순 정렬
-    //         } 
-    //         return a.dist - b.dist; //거리순 오름차순 정렬
-    //     });
-
-    //     return passenger;
-
-    // }
-
 
 }
