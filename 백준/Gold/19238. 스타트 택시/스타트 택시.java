@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Main {
 
+    private static final int MAX = Integer.MAX_VALUE;
     private static int n,m,fuel;
 
     private static final int [] dx = new int[]{-1,1,0,0};
@@ -68,7 +69,7 @@ public class Main {
             Pos stPos = new Pos(stX, stY);
             Pos enPos = new Pos(enX, enY);
 
-            int dist = setDist(start, stPos, board);
+            int dist = bfs(start, stPos, board, false, true);
 
             Psg psg = new Psg(stPos,enPos, dist);
             passenger.add(psg);
@@ -77,9 +78,8 @@ public class Main {
         Psg minDist = new Psg(new Pos(0,0), new Pos(0,0), Integer.MAX_VALUE);
         //손님 태우기
         while(m-- > 0){
-
             for(Psg psg : passenger){
-                psg.dist = setDist(start, psg.str ,board);
+                psg.dist = bfs(start, psg.str ,board,false , true);
                 if(psg.dist < minDist.dist) minDist = psg;
                 else if(psg.dist == minDist.dist){
                     if(psg.str.x == minDist.str.x){
@@ -91,8 +91,8 @@ public class Main {
                 }
             }
 
-            if(bfs(start, minDist.str , board, false)){
-                if(bfs(minDist.str, minDist.en, board, true)) {
+            if(bfs(start, minDist.str , board, false, false) == 1){
+                if(bfs(minDist.str, minDist.en, board, true, false) == 1) {
                     passenger.remove(minDist);
                     start = minDist.en;
                     minDist = new Psg(new Pos(0,0), new Pos(0,0), Integer.MAX_VALUE);
@@ -109,7 +109,7 @@ public class Main {
 
     }
 
-    private static boolean bfs(Pos st, Pos en, int [][] board, boolean dest){
+    private static int bfs(Pos st, Pos en, int [][] board, boolean dest, boolean calc){
 
         // System.out.printf("%d %d\n",st.x,st.y);
         // System.out.printf("%d %d\n",en.x,en.y);
@@ -129,12 +129,17 @@ public class Main {
             for(int i = 0; i<size; i++){
 
                 Pos mv = deque.poll();
-                if(mv.x == en.x && mv.y == en.y && cnt <= fuel){
-                    fuel-=cnt;
-                    if(dest) fuel += cnt*2;
-                    return true;
+                if(mv.x == en.x && mv.y == en.y){
+                    if(calc) return cnt;
+                    else {
+                        if(cnt > fuel) return MAX;
+                        fuel-=cnt;
+                        if(dest) fuel += cnt*2;
+                        return 1;
+                    }
+                    
                 }
-                if(cnt > fuel) return false;
+                if(cnt > fuel) return MAX;
 
                 for(int k = 0; k<4; k ++){
                     
@@ -154,46 +159,46 @@ public class Main {
 
         }
 
-        return false;
+        return MAX;
         
     }
 
-    private static int setDist(Pos st, Pos en, int [][] board){
+    // private static int setDist(Pos st, Pos en, int [][] board){
         
-        Deque<Pos> deque = new ArrayDeque<>();
-        deque.add(st);
+    //     Deque<Pos> deque = new ArrayDeque<>();
+    //     deque.add(st);
 
-        boolean [][] visited = new boolean[n+1][n+1];
-        visited[st.x][st.y] = true;
+    //     boolean [][] visited = new boolean[n+1][n+1];
+    //     visited[st.x][st.y] = true;
 
-        int dist = 0;
-        while(!deque.isEmpty()){
+    //     int dist = 0;
+    //     while(!deque.isEmpty()){
 
-            int size = deque.size();
+    //         int size = deque.size();
 
-            for(int i = 0; i<size; i++){
+    //         for(int i = 0; i<size; i++){
 
-                Pos mv = deque.poll();
-                if(mv.x == en.x && mv.y == en.y) return dist;
+    //             Pos mv = deque.poll();
+    //             if(mv.x == en.x && mv.y == en.y) return dist;
                 
-                for(int k = 0;k <4; k++){
-                    int mvX = mv.x + dx[k];
-                    int mvY = mv.y + dy[k];
+    //             for(int k = 0;k <4; k++){
+    //                 int mvX = mv.x + dx[k];
+    //                 int mvY = mv.y + dy[k];
 
-                    if(mvX <= 0 || mvY <= 0 || mvX > n || mvY > n || visited[mvX][mvY] || board[mvX][mvY] == 1) continue;
-                    deque.add(new Pos(mvX,mvY));
-                    visited[mvX][mvY] = true;
-                }
+    //                 if(mvX <= 0 || mvY <= 0 || mvX > n || mvY > n || visited[mvX][mvY] || board[mvX][mvY] == 1) continue;
+    //                 deque.add(new Pos(mvX,mvY));
+    //                 visited[mvX][mvY] = true;
+    //             }
 
-            }
+    //         }
 
-            dist ++;
+    //         dist ++;
 
-        }
+    //     }
 
-        return Integer.MAX_VALUE;
+    //     return Integer.MAX_VALUE;
 
-    }
+    // }
 
     // private static ArrayList<Psg> sortArr(ArrayList<Psg> passenger){
 
