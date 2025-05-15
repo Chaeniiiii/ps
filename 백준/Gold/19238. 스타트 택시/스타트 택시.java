@@ -66,16 +66,12 @@ public class Main {
             int enX = Integer.parseInt(st.nextToken());
             int enY = Integer.parseInt(st.nextToken());
 
-            Pos stPos = new Pos(stX, stY);
-            Pos enPos = new Pos(enX, enY);
-
-            int dist = bfs(start, stPos, board, false, true);
-
-            Psg psg = new Psg(stPos,enPos, dist);
+            Psg psg = new Psg(new Pos(stX, stY),new Pos(enX, enY), MAX);
             passenger.add(psg);
         }
 
-        Psg minDist = new Psg(new Pos(0,0), new Pos(0,0), Integer.MAX_VALUE);
+        Psg minDist = new Psg(new Pos(0,0), new Pos(0,0), MAX);
+        
         //손님 태우기
         while(m-- > 0){
             for(Psg psg : passenger){
