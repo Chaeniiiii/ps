@@ -40,10 +40,12 @@ class Solution {
         int cnt = 0;
         
         for(int i = 0; i<a.length(); i++){
-            if(a.charAt(i) != b.charAt(i)) cnt ++;
+            if(a.charAt(i) != b.charAt(i)) ++cnt;
+            if(cnt > 1) return false;            
+            
         }
         
-        return cnt > 1 ? false : true;
+        return true;
         
     }
     
