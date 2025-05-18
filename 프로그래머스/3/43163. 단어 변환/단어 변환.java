@@ -1,35 +1,33 @@
 import java.util.*;
 
 class Solution {
-    
-    private static class Node {
-        String word;
-        int cnt;
-        
-        private Node (String word, int cnt){
-            this.word = word;
-            this.cnt = cnt;
-        }
-    }
-    
     public int solution(String begin, String target, String[] words) {
         
-        Deque<Node> deque = new ArrayDeque<>();
-        deque.add(new Node(begin,0));
+        Deque<String> deque = new ArrayDeque<>();
+        deque.add(begin);
         
-        int len = words.length;
-        boolean [] visited = new boolean[len];
+        boolean [] visited = new boolean[words.length];
         
+        int cnt = 0;
         while(!deque.isEmpty()){
             
-            Node now = deque.poll();
-            if(now.word.equals(target)) return now.cnt;
+            int size = deque.size();
             
-            for(int i = 0; i<len; i++){
-                if(!isCorrect(words[i],now.word) || visited[i]) continue;
-                visited[i] = true;
-                deque.add(new Node(words[i],now.cnt+1));
+            for(int i = 0; i<size; i++){
+                String now = deque.poll();
+                if(now.equals(target)) return cnt;
+                
+                for(int k = 0; k<words.length; k++){
+                    if(visited[k]) continue;
+                    if(getDifferentWord(now,words[k])) {
+                        deque.add(words[k]);
+                        visited[k] = true;
+                    }
+                }
+                
             }
+            
+            cnt ++;
             
         }
         
@@ -37,16 +35,16 @@ class Solution {
         
     }
     
-    private static boolean isCorrect(String nextStr, String begin){
+    private static boolean getDifferentWord(String a, String b){
         
-        int idx = 0;
+        int cnt = 0;
         
-        for(int i = 0; i<nextStr.length(); i++){
-            if(nextStr.charAt(i) != begin.charAt(i)) idx++;
-            if(idx > 1) return false;
+        for(int i = 0; i<a.length(); i++){
+            if(a.charAt(i) != b.charAt(i)) cnt ++;
         }
         
-        return true;
+        return cnt > 1 ? false : true;
+        
     }
     
 }
