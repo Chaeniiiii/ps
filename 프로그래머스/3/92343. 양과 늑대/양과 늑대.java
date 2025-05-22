@@ -1,31 +1,35 @@
 import java.util.*;
 
 class Solution {
-    List<Integer>[] tree;
-    int maxSheep = 0;
+
+    private static ArrayList<Integer>[] arr;
+    private static int result;
 
     public int solution(int[] info, int[][] edges) {
-        tree = new List[info.length];
-        for (int i = 0; i < info.length; i++) tree[i] = new ArrayList<>();
-        for (int[] edge : edges) tree[edge[0]].add(edge[1]);
+        arr = new ArrayList[info.length];
+        for (int i = 0; i < info.length; i++) arr[i] = new ArrayList<>();
+        for (int[] edge : edges) arr[edge[0]].add(edge[1]);
 
-        dfs(0, 0, 0, List.of(0), info);
-        return maxSheep;
+        ArrayList<Integer> nextList = new ArrayList<>();
+        nextList.add(0);  // 시작 노드
+        dfs(0, 0, 0, nextList, info);
+        return result;
     }
 
-    private void dfs(int curr, int sheep, int wolf, List<Integer> available, int[] info) {
-        if (info[curr] == 0) sheep++;
+    private void dfs(int st, int sheep, int wolf, ArrayList<Integer> nxt, int[] info) {
+        if (info[st] == 0) sheep++;
         else wolf++;
 
         if (wolf >= sheep) return;
-        maxSheep = Math.max(maxSheep, sheep);
 
-        List<Integer> next = new ArrayList<>(available);
-        next.remove(Integer.valueOf(curr));
-        next.addAll(tree[curr]);
+        result = Math.max(result, sheep);
 
-        for (int node : next) {
-            dfs(node, sheep, wolf, next, info);
+        ArrayList<Integer> nextNode = new ArrayList<>(nxt);
+        nextNode.remove(Integer.valueOf(st));
+        nextNode.addAll(arr[st]);
+
+        for (int node : nextNode) {
+            dfs(node, sheep, wolf, nextNode, info);
         }
     }
 }
