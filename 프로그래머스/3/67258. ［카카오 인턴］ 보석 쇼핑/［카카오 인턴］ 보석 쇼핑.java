@@ -18,7 +18,6 @@ class Solution {
             
             while(map.size() == gemSize){
                 
-                if(left > right) break;
                 if(right - left < len){
                     len = right - left;
                     result[0] = left+1;
