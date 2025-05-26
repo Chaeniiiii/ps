@@ -15,16 +15,7 @@ class Solution {
                 
                 if(c == '(' || c == '{' || c == '[') deque.add(c);
                 else {
-                    if(deque.isEmpty()){
-                        check = true;
-                        break;
-                    }
-                    char open = deque.pollLast();
-                    
-                    if(open == '(' && c == ')') continue;
-                    else if(open == '{' && c == '}') continue;
-                    else if(open == '[' && c == ']') continue;
-                    else {
+                    if(deque.isEmpty() || !match(deque.pollLast(),c)){
                         check = true;
                         break;
                     }
@@ -38,4 +29,11 @@ class Solution {
         return cnt;
         
     }
+    
+    private static boolean match(char a, char b){
+        
+        if(a == '(' && b == ')' || a == '{' && b == '}' || a == '[' && b == ']') return true;
+        return false; 
+    }
+    
 }
