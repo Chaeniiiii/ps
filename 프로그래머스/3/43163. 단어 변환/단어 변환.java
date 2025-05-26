@@ -6,7 +6,7 @@ class Solution {
         Deque<String> deque = new ArrayDeque<>();
         deque.add(begin);
         
-        boolean [] visited = new boolean[words.length];
+        boolean[] visited = new boolean[words.length];
         
         int cnt = 0;
         while(!deque.isEmpty()){
@@ -14,17 +14,21 @@ class Solution {
             int size = deque.size();
             
             for(int i = 0; i<size; i++){
-                String now = deque.poll();
-                if(now.equals(target)) return cnt;
                 
-                for(int k = 0; k<words.length; k++){
-                    if(visited[k]) continue;
-                    if(getDifferentWord(now,words[k])) {
-                        deque.add(words[k]);
-                        visited[k] = true;
-                    }
+                String now = deque.poll();
+                if(now.equals(target)){
+                    return cnt;
                 }
                 
+                for(int t = 0; t<words.length; t++){
+                    if(visited[t]){
+                        continue;
+                    }
+                    if(checkStr(now,words[t])){
+                        deque.add(words[t]);
+                        visited[t] = true;
+                    }
+                }
             }
             
             cnt ++;
@@ -35,18 +39,26 @@ class Solution {
         
     }
     
-    private static boolean getDifferentWord(String a, String b){
+    private static boolean checkStr(String now, String nxt){
+        
+        if(now.length() != nxt.length()){
+            return false;
+        }
         
         int cnt = 0;
+        for(int i = 0; i<now.length(); i++){
         
-        for(int i = 0; i<a.length(); i++){
-            if(a.charAt(i) != b.charAt(i)) ++cnt;
-            if(cnt > 1) return false;            
+            if(now.charAt(i) != nxt.charAt(i)){
+                cnt ++;
+            }
+            
+            if(cnt >= 2){
+                return false;
+            }
             
         }
         
         return true;
         
     }
-    
 }
