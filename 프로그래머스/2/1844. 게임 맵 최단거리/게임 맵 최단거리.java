@@ -1,9 +1,8 @@
 import java.util.*;
 
 class Solution {
-
+    
     private static class Pos {
-        
         int x;
         int y;
         
@@ -11,54 +10,45 @@ class Solution {
             this.x = x;
             this.y = y;
         }
-        
     }
     
     public int solution(int[][] maps) {
-        return bfs(maps);
-    }
-    
-    private static int bfs(int [][] maps){
         
-        int n = maps.length; //row
-        int m = maps[0].length;//col
-        Pos arrive = new Pos(n-1,m-1); //상대팀 진영
-        
-        int [] dx = {-1,1,0,0};
-        int [] dy = {0,0,-1,1};
+        int row = maps.length;
+        int col = maps[0].length;
         
         Deque<Pos> deque = new ArrayDeque<>();
-        deque.add(new Pos(0,0)); //시작 위치
+        deque.add(new Pos(0,0));
         
-        boolean [][] visited = new boolean[n][m];
-        visited[0][0] = true;
+        boolean [][] visited = new boolean[row][col];
+        
+        int[] dx = new int[]{-1,1,0,0};
+        int[] dy = new int[]{0,0,-1,1};
         
         int cnt = 1;
-        
         while(!deque.isEmpty()){
             
             int size = deque.size();
             
             for(int i = 0; i<size; i++){
                 
-                Pos mv = deque.poll();
-                
-                if(mv.x == arrive.x && mv.y == arrive.y) return cnt;
+                Pos now = deque.poll();
+                if(now.x == row-1 && now.y == col-1) return cnt;
                 
                 for(int k = 0; k<4; k++){
                     
-                    int mvX = mv.x + dx[k];
-                    int mvY = mv.y + dy[k];
-                    
-                    if(mvX < 0 || mvY < 0 || mvX >= n || mvY >= m || 
-                            visited[mvX][mvY] || maps[mvX][mvY] == 0) continue;
-                    
+                    int mvX = now.x + dx[k];
+                    int mvY = now.y + dy[k];
+                       
+                    if(mvX <0 || mvY <0 || mvX >=row || mvY >= col || visited[mvX][mvY] || maps[mvX][mvY] == 0) continue;
                     visited[mvX][mvY] = true;
                     deque.add(new Pos(mvX,mvY));
+                    
                 }
+                
             }
             
-            cnt ++;
+            cnt++;
             
         }
         
