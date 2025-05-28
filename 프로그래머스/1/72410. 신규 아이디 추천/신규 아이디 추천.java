@@ -1,82 +1,67 @@
 class Solution {
-    
-    private static class NewId {
-        
+
+    private static class Kakao {
         String id;
-        
-        private NewId(String id){
+
+        private Kakao(String id) {
             this.id = id;
         }
 
-        //1단계                
-        private NewId replaceSmall(){
-            this.id = id.toLowerCase();
+        private Kakao replaceSmall() {
+            this.id = this.id.toLowerCase();
             return this;
         }
-        
-        //2단계
-        private NewId replaceStr(){
-            this.id = id.replaceAll("[^a-z0-9\\._-]","");
+
+        private Kakao removeStr() {
+            this.id = this.id.replaceAll("[^a-z0-9._-]", "");
             return this;
         }
-        
-        //3-4단계
-        private NewId dot(){
-            //3단계
-            this.id = id.replaceAll("[.]{2,}",".");
-            //4단계
-            this.id = this.id.replaceAll("^\\.|\\.$", "");
-            
+
+        private Kakao replaceDot() {
+            this.id = this.id.replaceAll("\\.{2,}", ".");
             return this;
         }
-        
-        //5단계
-        private NewId putA(){
-            if(this.id.equals("")){
-                this.id+="a";
-            }
+
+        private Kakao removeDot() {
+            if (!this.id.isEmpty() && this.id.charAt(0) == '.')
+                this.id = this.id.substring(1);
+            if (!this.id.isEmpty() && this.id.charAt(this.id.length() - 1) == '.')
+                this.id = this.id.substring(0, this.id.length() - 1);
             return this;
         }
-        
-        //6단계
-        private NewId cutStr(){
-            if(this.id.length() > 15) {
-                this.id = id.substring(0,15);
-            }
+
+        private Kakao isNull() {
+            if (this.id.isEmpty()) this.id = "a";
             return this;
         }
-        
-        //7단계
-        private NewId attachChar(){
-            
-            while(this.id.length() < 3){
-                
-                this.id += this.id.charAt(this.id.length()-1);
-                
-            }
-            
+
+        private Kakao cutLen() {
+            if (this.id.length() >= 16)
+                this.id = this.id.substring(0, 15);
             return this;
-            
         }
-        
-        private String getString(){
-            return this.id.toString();
+
+        private Kakao checkLen() {
+            while (this.id.length() < 3)
+                this.id += this.id.charAt(this.id.length() - 1);
+            return this;
         }
-        
+
+        private String get() {
+            return this.id;
+        }
     }
-    
+
     public String solution(String new_id) {
-        
-        String id = new NewId(new_id)
-            .replaceSmall()
-            .replaceStr()
-            .dot()
-            .putA()
-            .cutStr()
-            .dot()
-            .attachChar()
-            .getString();
-        
-        return id;
+        return new Kakao(new_id)
+                .replaceSmall()
+                .removeStr()
+                .replaceDot()
+                .removeDot()
+                .isNull()
+                .cutLen()
+                .removeDot()
+                .checkLen()
+                .get();  
     }
 }
