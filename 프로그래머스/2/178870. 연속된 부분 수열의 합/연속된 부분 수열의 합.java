@@ -3,27 +3,36 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] sequence, int k) {
         
-        int[] answer = new int[2];
+        int len = Integer.MAX_VALUE;
+        int lt = 0, rt = 0;
         
-        int left = 0, right = 0, sum = 0, minLen =  Integer.MAX_VALUE;
-        while (right < sequence.length) {
-            sum += sequence[right];
-
-            while (sum > k) {
-                sum -= sequence[left++];
-            }
-
-            if (sum == k) {
-                if (right - left < minLen) {
-                    minLen = right - left;
-                    answer[0] = left;
-                    answer[1] = right;
+        int[] result = new int[2];
+        
+        int sum = 0;
+        while(lt <= rt){
+            
+            if(rt >= sequence.length) break;
+            
+            sum+=sequence[rt];
+            
+            while(sum >= k){
+                
+                if(sum == k && (rt - lt) <len){
+                    result[0] = lt;
+                    result[1] = rt;
+                    len = rt - lt;
                 }
+                
+                sum-=sequence[lt];
+                lt ++;
+                
             }
-
-            right++;
+            
+            rt++;
+            
         }
-
-        return answer;
+        
+        return result;
+        
     }
 }
