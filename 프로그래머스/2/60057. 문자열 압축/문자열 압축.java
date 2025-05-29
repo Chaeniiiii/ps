@@ -1,64 +1,41 @@
 import java.util.*;
 
 class Solution {
-    
-    private static class Str {
-        
-        String str;
-        int cnt;
-        
-        private Str(String str, int cnt){
-            this.str = str;
-            this.cnt = cnt;
-        }
-    }
-    
     public int solution(String s) {
         
-        if(s.length() == 1) return 1;
+        StringBuilder sb;
+        Deque<String> deque;
         
-        Deque<Str> deque;
-        int answer = Integer.MAX_VALUE;
+        int len = s.length();
+        int answer = len;
         
-        for(int i = 1; i<=s.length()/2; i++){   
+        for(int i = 1; i<=len/2; i++){
+            sb = new StringBuilder();
             deque = new ArrayDeque<>();
             
-            int lt = 0, rt = lt+i, len = 0, cnt = 1;
-            
-            while(lt < rt){
-                
-                String now;
-                
-                if(rt >= s.length()) now = s.substring(lt);
-                else now = s.substring(lt,rt);
-                
-                if(deque.isEmpty() || !deque.peekLast().str.equals(now)){
-                    deque.add(new Str(now,1));
-                }
-                else if(deque.peekLast().str.equals(now)){
-                    Str prev = deque.peekLast();
-                    prev.cnt ++;
-                }
-                
-                if(rt > s.length()) break;
-                
-                lt+=i;
-                rt+=i;
-                
+            for(int j = 0; j<len; j+=i){
+                int end = j + i;
+                if(end >= len) deque.add(s.substring(j));
+                else deque.add(s.substring(j,end));
             }
             
             while(!deque.isEmpty()){
-                Str target = deque.poll();
-                len+=target.str.length();
-                if(target.cnt > 1) len += String.valueOf(target.cnt).length();
+                String now = deque.poll();
+                int cnt = 1;
+                while(!deque.isEmpty() && deque.peek().equals(now)){
+                    deque.poll();
+                    cnt ++;
+                }
+                if(cnt > 1) sb.append(cnt).append(now);
+                else sb.append(now);
             }
             
-            answer = Math.min(answer,len);
-            
+            answer = Math.min(answer,sb.toString().length());
             
         }
         
-        return answer ;
+        return answer;
+        
         
     }
 }
