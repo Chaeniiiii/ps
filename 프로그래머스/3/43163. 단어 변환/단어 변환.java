@@ -6,7 +6,7 @@ class Solution {
         Deque<String> deque = new ArrayDeque<>();
         deque.add(begin);
         
-        boolean[] visited = new boolean[words.length];
+        Set<String> set = new HashSet<>();
         
         int cnt = 0;
         while(!deque.isEmpty()){
@@ -16,19 +16,14 @@ class Solution {
             for(int i = 0; i<size; i++){
                 
                 String now = deque.poll();
-                if(now.equals(target)){
-                    return cnt;
+                if(now.equals(target)) return cnt;
+                
+                for(String next : words){
+                    if(set.contains(next) || !isPossible(now,next)) continue;
+                    set.add(next);
+                    deque.add(next);
                 }
                 
-                for(int t = 0; t<words.length; t++){
-                    if(visited[t]){
-                        continue;
-                    }
-                    if(checkStr(now,words[t])){
-                        deque.add(words[t]);
-                        visited[t] = true;
-                    }
-                }
             }
             
             cnt ++;
@@ -39,26 +34,20 @@ class Solution {
         
     }
     
-    private static boolean checkStr(String now, String nxt){
-        
-        if(now.length() != nxt.length()){
-            return false;
-        }
-        
+    private static boolean isPossible(String origin, String other){
+            
+        if(origin.length() != other.length()) return false;
+
         int cnt = 0;
-        for(int i = 0; i<now.length(); i++){
-        
-            if(now.charAt(i) != nxt.charAt(i)){
-                cnt ++;
-            }
-            
-            if(cnt >= 2){
-                return false;
-            }
-            
+        for(int i = 0; i<origin.length(); i++){
+            if(origin.charAt(i) == other.charAt(i)) continue;
+            cnt ++;
+            if(cnt >= 2) return false;
         }
-        
+
         return true;
-        
+
+
     }
+    
 }
