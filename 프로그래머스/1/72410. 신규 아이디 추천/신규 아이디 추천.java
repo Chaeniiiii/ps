@@ -1,67 +1,58 @@
 class Solution {
-
-    private static class Kakao {
-        String id;
-
-        private Kakao(String id) {
+    
+    private static class Id {
+        
+        String id ;
+        
+        private Id(String id){
             this.id = id;
         }
-
-        private Kakao replaceSmall() {
-            this.id = this.id.toLowerCase();
+        
+        private Id toLower(){
+            this.id = id.toLowerCase();
             return this;
         }
-
-        private Kakao removeStr() {
-            this.id = this.id.replaceAll("[^a-z0-9._-]", "");
+        
+        private Id removeChar(){
+            this.id = id.replaceAll("[^a-z0-9\\._-]","");
             return this;
         }
-
-        private Kakao replaceDot() {
-            this.id = this.id.replaceAll("\\.{2,}", ".");
+        
+        private Id dot(){
+            this.id = id.replaceAll("\\.{2,}",".");
+            this.id = id.replaceAll("^\\.|\\.$","");
             return this;
         }
-
-        private Kakao removeDot() {
-            if (!this.id.isEmpty() && this.id.charAt(0) == '.')
-                this.id = this.id.substring(1);
-            if (!this.id.isEmpty() && this.id.charAt(this.id.length() - 1) == '.')
-                this.id = this.id.substring(0, this.id.length() - 1);
+        
+        private Id putA(){
+            if(this.id.equals("")) this.id = "a";
             return this;
         }
-
-        private Kakao isNull() {
-            if (this.id.isEmpty()) this.id = "a";
+        
+        private Id cutStr(){
+            if(this.id.length() > 15) this.id = id.substring(0,15);
             return this;
         }
-
-        private Kakao cutLen() {
-            if (this.id.length() >= 16)
-                this.id = this.id.substring(0, 15);
+        
+        private Id setLen(){
+            
+            while(this.id.length() < 3){
+                this.id = this.id + this.id.charAt(this.id.length()-1);
+            }
+            
             return this;
+            
         }
-
-        private Kakao checkLen() {
-            while (this.id.length() < 3)
-                this.id += this.id.charAt(this.id.length() - 1);
-            return this;
+        
+        private String getString(){
+            return this.id.toString();
         }
-
-        private String get() {
-            return this.id;
-        }
+        
     }
-
+    
     public String solution(String new_id) {
-        return new Kakao(new_id)
-                .replaceSmall()
-                .removeStr()
-                .replaceDot()
-                .removeDot()
-                .isNull()
-                .cutLen()
-                .removeDot()
-                .checkLen()
-                .get();  
+        
+        return new Id(new_id).toLower().removeChar().dot().putA().cutStr().dot().setLen().getString();
+        
     }
 }
