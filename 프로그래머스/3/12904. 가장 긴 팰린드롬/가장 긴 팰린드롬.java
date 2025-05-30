@@ -4,8 +4,6 @@ class Solution
 {
     public int solution(String s){
         
-        int answer = 1;
-        
         for(int i = s.length()-1; i>=1; i--){
             
             int lt = 0, rt = i, cnt=0;
@@ -32,14 +30,11 @@ class Solution
                 
             }
             
-            if(check){
-                answer = Math.max(answer,i+1);
-                break;
-            }
+            if(check) return i+1;
 
         }
         
-        return answer;
+        return 1;
         
     }
 }
