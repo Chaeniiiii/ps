@@ -5,7 +5,6 @@ class Solution {
     private static class Pos {
         int x;
         int y;
-        
         private Pos(int x, int y){
             this.x = x;
             this.y = y;
@@ -14,16 +13,17 @@ class Solution {
     
     public int solution(int[][] maps) {
         
-        int row = maps.length;
-        int col = maps[0].length;
+        int n = maps.length;
+        int m = maps[0].length;
+        
+        int[] dx = new int[]{-1,1,0,0};
+        int[] dy = new int[]{0,0,-1,1};
         
         Deque<Pos> deque = new ArrayDeque<>();
         deque.add(new Pos(0,0));
         
-        boolean [][] visited = new boolean[row][col];
-        
-        int[] dx = new int[]{-1,1,0,0};
-        int[] dy = new int[]{0,0,-1,1};
+        boolean[][] visited = new boolean[n][m];
+        visited[0][0] = true;
         
         int cnt = 1;
         while(!deque.isEmpty()){
@@ -32,17 +32,20 @@ class Solution {
             
             for(int i = 0; i<size; i++){
                 
-                Pos now = deque.poll();
-                if(now.x == row-1 && now.y == col-1) return cnt;
+                Pos mv = deque.poll();
+                if(mv.x == n-1 && mv.y == m-1) return cnt;
                 
                 for(int k = 0; k<4; k++){
                     
-                    int mvX = now.x + dx[k];
-                    int mvY = now.y + dy[k];
-                       
-                    if(mvX <0 || mvY <0 || mvX >=row || mvY >= col || visited[mvX][mvY] || maps[mvX][mvY] == 0) continue;
-                    visited[mvX][mvY] = true;
+                    int mvX = mv.x + dx[k];
+                    int mvY = mv.y + dy[k];
+                    
+                    if(mvX < 0 || mvY < 0 || mvX >= n || mvY >= m || maps[mvX][mvY] == 0 || visited[mvX][mvY]){
+                        continue;
+                    }
+                    
                     deque.add(new Pos(mvX,mvY));
+                    visited[mvX][mvY] = true;
                     
                 }
                 
