@@ -1,23 +1,21 @@
 import java.util.*;
 
 class Solution {
+    
+    private static int MAX = 1_000_000_007;
+    
     public int solution(int n, int[] money) {
         
         int[] dp = new int[n+1];
-        Arrays.fill(dp,Integer.MIN_VALUE);
-        dp[0] = 0;
+        dp[0] = 1;
         
-        for(int i = 0; i<n+1; i++){
-            if(dp[i] == Integer.MIN_VALUE) continue;
-            for(int j = 0; j<money.length; j++){
-                int amount = i + money[j];
-                if(amount >= n+1 || amount < 0) continue;
-                dp[amount] = Math.max(dp[amount],dp[i]+1)%1000000007;
+        for(int m : money){
+            for(int j = m; j<=n; j++){
+                dp[j] += dp[j-m]%MAX;
             }
         }
         
-        System.out.println(Arrays.toString(dp));
-        return dp[n]/1000000007;
+        return dp[n]%1000000007;
         
     }
 }
