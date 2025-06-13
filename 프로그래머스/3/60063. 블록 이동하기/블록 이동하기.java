@@ -1,209 +1,138 @@
 import java.util.*;
 
-public class Solution {
-    
-    private static int n;
-    
-    private static final int [] dx = new int[]{1,-1,0,0}; 
-    private static final int [] dy = new int[]{0,0,-1,1};
-        
-    private static Set<Robot> visited;
-    
+class Solution {
+
+    private static int n, m;
+    private static int[][] board;
+
     private static class Robot {
-        Pos st;
-        Pos en;
-        boolean dir;
-        
-        private Robot(Pos st, Pos en, boolean dir){
-            if (st.x < en.x || (st.x == en.x && st.y < en.y)) {
-                this.st = st;
-                this.en = en;
+        Pos pos1, pos2;
+        int dir; // 0: 가로, 1: 세로
+
+        Robot(Pos pos1, Pos pos2, int dir) {
+            // 항상 pos1이 왼쪽 또는 위쪽
+            if (pos1.x < pos2.x || (pos1.x == pos2.x && pos1.y < pos2.y)) {
+                this.pos1 = pos1;
+                this.pos2 = pos2;
             } else {
-                this.st = en;
-                this.en = st;
+                this.pos1 = pos2;
+                this.pos2 = pos1;
             }
             this.dir = dir;
         }
-        
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Robot robot = (Robot) obj;
-            return dir == robot.dir &&
-                   st.equals(robot.st) &&
-                   en.equals(robot.en);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = st.hashCode();
-            result = 31 * result + en.hashCode();
-            result = 31 * result + (dir ? 1 : 0);
-            return result;
-        }
     }
-    
+
     private static class Pos {
-        int x;
-        int y;
-        private Pos(int x, int y){
+        int x, y;
+        Pos(int x, int y) {
             this.x = x;
             this.y = y;
         }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Pos pos = (Pos) obj;
-            return x == pos.x && y == pos.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-
     }
-    
-    public static int solution(int[][] board) {
-        
-        n = board.length; //격자 크기
-        Robot rb = new Robot(new Pos(0,0),new Pos(0,1),false); //초기 로봇 위치 
-        
+
+    public int solution(int[][] inputBoard) {
+        this.board = inputBoard;
+        n = board.length;
+        m = board[0].length;
+
+        boolean[][][] visited = new boolean[n][m][2]; // pos1 기준, dir
         Deque<Robot> deque = new ArrayDeque<>();
-        deque.add(rb);
-        
-        // visited = new boolean[n][n][5];
-        visited = new HashSet<>();
-        visited.add(rb);
-        // for(int i = 0; i<5; i++) visited[0][0][i] = true;
-        
+        deque.add(new Robot(new Pos(0, 0), new Pos(0, 1), 0));
+        visited[0][0][0] = true;
+
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+
         int cnt = 0;
-        while(!deque.isEmpty()){
-            
+        while (!deque.isEmpty()) {
             int size = deque.size();
-            
-            for(int i = 0; i<size; i++){
-                
-                Robot now = deque.poll();
-                // System.out.println("==============================");
-                // System.out.printf("%d %d\n",now.st.x,now.st.y);
-                // System.out.printf("%d %d\n",now.en.x,now.en.y);
-                // System.out.println(cnt);
-                
-                if((now.st.x == n-1 && now.st.y == n-1) || (now.en.x == n-1 && now.en.y == n-1)) return cnt;
-                
-                //상하좌우 이동
-                for(int k = 0; k<4; k++){
-                    int stX = now.st.x + dx[k];
-                    int stY = now.st.y + dy[k];
-                    Pos posSt = new Pos(stX,stY);
-                    
-                    int enX = now.en.x + dx[k];
-                    int enY = now.en.y + dy[k];
-                    Pos posEn = new Pos(enX,enY);
-                    
-                    if(stX < 0 || stY < 0 || stX >= n || stY >= n || board[stX][stY] == 1) continue;
-                    if(enX < 0 || enY < 0 || enX >= n || enY >= n || board[enX][enY] == 1 || visited.contains(new Robot(posSt,posEn,now.dir)) ) continue;
-                    
-                    deque.add(new Robot(posSt,posEn,now.dir));
-                    visited.add(new Robot(posSt,posEn,now.dir));
-                    
+
+            for (int i = 0; i < size; i++) {
+                Robot rb = deque.poll();
+                Pos p1 = rb.pos1;
+                Pos p2 = rb.pos2;
+                int dir = rb.dir;
+
+                if ((p1.x == n - 1 && p1.y == m - 1) || (p2.x == n - 1 && p2.y == m - 1)) {
+                    return cnt;
                 }
-                
-                //90도 회전
-                ArrayList<Robot> nxt = playRotate(now, board);
-                for(Robot robot : nxt) deque.add(robot);
-                
+
+                // 1. 상하좌우 이동
+                for (int d = 0; d < 4; d++) {
+                    int nx1 = p1.x + dx[d], ny1 = p1.y + dy[d];
+                    int nx2 = p2.x + dx[d], ny2 = p2.y + dy[d];
+
+                    if (isIn(nx1, ny1) && isIn(nx2, ny2)
+                            && board[nx1][ny1] == 0 && board[nx2][ny2] == 0) {
+
+                        Robot next = new Robot(new Pos(nx1, ny1), new Pos(nx2, ny2), dir);
+                        int vx = next.pos1.x, vy = next.pos1.y;
+
+                        if (!visited[vx][vy][dir]) {
+                            visited[vx][vy][dir] = true;
+                            deque.add(next);
+                        }
+                    }
+                }
+
+                // 2. 회전
+                ArrayList<Robot> rotates = (dir == 0) ? rotationRow(rb) : rotationCol(rb);
+                for (Robot next : rotates) {
+                    int vx = next.pos1.x, vy = next.pos1.y, vdir = next.dir;
+                    if (!visited[vx][vy][vdir]) {
+                        visited[vx][vy][vdir] = true;
+                        deque.add(next);
+                    }
+                }
             }
-            
-            cnt ++;
-            
+
+            cnt++;
         }
-        
+
         return -1;
-        
-    }
-    
-    //회전
-    private static ArrayList<Robot> playRotate(Robot now, int[][] board) {
-        
-        ArrayList<Robot> arr = new ArrayList<>();
-        int x = now.st.x;
-        int y = now.st.y;
-        
-        //로봇이 세로 방향일 때
-        if(now.dir){
-            
-            //왼쪽 방향으로 회전
-            if(x+1 < n && y-1 >= 0 && board[x][y-1] == 0 && board[x+1][y-1] == 0){
-                Robot r1 = new Robot(now.st,new Pos(x,y-1),!now.dir); //st고정
-                Robot r2 = new Robot(now.en,new Pos(x+1,y-1),!now.dir); //en고정
-                
-                if(!visited.contains(r1)){
-                    visited.add(r1);
-                    arr.add(r1);
-                }
-                if(!visited.contains(r2)){
-                    visited.add(r2);
-                    arr.add(r2);
-                }
-            }
-            
-            //오른쪽 방향으로 회전
-            if(x+1 < n && y+1 < n && board[x][y+1] == 0 && board[x+1][y+1] == 0){
-                Robot r1 = new Robot(now.st,new Pos(x,y+1),!now.dir); //st고정
-                Robot r2 = new Robot(now.en,new Pos(x+1,y+1),!now.dir); //en고정
-                
-                if(!visited.contains(r1)){
-                    visited.add(r1);
-                    arr.add(r1);
-                }
-                if(!visited.contains(r2)){
-                    visited.add(r2);
-                    arr.add(r2);
-                }
-                
-            }
-          
-        }
-        else {
-            
-            //위쪽으로 회전
-            if(y+1 < n && x-1>=0 && board[x-1][y] == 0 && board[x-1][y+1] == 0){
-                Robot r1 = new Robot(now.st, new Pos(x-1,y),!now.dir);
-                Robot r2 = new Robot(now.en, new Pos(x-1,y+1),!now.dir);
-                
-                if(!visited.contains(r1)){
-                    visited.add(r1);
-                    arr.add(r1);
-                }
-                if(!visited.contains(r2)){
-                    visited.add(r2);
-                    arr.add(r2);
-                }
-            }
-            //아래쪽으로 회전
-            if(y+1 < n && x+1 < n && board[x+1][y] == 0 && board[x+1][y+1] == 0){
-                Robot r1 = new Robot(now.st, new Pos(x+1,y),!now.dir);
-                Robot r2 = new Robot(now.en,new Pos(x+1,y+1),!now.dir);
-                
-                if(!visited.contains(r1)){
-                    visited.add(r1);
-                    arr.add(r1);
-                }
-                if(!visited.contains(r2)){
-                    visited.add(r2);
-                    arr.add(r2);
-                }
-                
-            }
-        }
-        
-        return arr;
-        
     }
 
+    private static boolean isIn(int x, int y) {
+        return 0 <= x && x < n && 0 <= y && y < m;
+    }
+
+    private static ArrayList<Robot> rotationRow(Robot rb) {
+        ArrayList<Robot> list = new ArrayList<>();
+        Pos p1 = rb.pos1;
+        Pos p2 = rb.pos2;
+
+        // 위 회전
+        if (p1.x - 1 >= 0 && board[p1.x - 1][p1.y] == 0 && board[p1.x - 1][p2.y] == 0) {
+            list.add(new Robot(p1, new Pos(p1.x - 1, p1.y), 1));
+            list.add(new Robot(p2, new Pos(p2.x - 1, p2.y), 1));
+        }
+
+        // 아래 회전
+        if (p1.x + 1 < n && board[p1.x + 1][p1.y] == 0 && board[p1.x + 1][p2.y] == 0) {
+            list.add(new Robot(p1, new Pos(p1.x + 1, p1.y), 1));
+            list.add(new Robot(p2, new Pos(p2.x + 1, p2.y), 1));
+        }
+
+        return list;
+    }
+
+    private static ArrayList<Robot> rotationCol(Robot rb) {
+        ArrayList<Robot> list = new ArrayList<>();
+        Pos p1 = rb.pos1;
+        Pos p2 = rb.pos2;
+
+        // 왼쪽 회전
+        if (p1.y - 1 >= 0 && board[p1.x][p1.y - 1] == 0 && board[p2.x][p2.y - 1] == 0) {
+            list.add(new Robot(p1, new Pos(p1.x, p1.y - 1), 0));
+            list.add(new Robot(p2, new Pos(p2.x, p2.y - 1), 0));
+        }
+
+        // 오른쪽 회전
+        if (p1.y + 1 < m && board[p1.x][p1.y + 1] == 0 && board[p2.x][p2.y + 1] == 0) {
+            list.add(new Robot(p1, new Pos(p1.x, p1.y + 1), 0));
+            list.add(new Robot(p2, new Pos(p2.x, p2.y + 1), 0));
+        }
+
+        return list;
+    }
 }
