@@ -1,34 +1,35 @@
 import java.util.*;
 
 class Solution {
-    public int solution(int[] arr) {
+    public int solution(int[] a) {
         
-        Map<Integer,Integer> map = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
         
-        for(int a : arr){
-            map.put(a,map.getOrDefault(a,0)+1);
-        }
+        int lt = 0, rt = 1;
+        int len = 0;
         
-        int result = 0;
-        for(int key : map.keySet()){
+        while(lt < a.length){
             
-            if(map.get(key) <= result) continue;
-            
-            int cnt = 0;
-            for(int i = 0; i < arr.length - 1; i++){
-                if(arr[i] != key && arr[i+1] != key) continue;
-                if(arr[i] == arr[i+1]) continue;
-                
-                cnt ++;
-                i++;
-                
+            if(a[lt] == a[rt]){
+                lt += 2;
+                rt += 2;
+                continue;
             }
             
-            result = Math.max(cnt,result);
+            System.out.printf("%d %d\n",lt,rt);
             
+            if(set.isEmpty() || set.contains(a[lt]) || set.contains(a[rt])){
+                
+                len += 2;
+                lt += 2;
+                rt += 2;
+                
+                set.add(a[lt]);
+                set.add(a[rt]);
+            }
         }
-        
-        return result*2;
+            
+        return len;
         
     }
 }
