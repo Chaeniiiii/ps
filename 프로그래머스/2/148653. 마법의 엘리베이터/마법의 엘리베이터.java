@@ -1,52 +1,57 @@
 import java.util.*;
 
 class Solution {
+    
+    private static int cnt;
+    
     public int solution(int storey) {
         
-        Deque<Integer> deque = new ArrayDeque<>();
+        String storeyStr = String.valueOf(storey);
         
-        //Deque에 숫자 하나씩 삽입
-        for(char c : Integer.toString(storey).toCharArray()){
-            deque.add((int)(c-'0'));
+        int[] nums = new int[storeyStr.length()];
+        cnt = 0;
+        
+        for(int i = 0; i < storeyStr.length(); i++){
+            char c = storeyStr.charAt(i);
+            nums[i] = c -'0';
         }
-        
-        int cnt = 0; //버튼 누르는 횟수
-        int add = 0; //받아올림 
-        
-        while(!deque.isEmpty()){
             
-            int x = deque.pollLast();
-            x += add;
+        for(int i = nums.length - 1; i >= 0; i--){
             
-            add = 0;
+            int num = nums[i];
             
-            if(x > 5){ //현재 수가 5보다 크면
-                cnt+=(10-x);
-                add++;
+            if(num > 5){
+                cnt += (10 - num);
+                nums = upNext(nums,i-1,i,true);
             }
-            else if(x < 5){
-                cnt+=x;
+            else if(num < 5){
+                cnt += num;   
             }
-            else {
-                if(deque.isEmpty()){
-                    cnt +=5;
-                    continue;
-                }
-                int next = deque.peekLast();
-                if(next >= 5){
-                    add ++;
-                    cnt += (10-x);
-                }
-                else cnt+=x;
+            else{
+                cnt += 5;
+                nums = upNext(nums,i-1,i,false);
             }
             
-            if(deque.isEmpty() && add != 0) cnt+=add;
-            
-        }
-        
+        }        
         
         return cnt;
         
+    }
+    
+    private static int[] upNext(int[] nums, int prev, int now, boolean up){
+        
+        if(prev < 0){
+            if(nums[now] > 5){
+                cnt++;
+            }
+            return nums;
+        }
+        
+        nums[now] = 0;
+        if(up || (!up && nums[prev] >= 5)) nums[prev]++;
+        
+        return nums;
         
     }
+    
 }
