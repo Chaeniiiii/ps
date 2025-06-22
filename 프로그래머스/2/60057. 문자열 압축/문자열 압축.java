@@ -20,8 +20,7 @@ class Solution {
         Deque<Str> deque;
         int answer = Integer.MAX_VALUE;
         
-        for(int i = 1; i<=s.length()/2; i++){ 
-            
+        for(int i = 1; i<=s.length()/2; i++){   
             deque = new ArrayDeque<>();
             
             int lt = 0, rt = lt+i, len = 0, cnt = 1;
@@ -55,6 +54,7 @@ class Solution {
             }
             
             answer = Math.min(answer,len);
+            
             
         }
         
