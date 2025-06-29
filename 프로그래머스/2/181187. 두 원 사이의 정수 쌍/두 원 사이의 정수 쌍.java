@@ -3,11 +3,11 @@ class Solution {
        
         long cnt = 0;
         
-        for(int i = 1; i<=r2; i++){
-            int max = (int) Math.floor(Math.sqrt((1.0*r2*r2) - (1.0*i*i)));
-            int min = (int) Math.ceil(Math.sqrt((1.0*r1*r1) - (1.0*i*i)));
+        for(int x = 1; x <= r2; x++){
+            int maxY = (int) Math.floor(Math.sqrt((1.0 * r2*r2) - (1.0 * x * x)));
+            int minY = (int) Math.ceil(Math.sqrt((1.0 * r1*r1) - (1.0 * x * x)));
             
-            cnt += (max-min + 1);
+            cnt += (maxY - minY + 1);
         }
         
         return cnt * 4;
