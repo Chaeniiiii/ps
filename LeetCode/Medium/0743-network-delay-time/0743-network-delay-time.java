@@ -2,75 +2,71 @@ import java.util.*;
 
 class Solution {
 
-    private static int[][] graph;
-    private static int INF = Integer.MAX_VALUE;
+    private static Map<Integer,ArrayList<Node>> map;
+
     private static class Node{
-        
-        int next;
+
+        int nxt;
         int cost;
 
-        private Node(int next, int cost){
-            this.next = next;
+        private Node(int nxt, int cost){
+            this.nxt = nxt;
             this.cost = cost;
         }
     }
 
     public int networkDelayTime(int[][] times, int n, int k) {
         
-        graph = new int[n+1][n+1];
-
+        map = new HashMap<>();
         for(int i = 1; i <= n; i++){
-            Arrays.fill(graph[i], INF);
+            map.put(i, new ArrayList<>());
         }
 
         for(int[] time : times){
-            
-            int u = time[0];
-            int v = time[1];
-            int w = time[2];
+            int v = time[0];
+            int u = time[1];
+            int cost = time[2];
 
-            graph[u][v] = w;
-
+            map.get(v).add(new Node(u,cost));
         }
 
+        int[] cost = dijkstra(times,n,k);
         int result = 0;
-        int[] dist = dijkstra(n,k);
-
         for(int i = 1; i <= n; i++){
-            if(dist[i] == INF) return -1;
-            result = Math.max(result,dist[i]);
+            result = Math.max(result, cost[i]);
         }
 
-        return result;
+        return result == Integer.MAX_VALUE ? -1 : result;
 
     }
 
-    private static int[] dijkstra(int n, int k){
+    private static int[] dijkstra(int[][] times, int n, int k){
 
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
+        PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost - b.cost);
         pq.add(new Node(k,0));
 
-        int[] dist = new int[n+1];
-        Arrays.fill(dist, INF);
+        int[] costs = new int[n+1];
+        Arrays.fill(costs, Integer.MAX_VALUE);
 
-        dist[k] = 0;
+        costs[k] = 0;
 
         while(!pq.isEmpty()){
 
             Node now = pq.poll();
 
-            for(int i = 1; i <= n; i++){
-                if(graph[now.next][i] == INF) continue;
-                if(dist[i] > graph[now.next][i] + dist[now.next]){
-                    dist[i] = graph[now.next][i] + dist[now.next];
-                    pq.add(new Node(i,dist[i]));
+            for(Node next : map.get(now.nxt)){
+                
+                int nextCost = costs[now.nxt] + next.cost;
+                if(nextCost < costs[next.nxt]){
+                    costs[next.nxt] = nextCost;
+                    pq.add(next);
                 }
+
             }
+
         }
 
-        return dist;
+        return costs;
 
     }
-
-
 }
