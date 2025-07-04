@@ -1,56 +1,63 @@
 import java.util.*;
 
 class Solution {
-    
-    long[] times; 
-    
     public String solution(String play_time, String adv_time, String[] logs) {
-        int adTime = toSeconds(adv_time);
-        int playTime = toSeconds(play_time);
-        times = new long[playTime+1];
-        Arrays.fill(times,0);
+        
+        int aTime = toSeconds(adv_time);
+        int pTime = toSeconds(play_time);
+        
+        long[] dp = new long[pTime  + 1];
         
         for(String log : logs){
-            String[] splited = log.split("-");
-            times[toSeconds(splited[0])]++;
-            times[toSeconds(splited[1])]--;
-        }
-
-        for(int i = 1; i <= playTime ; i++){
-            times[i] += times[i-1];
-        }
-        
-        for(int i = 1; i <= playTime; i++){
-            times[i] += times[i-1];
+            
+            String[] logTime = log.split("-");
+            
+            dp[toSeconds(logTime[0])]++;
+            dp[toSeconds(logTime[1])]--;
+            
         }
         
-        int sTime = 0; 
-        long ansTime = times[adTime-1];
+        for(int i = 1; i <= pTime; i++){
+            dp[i] += dp[i-1];
+        }
         
-        for(int i = 1; i <= playTime-adTime;i++){
-            if(times[i+adTime-1] - times[i-1] > ansTime){
-                ansTime = times[i+adTime-1] - times[i-1];
-                sTime = i;
+        for(int i = 1; i <= pTime; i++){
+            dp[i] += dp[i-1];
+        }
+        
+        int result = 0;
+        long maxTime = dp[aTime - 1];
+        
+        for(int i = 1; i <= pTime - aTime; i++){
+            if(dp[i + aTime -1] - dp[i - 1] > maxTime){
+                maxTime = dp[i + aTime -1] - dp[i - 1];
+                result = i;
             }
         }
         
-        return toFormatted(sTime);
+        return toTime(result);
+        
     }
     
-    public int toSeconds(String time){
-        String[] splited = time.split(":");
-        int hours = Integer.parseInt(splited[0]);
-        int minutes = Integer.parseInt(splited[1]);
-        int seconds = Integer.parseInt(splited[2]);
+    private static int toSeconds(String time){
         
-        return hours * 3600 + minutes * 60 + seconds;
+        String[] timeArr = time.split(":");
+        
+        int h = Integer.parseInt(timeArr[0]) * 3600;
+        int m = Integer.parseInt(timeArr[1]) * 60;
+        int s = Integer.parseInt(timeArr[2]);
+        
+        return h + m + s;
+        
     }
     
-    public String toFormatted(int time){
-        int hours = time / 3600;
-        int minutes = (time % 3600) / 60;
-        int seconds = (time % 3600) % 60;
+    private static String toTime(int time){
         
-        return String.format("%02d:%02d:%02d",hours,minutes,seconds);
+        int h = time / 3600;
+        int m = (time % 3600) / 60;
+        int s = (time % 3600) % 60;
+        
+        return String.format("%02d:%02d:%02d",h,m,s);
+        
     }
 }
