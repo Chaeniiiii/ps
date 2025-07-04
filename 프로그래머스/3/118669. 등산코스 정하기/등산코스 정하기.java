@@ -3,19 +3,18 @@ import java.util.*;
 class Solution {
     
     private static int n;
-    private static int[] result;
-    
-    private static ArrayList<Node>[] graph;
     
     private static ArrayList<Integer> gateArr;
     private static ArrayList<Integer> summitArr;
-        
+    
+    private static Map<Integer,ArrayList<Node>> map;
+    
     private static class Node{
-        int idx;
+        int num;
         int cost;
         
-        private Node(int idx, int cost){
-            this.idx = idx;
+        private Node(int num, int cost){
+            this.num = num;
             this.cost = cost;
         }
     }
@@ -23,52 +22,47 @@ class Solution {
     public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
         
         this.n = n;
-        result = new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE};
-        
-        graph = new ArrayList[n+1];
-        for(int i = 1; i <= n; i++){
-            graph[i] = new ArrayList<>();
-        }
         
         gateArr = new ArrayList<>();
-        for(int gate : gates){
-            gateArr.add(gate);
-        }
-        
         summitArr = new ArrayList<>();
-        for(int summit : summits){
-            summitArr.add(summit);
+        
+        for(int gate : gates) gateArr.add(gate);
+        for(int summit : summits) summitArr.add(summit);
+        
+        map = new HashMap<>();
+        for(int i = 1; i <= n; i++){
+            map.put(i, new ArrayList<>());
         }
         
-        //그래프 설계
         for(int[] path : paths){
             
-            Node v = new Node(path[0],path[2]);
-            Node u = new Node(path[1],path[2]);
+            int v = path[0];
+            int u = path[1];
+            int t = path[2];
             
-            if(gateArr.contains(v.idx) || summitArr.contains(u.idx)){
-                graph[v.idx].add(u);
+            if(gateArr.contains(v) || summitArr.contains(u)){
+                map.get(v).add(new Node(u,t));
             }
-            else if(gateArr.contains(u.idx) || summitArr.contains(v.idx)){
-                graph[u.idx].add(v);
+            else if(gateArr.contains(u) || summitArr.contains(v)){
+                map.get(u).add(new Node(v,t));
             }
             else{
-                graph[u.idx].add(v);
-                graph[v.idx].add(u);
+                map.get(v).add(new Node(u,t));
+                map.get(u).add(new Node(v,t));
             }
+            
         }
         
-        dijkstra();
-        return result;
+        return dijkstra();
         
     }
     
-    private static void dijkstra(){
+    private static int[] dijkstra(){
         
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
+        PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost - b.cost);
         
         int[] dist = new int[n+1];
-        Arrays.fill(dist,Integer.MAX_VALUE);
+        Arrays.fill(dist, Integer.MAX_VALUE);
         
         for(int gate : gateArr){
             pq.add(new Node(gate,0));
@@ -79,29 +73,28 @@ class Solution {
             
             Node now = pq.poll();
             
-            if(dist[now.idx] < now.cost){
-                continue;
+            if(dist[now.num] < now.cost) continue;
+            
+            for(Node nxt : map.get(now.num)){
+                int nxtDist = Math.max(dist[now.num],nxt.cost);
+                if(nxtDist < dist[nxt.num]){
+                    dist[nxt.num] = nxtDist;
+                    pq.add(new Node(nxt.num,nxtDist));
+                }
             }
             
-            for(Node nxt : graph[now.idx]){
-                int nxtDist = Math.max(nxt.cost,dist[now.idx]);
-                if(nxtDist < dist[nxt.idx]){
-                    dist[nxt.idx] = nxtDist;
-                    pq.add(new Node(nxt.idx,nxtDist));
-                }
-            }            
         }
-
-        summitArr.sort((a,b) -> a - b);
+        
+        int[] result = new int[]{0,Integer.MAX_VALUE};
+        summitArr.sort((a,b) -> a-b);
+        
         for(int summit : summitArr){
             if(result[1] > dist[summit]){
                 result[1] = dist[summit];
                 result[0] = summit;
             }
-            else if(result[1] == dist[summit]){
-                result[0] = Math.min(result[0],summit);
-            }
         }
         
+        return result;
     }
 }
