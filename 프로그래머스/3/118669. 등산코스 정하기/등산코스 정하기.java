@@ -2,26 +2,24 @@ import java.util.*;
 
 class Solution {
     
-    private static int n;
-    
     private static ArrayList<Integer> gateArr;
     private static ArrayList<Integer> summitArr;
     
     private static Map<Integer,ArrayList<Node>> map;
     
     private static class Node{
-        int num;
+        
+        int idx;
         int cost;
         
-        private Node(int num, int cost){
-            this.num = num;
+        private Node(int idx, int cost){
+            this.idx = idx;
             this.cost = cost;
         }
+        
     }
     
     public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-        
-        this.n = n;
         
         gateArr = new ArrayList<>();
         summitArr = new ArrayList<>();
@@ -30,40 +28,39 @@ class Solution {
         for(int summit : summits) summitArr.add(summit);
         
         map = new HashMap<>();
+        
         for(int i = 1; i <= n; i++){
             map.put(i, new ArrayList<>());
         }
         
         for(int[] path : paths){
-            
             int v = path[0];
             int u = path[1];
-            int t = path[2];
+            int c = path[2];
             
             if(gateArr.contains(v) || summitArr.contains(u)){
-                map.get(v).add(new Node(u,t));
+                map.get(v).add(new Node(u,c));
             }
             else if(gateArr.contains(u) || summitArr.contains(v)){
-                map.get(u).add(new Node(v,t));
+                map.get(u).add(new Node(v,c));
             }
             else{
-                map.get(v).add(new Node(u,t));
-                map.get(u).add(new Node(v,t));
+                map.get(v).add(new Node(u,c));
+                map.get(u).add(new Node(v,c));
             }
-            
         }
         
-        return dijkstra();
-        
+        return dijkstra(n);
+    
     }
     
-    private static int[] dijkstra(){
+    private static int[] dijkstra(int n){
         
         PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost - b.cost);
         
         int[] dist = new int[n+1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        
+        Arrays.fill(dist,Integer.MAX_VALUE);
+            
         for(int gate : gateArr){
             pq.add(new Node(gate,0));
             dist[gate] = 0;
@@ -73,22 +70,26 @@ class Solution {
             
             Node now = pq.poll();
             
-            if(dist[now.num] < now.cost) continue;
+            if(dist[now.idx] < now.cost) continue;
             
-            for(Node nxt : map.get(now.num)){
-                int nxtDist = Math.max(dist[now.num],nxt.cost);
-                if(nxtDist < dist[nxt.num]){
-                    dist[nxt.num] = nxtDist;
-                    pq.add(new Node(nxt.num,nxtDist));
+            for(Node nxt : map.get(now.idx)){
+                
+                int nxtCost = Math.max(nxt.cost,dist[now.idx]);
+                
+                if(nxtCost < dist[nxt.idx]){
+                    dist[nxt.idx] = nxtCost;
+                    pq.add(new Node(nxt.idx,nxtCost));
                 }
+                
             }
             
         }
         
         int[] result = new int[]{0,Integer.MAX_VALUE};
-        summitArr.sort((a,b) -> a-b);
+        summitArr.sort((a,b) -> a - b);
         
         for(int summit : summitArr){
+            
             if(result[1] > dist[summit]){
                 result[1] = dist[summit];
                 result[0] = summit;
@@ -96,5 +97,7 @@ class Solution {
         }
         
         return result;
+        
     }
+    
 }
