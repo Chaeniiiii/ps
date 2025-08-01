@@ -14,9 +14,8 @@ public class Main{
 
         int lt = 0, rt = lt , cnt = 0, result = 0;
 
-        while(lt <= rt){
+        while(rt < arr.size()){
 
-            if(rt >= arr.size()) break;
             cnt += arr.get(rt);
 
             if(cnt >= n){
