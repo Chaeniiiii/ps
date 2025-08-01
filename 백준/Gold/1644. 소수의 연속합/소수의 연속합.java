@@ -3,15 +3,15 @@ import java.io.*;
 
 public class Main{
 
-    private static ArrayList<Integer> arr;
-
     public static void main(String [] args) throws Exception{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
 
-        arr = new ArrayList<>();
-        getPrime(n);
+        ArrayList<Integer> arr = new ArrayList<>();
+        for(int i = 2; i <= n; i++){
+            if(isPrime(i)) arr.add(i);
+        }
 
         int lt = 0, rt = lt , cnt = 0, result = 0;
 
@@ -32,14 +32,6 @@ public class Main{
 
         System.out.println(result);
         
-    }
-
-    private static void getPrime(int n){
-
-        for(int num = 2; num <= n ; num++){
-            if(isPrime(num)) arr.add(num);
-        }
-
     }
 
     private static boolean isPrime(int num){
