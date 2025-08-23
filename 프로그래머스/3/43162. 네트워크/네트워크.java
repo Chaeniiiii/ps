@@ -2,55 +2,43 @@ import java.util.*;
 
 class Solution {
     
-    private static int[] parent;
-    private static Set<Integer> network;
-    
-    private static void union(int x, int y){
-        
-        x = find(x);
-        y = find(y);
-        
-        if(x < y){
-            parent[y] = x;
-        }
-        else{
-            parent[x] = y;
-        }
-        
-    }
-    
-    private static int find(int x){
-        
-        if(x == parent[x]) return parent[x];
-        return find(parent[x]);
-        
-    }
+    private static Map<Integer,ArrayList<Integer>> map;
+    private static boolean[] visited;
     
     public int solution(int n, int[][] computers) {
         
-        network = new HashSet<>();
-        parent = new int[n];
-        for(int i = 0; i < n; i++){
-            parent[i] = i;
-        }
+        map = new HashMap<>();
         
-        for(int i = 0 ; i < n; i++){
-            for(int j = 0 ; j < n; j++){
-                if(computers[i][j] == 0) continue;
-                union(i, j);    
+        for(int i = 1; i <= computers.length; i++){
+            map.put(i, new ArrayList<>());
+            for(int j = 1; j <= computers[i-1].length; j++){
+                if(computers[i-1][j-1] == 0) continue;
+                map.get(i).add(j);
             }
         }
         
-        for(int i = 0; i < n; i++){
-            parent[i] = find(i);
+        visited = new boolean[map.size()+1];
+        int cnt = 0;
+        for(int i = 1; i <= map.size(); i++){
+            if(visited[i]) continue;
+            dfs(i);
+            cnt++;
         }
         
+        return cnt;
+                
+    }
+    
+    private static void dfs(int node){
         
-        for(int i = 0; i < n; i++){
-            network.add(parent[i]);
+        if(visited[node]) return;
+        visited[node] = true;
+        
+        for(int nxt : map.get(node)){
+            if(visited[nxt]) continue;
+            dfs(nxt);
         }
-        
-        return network.size();
         
     }
+    
 }
