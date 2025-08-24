@@ -6,27 +6,30 @@ class Solution {
         Deque<String> deque = new ArrayDeque<>();
         deque.add(begin);
         
-        Set<String> set = new HashSet<>();
-        
+        boolean[] visited = new boolean[words.length];
         int cnt = 0;
+        
         while(!deque.isEmpty()){
             
-            int size = deque.size();
-            
-            for(int i = 0; i<size; i++){
+            for(int k = 0; k < deque.size(); k++){
                 
                 String now = deque.poll();
-                if(now.equals(target)) return cnt;
                 
-                for(String next : words){
-                    if(set.contains(next) || !isPossible(now,next)) continue;
-                    set.add(next);
-                    deque.add(next);
+                if(now.equals(target)){
+                    return cnt;
+                }
+            
+                for(int i = 0; i < words.length; i++){
+                    if(visited[i]) continue;
+                    if(check(words[i], now)){
+                        deque.add(words[i]);
+                        visited[i] = true;
+                    }
                 }
                 
             }
             
-            cnt ++;
+            cnt++;
             
         }
         
@@ -34,20 +37,21 @@ class Solution {
         
     }
     
-    private static boolean isPossible(String origin, String other){
-            
-        if(origin.length() != other.length()) return false;
-
+    private static boolean check(String target, String origin){
+        
         int cnt = 0;
-        for(int i = 0; i<origin.length(); i++){
-            if(origin.charAt(i) == other.charAt(i)) continue;
-            cnt ++;
-            if(cnt >= 2) return false;
+        
+        for(int i = 0; i < origin.length(); i++){
+            
+            if(target.charAt(i) != origin.charAt(i)){
+                cnt++;
+            }         
+            
+            if(cnt > 1) return false;
+            
         }
-
-        return true;
-
-
+        
+        return cnt == 0 ? false : true;
+        
     }
-    
 }
