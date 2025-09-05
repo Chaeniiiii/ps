@@ -11,12 +11,9 @@ class Solution {
         while(aIdx < A.length && bIdx < B.length){
             if(A[aIdx] < B[bIdx]){
                 aIdx++;
-                bIdx++;
                 result++;
             }
-            else{
-                bIdx++;
-            }
+            bIdx++;
         }
         
         return result;
