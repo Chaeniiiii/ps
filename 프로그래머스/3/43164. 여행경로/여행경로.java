@@ -2,40 +2,47 @@ import java.util.*;
 
 class Solution {
     
-    private static int len;
     private static String str;
-
-    private static boolean [] visited;
+    private static boolean[] visited;
+    
+    private static String[][] tickets;
     
     public String[] solution(String[][] tickets) {
+    
+        this.tickets = tickets;
+        visited = new boolean[tickets.length];
+            
+        StringBuilder sb = new StringBuilder();
+        sb.append("ICN");
         
-        len = tickets.length;
-        str = null;
-        visited = new boolean[len];
+        dfs(0,"ICN", sb);
         
-        dfs(tickets,"ICN",0,"ICN,");
-        
-        String [] result = str.split(",");
+        String[] result = str.split(",");
+            
         return result;
         
     }
     
-    private static void dfs(String[][] tickets, String st, int dep, String route){
+    private static void dfs(int dep,  String start, StringBuilder sb){
         
-        if(dep == len){
-            if (str == null || str.compareTo(route) > 0) str = route;
+        if(dep == tickets.length){
+            String path = sb.toString();
+            if (str == null || path.compareTo(str) < 0) {
+                str = path;
+            }
             return;
         }
         
-        for(int i = 0; i<len; i++){
-            
-            if(visited[i] || !tickets[i][0].equals(st)) continue;
+        for(int i = 0 ; i < tickets.length; i++){
+            if(!tickets[i][0].equals(start) || visited[i]) continue;
             visited[i] = true;
-            dfs(tickets,tickets[i][1],dep+1,route+tickets[i][1]+",");
+            int len = sb.length();
+            sb.append(",").append(tickets[i][1]);
+            dfs(dep+1,tickets[i][1],sb);
+            sb.setLength(len);
             visited[i] = false;
-            
         }
         
+        
     }
-    
 }
