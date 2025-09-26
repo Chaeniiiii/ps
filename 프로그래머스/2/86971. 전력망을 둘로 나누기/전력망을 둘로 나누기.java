@@ -8,58 +8,56 @@ class Solution {
         
         x = find(x);
         y = find(y);
-        
-        if(x > y){
-            parent[x] = y; 
+
+        if(x < y){
+            parent[y] = x;
         }
-        else parent[y] = x;
+        else{
+            parent[x] = y;
+        }
     }
     
     private static int find(int x){
-        if(parent[x] != x){
-            return parent[x] = find(parent[x]);
-        }
         
+        if(x != parent[x]) return parent[x] = find(parent[x]);
         return parent[x];
         
     }
     
     public int solution(int n, int[][] wires) {
         
-        int answer = Integer.MAX_VALUE;
+        int result = Integer.MAX_VALUE;
         
-        for(int t = 0; t<wires.length; t++){
+        for(int i = 0; i < wires.length; i++){
             
-            //부모 초기화
             parent = new int[n+1];
-            for(int i = 1; i<=n; i++){
-                parent[i]  = i;
+            for(int k = 1; k <= n; k++){
+                parent[k] = k;
             }
             
-            for(int i = 0; i<wires.length; i++){
-                if(i == t) continue;
-                union(wires[i][0],wires[i][1]);
+            for(int j = 0; j < wires.length; j++){
+                if(i == j) continue;
+                union(wires[j][0],wires[j][1]);
             }
             
-            for(int i = 1; i<=n; i++){
-                parent[i] = find(i);
+            for(int k = 1; k <= n; k++){
+                parent[k] = find(parent[k]);
             }
             
-            int cnt = 0;
-            HashMap<Integer,Integer> map = new HashMap<>();
-            for(int i = 1; i<=n; i++){
-                map.put(parent[i],map.getOrDefault(parent[i],0)+1);
-            }
-            
+            Map<Integer,Integer> map = new HashMap<>();
+            for(int k = 1; k <= n ; k++){
+                map.put(parent[k],map.getOrDefault(parent[k],0)+1);            
+            }        
+
+            int total = 0;
             for(int key : map.keySet()){
-                cnt = Math.abs(cnt - map.get(key));
+                total = Math.abs(total - map.get(key));
             }
-            
-            answer = Math.min(answer,cnt);
-            
+
+            result = Math.min(result,total);
         }
-        
-        return answer;
+
+        return result;    
         
     }
 }
