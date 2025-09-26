@@ -1,57 +1,41 @@
 import java.util.*;
 
 class Solution {
-    
-    private static int cnt;
-    
     public int solution(int storey) {
         
-        String storeyStr = String.valueOf(storey);
+        int[] num = new int[String.valueOf(storey).length()];
+        int result = 0;
         
-        int[] nums = new int[storeyStr.length()];
-        cnt = 0;
-        
-        for(int i = 0; i < storeyStr.length(); i++){
-            char c = storeyStr.charAt(i);
-            nums[i] = c -'0';
+        String number = String.valueOf(storey);
+        for(int i = 0; i < number.length(); i++){
+            num[i] = number.charAt(i) - '0';
         }
             
-        for(int i = nums.length - 1; i >= 0; i--){
+        
+        for(int i = num.length - 1; i >= 0; i--){
             
-            int num = nums[i];
+            int now = num[i];
             
-            if(num > 5){
-                cnt += (10 - num);
-                nums = upNext(nums,i-1,i,true);
+            if(now > 5){
+                result += (10 - now);
+                if(i == 0) result++;
+                else num[i - 1]++;
             }
-            else if(num < 5){
-                cnt += num;   
+            else if(now < 5){
+                result += now;
             }
             else{
-                cnt += 5;
-                nums = upNext(nums,i-1,i,false);
+                result+=5;
+                if(i == 0 || num[i-1] < 5){
+                    continue;
+                }
+                if(num[i-1] >= 5){
+                    num[i-1]++;
+                }
             }
-            
-        }        
-        
-        return cnt;
-        
-    }
-    
-    private static int[] upNext(int[] nums, int prev, int now, boolean up){
-        
-        if(prev < 0){
-            if(nums[now] > 5){
-                cnt++;
-            }
-            return nums;
         }
         
-        nums[now] = 0;
-        if(up || (!up && nums[prev] >= 5)) nums[prev]++;
-        
-        return nums;
+        return result;
         
     }
-    
 }
