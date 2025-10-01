@@ -2,101 +2,116 @@ import java.util.*;
 
 class Solution {
     
-    private static ArrayList<Integer> gateArr;
-    private static ArrayList<Integer> summitArr;
+    private static Map<Integer, ArrayList<Node>> map;
+    private static boolean[] gate;
+    private static boolean[] summit;
     
-    private static Map<Integer,ArrayList<Node>> map;
+    private static Node result;
     
     private static class Node{
         
-        int idx;
+        int num;
         int cost;
         
-        private Node(int idx, int cost){
-            this.idx = idx;
+        private Node(int num, int cost){
+            this.num = num;
             this.cost = cost;
         }
-        
     }
     
     public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
         
-        gateArr = new ArrayList<>();
-        summitArr = new ArrayList<>();
+        //출발점 및 산봉우리 저장
+        gate = new boolean[n+1];
+        summit = new boolean[n+1];
         
-        for(int gate : gates) gateArr.add(gate);
-        for(int summit : summits) summitArr.add(summit);
+        for(int g : gates){
+            gate[g] = true;
+        }
         
+        for(int s : summits){
+            summit[s] = true;
+        }
+        
+        //그래프 만들기
         map = new HashMap<>();
-        
         for(int i = 1; i <= n; i++){
             map.put(i, new ArrayList<>());
         }
         
         for(int[] path : paths){
+            
+            int dist = path[2]; 
             int v = path[0];
             int u = path[1];
-            int c = path[2];
             
-            if(gateArr.contains(v) || summitArr.contains(u)){
-                map.get(v).add(new Node(u,c));
+            //출발지점이라면 나가는 방향만 저장
+            if(gate[v]){
+                map.get(v).add(new Node(u,dist));
+                continue;
             }
-            else if(gateArr.contains(u) || summitArr.contains(v)){
-                map.get(u).add(new Node(v,c));
+            if(gate[u]){
+                map.get(u).add(new Node(v,dist));
+                continue;
             }
-            else{
-                map.get(v).add(new Node(u,c));
-                map.get(u).add(new Node(v,c));
+            
+            //산봉우리라면 들어오는 방향만 저장
+            if(summit[v]){
+                map.get(u).add(new Node(v,dist));
+                continue;
             }
+            if(summit[u]){
+                map.get(v).add(new Node(u,dist));
+                continue;
+            }
+            
+            map.get(u).add(new Node(v,dist));
+            map.get(v).add(new Node(u,dist));
+            
         }
         
-        return dijkstra(n);
-    
+        result = new Node(Integer.MAX_VALUE,Integer.MAX_VALUE);
+        dijkstra(n,gates,summits);
+        
+        return new int[]{result.num, result.cost};
+        
     }
     
-    private static int[] dijkstra(int n){
+    private static void dijkstra(int n, int[] gates, int[] summits){
         
         PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost - b.cost);
         
         int[] dist = new int[n+1];
-        Arrays.fill(dist,Integer.MAX_VALUE);
-            
-        for(int gate : gateArr){
-            pq.add(new Node(gate,0));
-            dist[gate] = 0;
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        
+        for(int g : gates){
+            pq.add(new Node(g,0));
+            dist[g] = 0;
         }
         
         while(!pq.isEmpty()){
             
             Node now = pq.poll();
+            if(summit[now.num]) continue;
+            if(dist[now.num] < now.cost) continue;
             
-            if(dist[now.idx] < now.cost) continue;
-            
-            for(Node nxt : map.get(now.idx)){
-                
-                int nxtCost = Math.max(nxt.cost,dist[now.idx]);
-                
-                if(nxtCost < dist[nxt.idx]){
-                    dist[nxt.idx] = nxtCost;
-                    pq.add(new Node(nxt.idx,nxtCost));
+            for(Node nxt : map.get(now.num)){
+                int newCost = Math.max(nxt.cost,dist[now.num]);
+                if(newCost < dist[nxt.num]){
+                    dist[nxt.num] = newCost;
+                    pq.add(nxt);
                 }
                 
             }
             
         }
         
-        int[] result = new int[]{0,Integer.MAX_VALUE};
-        summitArr.sort((a,b) -> a - b);
-        
-        for(int summit : summitArr){
-            
-            if(result[1] > dist[summit]){
-                result[1] = dist[summit];
-                result[0] = summit;
+        Arrays.sort(summits);
+        for(int s : summits){
+            if(dist[s] < result.cost){
+                result = new Node(s,dist[s]);
             }
         }
-        
-        return result;
         
     }
     
