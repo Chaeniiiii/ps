@@ -1,47 +1,40 @@
 import java.util.*;
 
 class Solution {
-    
-    private static final int LIMIT = 8;
-    
     public int solution(int N, int number) {
         
-        if(number == N) return 1;
+        if(N == number) return 1;
         
-        List<Set<Integer>> arr = new ArrayList<>();
+        ArrayList<Set<Integer>> map = new ArrayList<>();
+        String strNum = String.valueOf(N);
         
-        for(int i = 0 ; i <= LIMIT; i++){
-            arr.add(new HashSet<>());
+        for(int i = 0; i <= 8; i++){
+            map.add(new HashSet<>());
+            if(i == 0) continue;
+            int originR = Integer.valueOf(strNum.repeat(i));
+            if(originR == number) return i;
+            map.get(i).add(originR);
         }
         
-        arr.get(1).add(N);
-        
-        for(int i = 2; i <= LIMIT; i++){
+        for(int i = 2; i <= 8; i++){
             
-            Set<Integer> set = arr.get(i);
-            
-            int rep = Integer.parseInt(String.valueOf(N).repeat(i));
-            if(rep == number) return i;
-            
-            set.add(rep);
-            
-            for(int j = 1; j < i; j++){
-                for(int now : arr.get(j)){
-                    for(int prev : arr.get(i-j)){
-                        int a = now + prev;
-                        int b = now - prev;
-                        int c = now * prev;
-                        if(prev != 0){
-                            int d = now / prev;
+            for(int j = 1; j <= i; j++){
+                for(int num : map.get(j)){
+                    for(int prevNum : map.get(i - j)){
+                        int a = num + prevNum;
+                        int b = num - prevNum;
+                        int c = num * prevNum;
+                        if(prevNum != 0){
+                            int d = num / prevNum;
                             if(d == number) return i;
-                            else set.add(d);
+                            map.get(i).add(d);
                         }
                         
-                        if(a == number || b == number || c == number) return i;
+                        if(a == number || b == number || c == number ) return i;
+                        map.get(i).add(a);
+                        map.get(i).add(b);
+                        map.get(i).add(c);
                         
-                        set.add(a);
-                        set.add(b);
-                        set.add(c);
                     }
                 }
             }
