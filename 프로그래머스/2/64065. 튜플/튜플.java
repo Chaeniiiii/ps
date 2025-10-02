@@ -3,30 +3,32 @@ import java.util.*;
 class Solution {
     public int[] solution(String s) {
         
-        Map<Integer,Integer> map = new LinkedHashMap<>();
-        String [] str = s.replace("{","").split("},");
+        String[] t = s.split("},");
+        for(int i = 0; i < t.length; i++){
+            t[i] = t[i].replace("{","").replace("}","");
+        }
+        Arrays.sort(t,(a,b) -> a.length() - b.length());
         
-        for(String numArr : str){
-            String [] numStr = numArr.replace("}","").split(",");
-            for(String ss : numStr){
-                int num = Integer.parseInt(ss);
-                map.put(num,map.getOrDefault(num,0)+1);
+        ArrayList<Integer> arr = new ArrayList<>();        
+        
+        for(String str : t){
+            
+            String newStr = str;
+            String[] number = newStr.split(",");
+            
+            for(int i = 0; i < number.length; i++){
+                int num = Integer.parseInt(number[i]);
+                if(!arr.contains(num)){
+                    arr.add(num);
+                }
             }
         }
         
-        ArrayList<int []> arr = new ArrayList<>();
-        int [] result = new int[map.size()];
-        
-//         for(int key : map.keySet()){
-//             System.out.printf("%d %d\n",key,map.get(key));
-//         }
-            
-        
-        for(int key : map.keySet()) arr.add(new int[]{key,map.get(key)});
-        arr.sort((a,b) -> b[1] - a[1]);
-        
-        for(int i = 0 ; i<arr.size(); i++) result[i] = arr.get(i)[0];
-        
+        int[] result = new int[arr.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = arr.get(i);
+        }
+    
         return result;
         
     }
