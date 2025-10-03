@@ -4,41 +4,35 @@ class Solution {
     public int solution(int n, int k) {
         
         StringBuilder sb = new StringBuilder();
+        while(n >= k){
+            sb.insert(0,n%k);
+            n /= k;
+        }
         
-        String number = Long.toString(n,k);
-        Deque<Character> deque = new ArrayDeque<>();
+        sb.insert(0,n);
         
-        for(char c : number.toCharArray()) deque.add(c);
+        String[] number = sb.toString().split("0");
+        int result = 0;
         
-        int cnt = 0;
-        while(!deque.isEmpty()){
-            
-            char c = deque.poll();
-            
-            if(c == '0'){
-                if(isPrime(Long.parseLong(sb.toString()))) cnt++;
-                sb = new StringBuilder();
-            }
-            
-            sb.append(c);
+        for(String num : number){
+            if("".equals(num) || num == null || num.isEmpty()) continue;
+            if(isPrime(Long.parseLong(num))) result++;
             
         }
         
-        if(isPrime(Long.parseLong(sb.toString()))) cnt++;
         
-        return cnt;
+        return result;
         
     }
     
     private static boolean isPrime(long num){
+     
+        if(num == 0 || num == 1) return false;
         
-        if(num == 1 || num == 0) return false;
-        
-        for(int i = 2; i<=Math.sqrt(num); i++){
-            if(num%i == 0) return false;
+        for(int i = 2; i <= Math.sqrt(num); i++){
+            if(num % i == 0) return false;
         }
         
         return true;
-        
     }
 }
