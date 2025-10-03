@@ -1,58 +1,55 @@
 import java.util.*;
 
 class Solution {
-    
     public int[] solution(String msg) {
         
-        ArrayList<Integer> arr = new ArrayList<>();
-        
         Map<String,Integer> map = init();
-        Deque<String> deque = new ArrayDeque<>();
+        int number = 27;
         
-        for(char c : msg.toCharArray()) deque.add(String.valueOf(c));
-        StringBuilder now = new StringBuilder();
-        while(!deque.isEmpty()){
-        
-            now.append(deque.poll());
+        int lt = 0, rt = 0;
+        boolean check = false;
+        ArrayList<Integer> arr = new ArrayList<>();
+        while(lt <= rt && lt < msg.length()){
             
-            boolean check = false;
-            while(map.containsKey(now.toString())){
-                if(deque.isEmpty()) {
+            String str = msg.substring(lt,rt+1);
+            while(map.containsKey(str)){
+                rt++;
+                if(rt >= msg.length()){
+                    arr.add(map.get(str.substring(0,str.length())));
                     check = true;
                     break;
                 }
-                now.append(deque.poll());
+                str += msg.charAt(rt);
             }
             
-            String str = now.toString();
+            if(check) break;
             
-            if(check){
-                arr.add(map.get(str));
-                continue;
-            }
+            map.put(str,number);
+            number++;
             
-            map.put(str,map.size()+1);
             arr.add(map.get(str.substring(0,str.length()-1)));
             
-            now = new StringBuilder();
-            now.append(str.charAt(str.length()-1));
-                            
-            if(deque.isEmpty()) arr.add(map.get(now.toString()));
+            lt = rt;
+            rt = lt;
             
-        }        
+        }
         
-        int [] result = new int[arr.size()];
-        for(int i = 0; i<arr.size(); i++) result[i] = arr.get(i);
+        int[] result = new int[arr.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = arr.get(i);
+        }
         
         return result;
+        
     }
     
     private static Map<String,Integer> init(){
         
-        HashMap<String,Integer> map = new HashMap<>();
-        
-        for(char c = 'A'; c<='Z'; c++){
-            map.put(String.valueOf(c),(int)(c-'A')+1);
+        Map<String,Integer> map = new HashMap<>();
+        int idx = 1;
+        for (char c = 'A'; c <= 'Z'; c++) {
+            map.put(String.valueOf(c), idx);
+            idx++;
         }
         
         return map;
