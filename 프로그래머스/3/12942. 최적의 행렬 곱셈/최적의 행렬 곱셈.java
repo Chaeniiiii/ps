@@ -2,31 +2,29 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] matrix_sizes) {
-        int answer = 0;
         
-        int[][] dp = new int[201][201];
-        for (int i = 0; i < dp.length; i++) {
-            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        int n = matrix_sizes.length;
+        
+        int[][] dp = new int[n][n];
+        for(int i = 0 ; i < n; i ++){
+            Arrays.fill(dp[i],Integer.MAX_VALUE);
+            dp[i][i] = 0;
         }
         
-        for (int i = 0; i < dp.length; i++) {
-            for (int j = 0; j < dp[0].length; j++) {
-                if (i == j) dp[i][j] = 0;
-            }
-        }
-        
-        for (int i = 0; i < matrix_sizes.length; i++) {
-            for (int j = 0; j < matrix_sizes.length - i; j++) {
-                int a = j; 
-                int b = j + i;
+        for(int i = 1; i < n; i++){
+            for(int st = 0; st + i < n; st++){
                 
-                for (int k = a; k < b; k++) {
-                    dp[a][b] = Math.min(dp[a][b], dp[a][k] + dp[k + 1][b]
-                                        + matrix_sizes[a][0] * matrix_sizes[k][1] * matrix_sizes[b][1]);
+                int en = i + st;
+                
+                for(int k = st; k < en; k++){
+                    dp[st][en] = Math.min(dp[st][en], dp[st][k] + dp[k+1][en] + (matrix_sizes[st][0] * matrix_sizes[k][1] * matrix_sizes[en][1]));
                 }
+                
             }
         }
         
         return dp[0][matrix_sizes.length - 1];
+        
+        
     }
 }
