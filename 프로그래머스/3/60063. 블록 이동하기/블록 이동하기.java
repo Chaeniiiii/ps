@@ -1,54 +1,53 @@
 import java.util.*;
 
 class Solution {
-
-    private static int n,m;
+    
+    private static int n;
     private static int[][] board;
+    private static Deque<Robot> deque;
+    private static boolean[][][] visited;
     
     private static class Robot{
         
-        Pos st;
-        Pos en;
-        int dir;
+        int x1;
+        int y1;
+        int x2;
+        int y2;
+        int d; //0:가로 1:세로
         
-        private Robot(Pos st, Pos en, int dir){
-            if(st.x < en.x || (st.x == en.x && st.y < en.y)){
-                this.st = st;
-                this.en = en;
+        private Robot(int x1, int x2, int y1, int y2, int d){
+            
+            if(x1 < x2 || (x1 == x2 && y1 < y2)){
+                this.x1 = x1;
+                this.x2 = x2;
+                this.y1 = y1;
+                this.y2 = y2;
             }
             else{
-                this.st = en;
-                this.en = st;
+                this.x1 = x2;
+                this.x2 = x1;
+                this.y1 = y2;
+                this.y2 = y1;
             }
-            this.dir = dir;
+            this.d = d;
         }
-    }
-    
-    private static class Pos{ 
-        int x;
-        int y;
         
-        private Pos(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
     }
     
     public int solution(int[][] board) {
         
         this.board = board;
-        
         n = board.length;
-        m = board[0].length;
         
-        ArrayDeque<Robot> deque = new ArrayDeque<>();
-        deque.add(new Robot(new Pos(0,0),new Pos(0,1),0));
+        Robot robot = new Robot(0,0,0,1,0);
         
-        boolean[][][] visited = new boolean[n][m][2];
-        visited[0][0][0] = true;
-        visited[0][1][0] = true;
+        deque = new ArrayDeque<>();
+        deque.add(robot);
         
-        int cnt = 0;
+        visited = new boolean[n][n][2];
+        visited[robot.x1][robot.y1][0] = visited[robot.x2][robot.y2][0] = true; 
+
+        int t = 0;
         int[] dx = new int[]{-1,1,0,0};
         int[] dy = new int[]{0,0,-1,1};
         
@@ -56,112 +55,111 @@ class Solution {
             
             int size = deque.size();
             
-            for(int i = 0; i < size; i++){
+            for(int i = 0 ; i < size; i++){
                 
-                Robot rb = deque.poll();
+                Robot now = deque.poll();
+                if(now.x1 == n - 1 && now.y1 == n - 1 || now.x2 == n - 1 && now.y2 == n - 1) return t;
                 
-                Pos st = rb.st;
-                Pos en = rb.en;
-                int dir = rb.dir;
-                
-                if((st.x == n - 1 && st.y == m - 1) || (en.x == n - 1 && en.y == m - 1)){
-                    return cnt;
-                }
-                
-                //상하좌우 이동
                 for(int k = 0; k < 4; k++){
                     
-                    int mx1 = st.x + dx[k];
-                    int my1 = st.y + dy[k];
+                    int mx1 = now.x1 + dx[k];
+                    int mx2 = now.x2 + dx[k];
+
+                    int my1 = now.y1 + dy[k];
+                    int my2 = now.y2 + dy[k];
                     
-                    int mx2 = en.x + dx[k];
-                    int my2 = en.y + dy[k];
+                    if(!isIn(mx1,my1) || !isIn(mx2,my2) || (visited[mx1][my1][now.d] && visited[mx2][my2][now.d])) continue;
                     
-                    if(!isIn(mx1,my1) || !isIn(mx2,my2) || (visited[mx1][my1][dir] && visited[mx2][my2][dir])){
-                        continue;
-                    }
-                    
-                    deque.add(new Robot(new Pos(mx1,my1),new Pos(mx2,my2),dir));
-                    
-                    visited[mx1][my1][dir] = true;
-                    visited[mx2][my2][dir] = true;
+                    deque.add(new Robot(mx1,mx2,my1,my2,now.d));
+                    visited[mx1][my1][now.d] = true;
+                    visited[mx2][my2][now.d] = true;
                     
                 }
                 
-                //90도 회전
-                ArrayList<Robot> rotatePos = dir == 0 ? rotateRow(st,en) : rotateCol(st,en);
-                for(Robot newRb : rotatePos){
-                    
-                    Pos nSt = newRb.st;
-                    Pos nEn = newRb.en;
-                    int nDir = newRb.dir;
-                    
-                    if(visited[nSt.x][nSt.y][nDir] && visited[nEn.x][nEn.y][nDir]){
-                        continue;
-                    }
-                    
-                    deque.add(new Robot(nSt,nEn,nDir));
-                    visited[nSt.x][nSt.y][nDir] = true;
-                    visited[nEn.x][nEn.y][nDir] = true;
-                    
-                }
+                //세로 검증
+                if(now.d == 0) rotateCol(now);
+                //가로 검증
+                if(now.d == 1) rotateRow(now);
+                
             }
-            cnt++;
+            
+            t++;
             
         }
         
-        return cnt;
+        return -1;
         
     }
     
     private static boolean isIn(int x, int y){
         
-        if(x < 0 || y < 0 || x >= n || y >= m || board[x][y] == 1){
-            return false;
-        }
-        
+        if(x < 0 || y < 0 || x >= n || y >= n || board[x][y] == 1) return false;
         return true;
         
     }
     
-    //기존 로봇의 방향 : 가로 
-    private static ArrayList<Robot> rotateRow(Pos st, Pos en){
+    private static void rotateCol(Robot now){
         
-        ArrayList<Robot> result = new ArrayList<>();
+        int x1 = now.x1;
+        int x2 = now.x2;
+        int y1 = now.y1;
+        int y2 = now.y2;
         
-        //상단으로 회전
-        if(isIn(st.x - 1, st.y) && isIn(en.x - 1, en.y)){
-            result.add(new Robot(new Pos(st.x - 1, st.y),st,1));
-            result.add(new Robot(new Pos(en.x - 1, en.y),en,1));
+        //위쪽 검증
+        if(isIn(x1 - 1,y1) && isIn(x2 - 1, y2)){
+            
+            if(!visited[x1][y1][1] || !visited[x1 - 1][y1][1]){
+                deque.add(new Robot(x1,x1-1,y1,y1,1));
+                visited[x1][y1][1] = visited[x1 - 1][y1][1] = true;
+            }
+            if(!visited[x2][y2][1] || !visited[x2-1][y2][1]){
+                deque.add(new Robot(x2,x2-1,y2,y2,1));
+                visited[x2][y2][1] = visited[x2 - 1][y2][1] = true;
+            }
+            
         }
-        //하단으로 회전
-        if(isIn(st.x + 1, st.y) && isIn(en.x + 1, en.y)){
-            result.add(new Robot(new Pos(st.x + 1, st.y),st,1));
-            result.add(new Robot(new Pos(en.x + 1, en.y),en,1));
-        }
         
-        return result;
+        //아래쪽 검증
+        if(isIn(x1 + 1, y1) && isIn(x2 + 1, y2)){
+            if(!visited[x1][y1][1] || !visited[x1 + 1][y1][1]){
+                deque.add(new Robot(x1,x1 + 1,y1,y1,1));
+                visited[x1][y1][1] = visited[x1 + 1][y1][1] = true;
+            }
+            if(!visited[x2][y2][1] || !visited[x2 + 1][y2][1]){
+                deque.add(new Robot(x2,x2 + 1, y2,y2,1));
+                visited[x2][y2][1] = visited[x2 + 1][y2][1] = true;
+            }
+        }
+            
+        
         
     }
     
-    //기존 로봇의 방향 : 세로 
-    private static ArrayList<Robot> rotateCol(Pos st, Pos en){
-     
-        ArrayList<Robot> result = new ArrayList<>();
+    private static void rotateRow(Robot now){
         
-        //좌측으로 회전
-        if(isIn(st.x, st.y - 1) && isIn(en.x, en.y - 1)){
-            result.add(new Robot(new Pos(st.x,st.y - 1),st,0));
-            result.add(new Robot(new Pos(en.x,en.y - 1),en,0));
-        }
-        //우측으로 회전
-        if(isIn(st.x, st.y + 1) && isIn(en.x, en.y + 1)){
-            result.add(new Robot(new Pos(st.x,st.y + 1),st,0));
-            result.add(new Robot(new Pos(en.x,en.y + 1),en,0));
+        //왼쪽 검증
+        if(isIn(now.x1, now.y1 - 1) && isIn(now.x2,now.y2 - 1)){
+            if(!visited[now.x1][now.y1][0] || !visited[now.x1][now.y1 - 1][0]){
+                deque.add(new Robot(now.x1,now.x1, now.y1, now.y1 - 1, 0));
+                visited[now.x1][now.y1][0] = visited[now.x1][now.y1 - 1][0] = true;
+            }
+            if(!visited[now.x2][now.y2][0] || !visited[now.x2][now.y2 - 1][0]){
+                deque.add(new Robot(now.x2, now.x2, now.y2, now.y2 - 1, 0));
+                visited[now.x2][now.y2][0] = visited[now.x2][now.y2 - 1][0] = true;
+            }
         }
         
-        return result;
+        //오른쪽 검증
+        if(isIn(now.x1, now.y1 + 1) && isIn(now.x2, now.y2 + 1)){
+            if(!visited[now.x1][now.y1][0] || !visited[now.x1][now.y1 + 1][0]){
+                deque.add(new Robot(now.x1,now.x1, now.y1, now.y1 + 1, 0));
+                visited[now.x1][now.y1][0] = visited[now.x1][now.y1 + 1][0] = true;
+            }
+            if(!visited[now.x2][now.y2][0] || !visited[now.x2][now.y2 + 1][0]){
+                deque.add(new Robot(now.x2, now.x2, now.y2, now.y2 + 1, 0));
+                visited[now.x2][now.y2][0] = visited[now.x2][now.y2 + 1][0] = true;
+            }
+        }
         
     }
-    
 }
