@@ -2,11 +2,11 @@ import java.util.*;
 
 class Solution {
     
-    private static final int MAXT = 10000;
+    private static final int MAX = 10000;
     
     public int solution(int n, int[] cores) {
         
-        int lt = 1, rt = MAXT*n;
+        int lt = 1, rt = MAX*n;
         
         int len = cores.length;
         
