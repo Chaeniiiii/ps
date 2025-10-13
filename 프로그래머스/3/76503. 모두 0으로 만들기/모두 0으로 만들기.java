@@ -12,11 +12,12 @@ class Solution {
         
         long sum = 0;
         for(int aNum : a){
-            sum += (long)aNum;
+            sum += aNum;
         }
-        
         if(sum != 0) return -1;
         
+        
+        this.a = a;
         graph = new ArrayList[a.length];
         for (int i = 0; i < a.length; i++) {
             graph[i] = new ArrayList<>();
@@ -28,7 +29,6 @@ class Solution {
         }
         
         result = 0;
-        this.a = a;
         visited = new boolean[a.length];
         
         dfs(0);
@@ -41,9 +41,10 @@ class Solution {
         visited[node] = true;
         long sum = a[node];
 
-        for (int child : graph[node]) {
-            if (!visited[child]) {
-                long childSum = dfs(child);
+        for (int i = 0; i < graph[node].size(); i++) {
+            int j = graph[node].get(i);
+            if (!visited[j]) {
+                long childSum = dfs(j);
                 sum += childSum;
                 result += Math.abs(childSum);
             }
