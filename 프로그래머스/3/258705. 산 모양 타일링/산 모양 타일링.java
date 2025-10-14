@@ -1,28 +1,29 @@
 import java.util.*;
 
 class Solution {
-    
-    private static final int MOD = 10007;
     public int solution(int n, int[] tops) {
         
-        int[] a = new int[n + 1];
-        int[] b = new int[n + 1];
+        int MOD = 10007;
         
-        a[1] = 1;
-        if(tops[0] == 1) b[1] = 3;
-        else b[1] = 2;
+        int[] tri = new int[n + 1];
+        int[] rvsTri = new int[n + 1];
+        
+        tri[1] = 1;
+        if(tops[0] == 1) rvsTri[1] = 3;
+        else rvsTri[1] = 2;
         
         for(int i = 2; i <= n; i++){
-            a[i] = (a[i - 1] + b[i - 1]) % MOD;
+            tri[i] = (tri[i - 1] + rvsTri[i - 1]) % MOD;
+            
             if(tops[i - 1] == 1){
-                b[i] = (a[i - 1] * 2 + b[i - 1] * 3) % MOD;
+                rvsTri[i] = (tri[i - 1] * 2 + rvsTri[i - 1] * 3) % MOD;
             }
             else{
-                b[i] = (a[i - 1] + b[i - 1] * 2) % MOD;
+                rvsTri[i] = (tri[i - 1] + rvsTri[i - 1] * 2) % MOD;
             }
         }
         
-        return (a[n] + b[n]) % MOD;
+        return (tri[n] + rvsTri[n]) % MOD;
         
     }
 }
