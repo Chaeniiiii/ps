@@ -1,64 +1,39 @@
 import java.util.*;
 
 class Solution {
-    
-    private static class Str {
-        
-        String str;
-        int cnt;
-        
-        private Str(String str, int cnt){
-            this.str = str;
-            this.cnt = cnt;
-        }
-    }
-    
     public int solution(String s) {
         
-        if(s.length() == 1) return 1;
-        
-        Deque<Str> deque;
-        int answer = Integer.MAX_VALUE;
-        
-        for(int i = 1; i<=s.length()/2; i++){   
-            deque = new ArrayDeque<>();
+        int result = s.length(); 
+
+        for (int cut = 1; cut <= s.length() / 2; cut++) {
             
-            int lt = 0, rt = lt+i, len = 0, cnt = 1;
+            StringBuilder sb = new StringBuilder();
             
-            while(lt < rt){
+            String prev = s.substring(0, cut);
+            int cnt = 1;
+
+            for (int i = cut; i < s.length(); i += cut) {
                 
-                String now;
-                
-                if(rt >= s.length()) now = s.substring(lt);
-                else now = s.substring(lt,rt);
-                
-                if(deque.isEmpty() || !deque.peekLast().str.equals(now)){
-                    deque.add(new Str(now,1));
+                int end = Math.min(i + cut, s.length());
+                String cur = s.substring(i, end);
+
+                if (cur.equals(prev)) cnt++;
+                else {
+                    if (cnt > 1) sb.append(cnt);
+                    sb.append(prev);
+                    prev = cur;
+                    cnt = 1;
+                    
                 }
-                else if(deque.peekLast().str.equals(now)){
-                    Str prev = deque.peekLast();
-                    prev.cnt ++;
-                }
-                
-                if(rt >= s.length()) break;
-                
-                lt+=i;
-                rt+=i;
-                
             }
-            
-            while(!deque.isEmpty()){
-                Str target = deque.poll();
-                len+=target.str.length();
-                if(target.cnt > 1) len += String.valueOf(target.cnt).length();
-            }
-            
-            answer = Math.min(answer,len);
-            
+
+            if (cnt > 1) sb.append(cnt);
+            sb.append(prev);
+
+            result = Math.min(result, sb.length());
             
         }
-        
-        return answer ;
-        
+
+        return result;
     }
 }
