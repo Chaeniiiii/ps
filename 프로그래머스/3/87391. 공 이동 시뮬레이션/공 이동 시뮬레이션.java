@@ -3,40 +3,43 @@ import java.util.*;
 class Solution {
     public long solution(int n, int m, int x, int y, int[][] queries) {
         
-        long r1 = x, r2 = x;
-        long c1 = y, c2 = y; 
+        long lt = y, rt = y, top = x, bt = x;
         
-        for(int i=queries.length-1; i>=0; i--){
-            int dir = queries[i][0];
-            int cnt = queries[i][1];
+        for(int i = queries.length - 1; i >=0; i--){
             
-            //좌 -> 우
-            if(dir==0){ 
-                if(c1!=0) c1 += cnt;
-                c2 = Math.min(c2+cnt, m-1);
-                if(c1>m-1) return 0;
+            int dir = queries[i][0];
+            int dist = queries[i][1];
+            
+            if(dir == 0){ //left
+                if(lt != 0){
+                    lt+=dist;
+                }
+                rt = Math.min(m-1,rt+dist);
             }
-            else if(dir==1) {
-                //우 -> 좌
-                if(c2!=m-1) c2 -= cnt;
-                c1 = Math.max(c1-cnt, 0);
-                if(c2<0) return 0;
+            else if(dir == 1){ //right
+                if(rt != m-1){
+                    rt-=dist;
+                }
+                lt = Math.max(0,lt-dist);
             }
-            else if(dir==2){
-                //위 -> 아래
-                if(r1!=0) r1 += cnt;
-                r2 = Math.min(r2+cnt, n-1);
-                if(r1>n-1) return 0;
+            else if(dir == 2){ //top
+                if(top != 0){
+                    top+=dist;
+                }
+                bt = Math.min(n-1,bt+dist);
+            } 
+            else if(dir == 3){ //bottom
+                if(bt != n-1){
+                    bt-=dist;
+                }
+                top = Math.max(0,top-dist);
             }
-            else{
-                //아래 -> 위
-                if(r2!=n-1) r2 -= cnt;
-                r1 = Math.max(r1-cnt, 0);
-                if(r2<0) return 0;
-            }
+            
+            if(lt >= m || rt < 0 || top >= n || bt < 0) return 0;
+            
         }
         
-        return (r2 - r1 + 1) * (c2 - c1 + 1);
+        return (rt-lt+1) * (bt-top+1);
         
     }
 }
