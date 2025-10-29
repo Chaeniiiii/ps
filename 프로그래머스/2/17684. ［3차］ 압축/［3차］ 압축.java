@@ -1,42 +1,46 @@
 import java.util.*;
 
 class Solution {
+    
+    private static Map<String,Integer> map;
+    
     public int[] solution(String msg) {
         
-        Map<String,Integer> map = init();
-        int dictSize = 27;
-        
+        map = new HashMap<>();
+        init();
+    
+        StringBuilder sb;
         ArrayList<Integer> arr = new ArrayList<>();
         
-        int idx = 0;
-        while(idx < msg.length()){
+        int lt = 0, rt = lt + 1, idx = 27;
+        
+        while(lt < rt){
             
-            StringBuilder sb = new StringBuilder();
-            sb.append(msg.charAt(idx));
+            sb = new StringBuilder();
+            sb.append(msg.charAt(lt));
             
-            int nxt = idx + 1;
-            
-            while(nxt < msg.length() && map.containsKey(sb.toString() + msg.charAt(nxt))){
-                sb.append(msg.charAt(nxt));
-                nxt++;
-            }
-            
-            arr.add(map.get(sb.toString()));
-            
-            if(nxt < msg.length()){
+            while(rt < msg.length() && map.containsKey(sb.toString()+ msg.charAt(rt))){
                 
-                sb.append(msg.charAt(nxt));
-                map.put(sb.toString(),dictSize);
-                dictSize++;
+                sb.append(msg.charAt(rt));
+                rt++;
                 
             }
             
-            idx = nxt;
+            String str = sb.toString();
+            arr.add(map.get(str));
+            
+            if(rt < msg.length()){
+                map.put(str+msg.charAt(rt),idx);
+                idx++;    
+            }
+            
+            lt = rt;
+            rt = Math.min(msg.length(),lt+1);
             
         }
         
         int[] result = new int[arr.size()];
-        for(int i = 0; i < arr.size(); i++){
+        for(int i = 0 ; i < result.length; i++){
             result[i] = arr.get(i);
         }
         
@@ -44,17 +48,15 @@ class Solution {
         
     }
     
-    private static Map<String, Integer> init(){
+    private static void init(){
         
-        Map<String,Integer> map = new HashMap<>();
+        char c = 'A';
         
-        int num = 1;
-        for(char c = 'A'; c <= 'Z'; c++){
-            map.put(String.valueOf(c),num);
-            num++;
+        for(int i = 1; i <= 26; i++){
+            map.put(String.valueOf(c),i);
+            c++;
         }
         
-        return map;
-        
     }
+    
 }
