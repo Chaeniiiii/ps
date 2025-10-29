@@ -5,27 +5,35 @@ class Solution {
         
         int cnt = 0;
         
-        for(String s : skill_trees){
+        for(String st : skill_trees){
             
-            boolean check = false;
-            int idx = 0;
-            for(int i = 0; i<s.length(); i++){
+            int now = 0;
+            boolean check = true;
+            
+            for(int i = 0; i < st.length(); i++){
+
+                char c = st.charAt(i);
+                int tg = skill.indexOf(c);
                 
-                int now = s.charAt(i);
+                if(tg == -1) continue;
                 
-                if(skill.indexOf(now) == -1) continue;
-                if(idx == skill.indexOf(now)) idx ++;
-                else{
-                    check = true;
-                    break;    
+                if((now == 0 && tg > 0) || now != tg){
+                    check = false;
+                    break;
                 }
+                
+                now = tg+1;
                 
             }
             
-            if(!check) cnt ++;
+            if(check){
+                cnt++;
+            }
             
         }
         
         return cnt;
+
     }
+        
 }
