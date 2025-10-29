@@ -12,30 +12,29 @@ class Solution {
         StringBuilder sb;
         ArrayList<Integer> arr = new ArrayList<>();
         
-        int lt = 0, rt = lt + 1, idx = 27;
+        int pt = 0, idx = 27;
         
-        while(lt < rt){
+        while(pt < msg.length()){
             
             sb = new StringBuilder();
-            sb.append(msg.charAt(lt));
+            sb.append(msg.charAt(pt));
+            pt++;
             
-            while(rt < msg.length() && map.containsKey(sb.toString()+ msg.charAt(rt))){
+            while(pt < msg.length() && map.containsKey(sb.toString()+ msg.charAt(pt))){
                 
-                sb.append(msg.charAt(rt));
-                rt++;
+                sb.append(msg.charAt(pt));
+                pt++;
                 
             }
             
             String str = sb.toString();
             arr.add(map.get(str));
             
-            if(rt < msg.length()){
-                map.put(str+msg.charAt(rt),idx);
+            if(pt < msg.length()){
+                map.put(str+msg.charAt(pt),idx);
                 idx++;    
             }
             
-            lt = rt;
-            rt = Math.min(msg.length(),lt+1);
             
         }
         
