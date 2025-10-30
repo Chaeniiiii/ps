@@ -2,93 +2,95 @@ import java.util.*;
 
 class Solution {
     
-    private static Fee fee;
+    private static int[] fees;
     
-    private static class Fee {
+    //차량의 입출차 시간 기록
+    private static class Car{
         
-        int basicT;
-        int basicP;
+        PriorityQueue<Integer> st;
+        PriorityQueue<Integer> en;
         
-        int unitT;
-        int unitP;
-        
-        private Fee(int [] fees){
-            this.basicT = fees[0];
-            this.basicP = fees[1];
-            this.unitT = fees[2];
-            this.unitP = fees[3];
+        private Car(){
+            this.st = new PriorityQueue<>();
+            this.en = new PriorityQueue<>();
         }
+        
+        
     }
     
     public int[] solution(int[] fees, String[] records) {
-    
-        Map<String,ArrayList<String>> in = new TreeMap<>();
-        Map<String,ArrayList<String>> out = new TreeMap<>();
         
-        fee = new Fee(fees);
+        this.fees = fees;
         
-        for(String s : records){
-            String [] str = s.split(" ");
+        Map<String,Car> map = new TreeMap<>();
+        for(int i = 0; i < records.length; i++){
             
-            if(str[2].equals("IN")) {
-                in.computeIfAbsent(str[1],v-> new ArrayList<>()).add(str[0]);
+            String[] rcd = records[i].replaceAll(":"," ").split(" ");
+            
+            int h = Integer.parseInt(rcd[0]) * 60;
+            int m = Integer.parseInt(rcd[1]);
+            
+            String number = rcd[2];
+            String action = rcd[3];
+
+            Car car = map.containsKey(number) ? map.get(number) : new Car();
+            
+            switch(action){
+                case "IN" :
+                    car.st.add(h+m);
+                    break;
+                case "OUT" : 
+                    car.en.add(h+m);
+                    break;
             }
-            else {
-                out.computeIfAbsent(str[1],v-> new ArrayList<>()).add(str[0]);
-            }
+            
+            map.put(number,car);
             
         }
         
-        int idx = 0;
-        int [] result = new int[in.size()];
-        
-        for(String key : in.keySet()){
-        
-            int total = 0;
-            for(int i = 0; i<in.get(key).size(); i++){
-                if(out.get(key) == null || out.get(key).size() <= i){
-                    total += getTime(in.get(key).get(i),"23:59");
-                }
-                else{
-                    total += getTime(in.get(key).get(i),out.get(key).get(i));
-                }
+        int[] result = new int[map.size()];
+
+        int i = 0;
+        for(String key : map.keySet()){
+            
+            Car car = map.get(key);
+            int odd = car.st.size() - car.en.size();
+            while(odd-- > 0){
+                car.en.add(1439);
             }
             
-            result[idx] = getPrice(total);
-            idx ++;
+            int size = car.st.size();
+            int cnt = 0;
+            while(size-- > 0){
+                cnt += calc(car);
+            }
+            
+            result[i] = calc2(cnt);
+            i++;
             
         }
-        
         
         return result;
+
+    }
+    
+    private static int calc(Car car){
+        
+        int stT = car.st.poll();
+        int enT = car.en.poll();
+        
+        int time = enT - stT;
+        return time;
         
     }
     
-    private static int getTime(String str1, String str2){
+    private static int calc2(int time){
         
-        String [] a = str1.split(":");
-        String [] b = str2.split(":");
+        if(time <= fees[0]) return fees[1];
         
-        int aTime = 0;
-        int bTime = 0;
-        
-        aTime = (Integer.parseInt(a[0])*60 + Integer.parseInt(a[1]));
-        bTime = (Integer.parseInt(b[0])*60 + Integer.parseInt(b[1]));
-        
-        return bTime - aTime;
-        
+        time -= fees[0];
+        return fees[1] + (time / fees[2] * fees[3]) + (time % fees[2] == 0 ? 0 : fees[3]);
+         
     }
     
-    private static int getPrice(int time){
-        
-        if(time <= fee.basicT) return fee.basicP;
-        
-        int unitPrice = (time - fee.basicT)/fee.unitT;
-        int div = (time - fee.basicT)%fee.unitT;
-        
-        if(div != 0) unitPrice++;
-        
-        return fee.basicP + unitPrice*fee.unitP;
-        
-    }
 }
