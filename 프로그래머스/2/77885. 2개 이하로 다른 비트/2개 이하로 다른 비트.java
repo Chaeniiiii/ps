@@ -1,44 +1,36 @@
 import java.util.*;
 
 class Solution {
+    
+    
     public long[] solution(long[] numbers) {
         
-        long[] result = new long[numbers.length];
+        long[] result = new long [numbers.length];
         
-        for(int t = 0; t < numbers.length; t++){
+        for(int t = 0; t<numbers.length; t++){
             
             long num = numbers[t];
-            String binary = Long.toBinaryString(num);
+            StringBuilder bitNum = new StringBuilder(Long.toBinaryString(num));
             
-            int len = binary.length();
-            
-            int idx = len;
-            
-            for(int i = len - 1; i >= 0; i--){
-                
-                 if(binary.charAt(i) == '0'){
-                     idx = i;
-                     break;
-                 }
-                
+            if(bitNum.charAt(bitNum.length()-1) == '0'){
+                bitNum.setCharAt(bitNum.length()-1,'1');
+            }
+            else if(bitNum.toString().contains("0")){
+                for(int i = bitNum.length()-1; i>=0; i--){
+                    if(bitNum.charAt(i) == '0'){
+                        bitNum.setCharAt(i,'1');
+                        bitNum.setCharAt(i+1,'0');
+                        break;
+                    }
+                }
+            }
+            else {
+                bitNum.setCharAt(0,'0');
+                bitNum.insert(0,'1');
             }
             
-            StringBuilder sb = new StringBuilder();
+            result[t] = Long.parseLong(bitNum.toString(),2);
             
-            if(idx == len){
-                sb.append("10").append(binary.substring(1));
-            }
-            else if(idx < len){                
-                
-                sb.append(binary.substring(0,idx)).append("1");
-                if(idx+1 < len) sb.append("0").append(binary.substring(idx+2));
-            }
-            else{
-                sb.append(binary.substring(0,idx)).append("1");
-            }
-            
-            //System.out.println(sb.toString());
-            result[t] = Long.parseLong(sb.toString(),2);
             
         }
         
