@@ -2,8 +2,11 @@ import java.util.*;
 
 class Solution {
     
-    private static class Pos {
-        int x ;
+    private static int n;
+    private static int[][] arr;
+    
+    private static class Pos{
+        int x;
         int y;
         private Pos(int x, int y){
             this.x = x;
@@ -13,8 +16,10 @@ class Solution {
     
     public int[] solution(int[][] arr) {
         
-        int n = arr.length;
-        int [] result = new int[2];
+        n = arr.length;
+        this.arr = arr;
+        
+        int[] result = new int[2];
         
         Deque<Pos> deque = new ArrayDeque<>();
         deque.add(new Pos(0,0));
@@ -23,20 +28,21 @@ class Solution {
             
             int size = deque.size();
             
-            for(int t = 0; t<size; t++){
+            for(int t = 0; t < size; t++){
                 
-                Pos now = deque.poll();
+                Pos pos = deque.poll();
                 
-                if(divide(now,arr,n)) result[arr[now.x][now.y]]++;
+                if(div(pos)){
+                    result[arr[pos.x][pos.y]]++;
+                }
                 else{
-                    for(int i = now.x; i<now.x+n; i+=(n/2)){
-                        for(int j = now.y; j<now.y+n; j+=(n/2)){
+                    for(int i = pos.x ; i < pos.x+n; i+=n/2){
+                        for(int j = pos.y; j < pos.y+n; j+=n/2){
                             deque.add(new Pos(i,j));
                         }
                     }
                 }
             }
-            
             
             n /= 2;
             
@@ -46,18 +52,17 @@ class Solution {
         
     }
     
-    private static boolean divide(Pos pos,int[][] arr,int len){
+    private static boolean div(Pos pos){
         
-        int now = arr[pos.x][pos.y];
+        int num = arr[pos.x][pos.y];
         
-        for(int i = pos.x; i<pos.x+len; i++){
-            for(int j = pos.y; j<pos.y+len; j++){
-                if(arr[i][j] != now) return false;
+        for(int i = pos.x; i < pos.x+n; i++){
+            for(int j = pos.y; j < pos.y+n; j++){
+                if(arr[i][j] != num) return false;
             }
         }
         
         return true;
-        
     }
     
 }
