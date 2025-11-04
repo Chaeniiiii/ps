@@ -26,7 +26,7 @@ class Solution {
         int maxDigit = 0;
         for(String ep : expressions){
             for(char ch : ep.toCharArray()){
-                //모든 숫자는 선택된 진법으로 표현 가능해야 함 = 가장 큰 수 찾기
+                //모든 숫자는 선택된 진법으로 표현 가능해야 함 => 가장 큰 수 찾기
                 if(Character.isDigit(ch)){
                     maxDigit = Math.max(maxDigit, ch - '0');
                 }
@@ -52,7 +52,6 @@ class Solution {
                 int c = Integer.parseInt(str[4]);
                 filterCandidate(a,b,c,sign);
             }
-            
         }
 
         //수식 복원
@@ -85,6 +84,7 @@ class Solution {
         return result;
     }
     
+    //진법 후보 중 가능한 진법 선별 
     private static void filterCandidate(int a, int b, int c, String sign){
         
         Set<Integer> set = new HashSet<>();
@@ -106,15 +106,15 @@ class Solution {
         
     }
     
-    private static int convert(int num, int base){
+    private static int convert(int num, int cdd){
         
         int res = 0;
         String s = String.valueOf(num);
         
         for(char c : s.toCharArray()){
             int n = c - '0';
-            if(n >= base) return -1; 
-            res = res * base + n;
+            if(n >= cdd) return -1; 
+            res = res * cdd + n;
         }
         
         return res;
