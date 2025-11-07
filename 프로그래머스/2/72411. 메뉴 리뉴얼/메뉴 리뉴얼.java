@@ -1,73 +1,61 @@
 import java.util.*;
 
 class Solution {
-    
-    private static Map<String,Integer> map;
-    private static boolean [] len;
-    private static int maxLen;
-    
     public String[] solution(String[] orders, int[] course) {
         
-        map = new HashMap<>();
-        len = new boolean[11];
-        maxLen = course[course.length-1];
+        PriorityQueue<String> pq = new PriorityQueue<>((a,b) -> a.compareTo(b));
         
-        for(int cour : course) len[cour] = true;
-        
-        for(String order : orders){
-            char [] newOrder = order.toCharArray();
-            Arrays.sort(newOrder);
-            
-            order = new String(newOrder);
-            dfs(0,order,"",0);
-        }
-        
-        ArrayList<String> arr = new ArrayList<>();
-        
-        int [] max = new int[maxLen+1];
-        Map<Integer,ArrayList<String>> result = new HashMap<>();
-        
-        for(String key : map.keySet()){
-            if(map.get(key) >= 2){
-                if(max[key.length()] < map.get(key)){
-                    result.remove(key.length());
-                    result.computeIfAbsent(key.length(),v -> new ArrayList<>()).add(key);
-                    max[key.length()] = map.get(key);
+        for(int c : course){
+            Map<String,Integer> map = new HashMap<>();
+            for(String order : orders){
+                char[] od = order.toCharArray();
+                Arrays.sort(od);
+                dfs(od,0,0,c,map, new StringBuilder());
+            }
+            int maxCnt = 0;
+            Deque<String> deque = new ArrayDeque<>();
+            for(String key : map.keySet()){
+                //System.out.printf("%s %d\n",key,map.get(key));
+                if(map.get(key) < 2) continue;
+                if(deque.isEmpty() || map.get(key) == maxCnt){
+                    deque.add(key);
+                    maxCnt = map.get(key);
                 }
-                else if (max[key.length()] == map.get(key)){
-                    result.get(key.length()).add(key);
+                else if(map.get(key) > maxCnt){
+                    deque.clear();
+                    deque.add(key);
+                    maxCnt = map.get(key);
                 }
+            }
+            while(!deque.isEmpty()){
+                pq.add(deque.poll());
             }
         }
         
-        ArrayList<String> answer = new ArrayList<>();
-        
-        for(int key : result.keySet()){
-            for(String value : result.get(key)) answer.add(value);
+        int size = pq.size();
+        String[] result = new String[size];
+        for(int i = 0; i < size; i++){
+            result[i] = pq.poll();
         }
         
-        String [] total = new String[answer.size()];
-    
-        for(int i = 0; i<answer.size(); i++) total[i] = answer.get(i);
-        Arrays.sort(total);
+        return result;
         
-        
-        return total;
         
     }
     
-    private static void dfs(int start , String origin, String str, int dep){
+    private static void dfs(char[] str,int idx, int dep, int c, Map<String,Integer> map, StringBuilder sb){
         
-        if(dep > maxLen) return;
-        
-        if(len[dep]){
-            StringBuilder sb = new StringBuilder(str);
-            map.put(str,map.getOrDefault(str,0)+1);
+        if(dep == c){
+            map.put(sb.toString(),map.getOrDefault(sb.toString(),0)+1);
+            return;
         }
         
-        for(int i = start; i<origin.length(); i++){
-            dfs(i+1,origin,str+origin.charAt(i),dep+1);
+        for(int i = idx; i < str.length; i++){
+            sb.append(str[i]);
+            dfs(str,i+1,dep+1,c,map,sb);
+            sb.delete(sb.length()-1,sb.length());
         }
         
     }
+    
 }
