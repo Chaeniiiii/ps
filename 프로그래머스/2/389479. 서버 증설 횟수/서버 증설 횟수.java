@@ -1,26 +1,22 @@
+import java.util.*;
+
 class Solution {
-    
-    private static final int SIZE = 24;
-    
     public int solution(int[] players, int m, int k) {
         
-        int [] server = new int[SIZE];
+        int[] time = new int[24];
         int cnt = 0;
         
-        for(int i = 0; i<SIZE; i++){
+        for(int i = 0; i < players.length; i++){
             
-            if(players[i] >= m){
-                
-                int plyr = (players[i]-(m*server[i])) / m;
-                
-                if(plyr <= 0) continue;
-                
-                cnt += plyr;
-                for(int j = i; j<(i+k >= SIZE ? SIZE : i+k); j++) {
-                    server[j] +=plyr;
+            int play = players[i];
+            if(play >= m && time[i] < play/m){
+                play -= time[i] *m;
+                for(int j = i; j < Math.min(i+k,players.length); j++){
+                    time[j]+=play/m;
                 }
-                
+                cnt+=play/m;
             }
+        
         }
         
         return cnt;
