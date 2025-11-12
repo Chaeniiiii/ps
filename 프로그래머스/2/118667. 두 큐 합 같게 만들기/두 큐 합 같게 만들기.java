@@ -1,47 +1,48 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
+    
+    private static final long MAX = 300_000;
     public int solution(int[] queue1, int[] queue2) {
         
-        Deque<Integer> q1 = new ArrayDeque<>();
-        Deque<Integer> q2 = new ArrayDeque<>();
+        long sum1 = Arrays.stream(queue1).sum();
+        long sum2 = Arrays.stream(queue2).sum();
         
-        long total1 = 0, total2 = 0;
+        if((sum1+sum2)%2 != 0) return -1;
         
-        for(int q : queue1) {
-            q1.add(q);
-            total1+=q;
+        int n = queue1.length;
+        Deque<Long> deque1 = new ArrayDeque<>();
+        Deque<Long> deque2 = new ArrayDeque<>();
+        
+        for(int i = 0; i < n; i++){
+            deque1.add((long)queue1[i]);
+            deque2.add((long)queue2[i]);
         }
-        for(int q : queue2) {
-            q2.add(q);
-            total2+=q;
-        }
-        
-        if((total1+total2)%2 !=0) return -1; //두 큐 합이 홀수이면 합을 같게 만들 수 없음 
-
-        long mid = (total1+total2)/2;
         
         int cnt = 0;
-        while(cnt <= (q1.size()+q2.size())*4){
+        while(cnt < MAX){
             
-            if(total1 == total2) return cnt;
-            else if(total1 > total2){
-                int num = q1.poll();
-                total2+=num;
-                total1-=num;
-                q2.add(num);
+            long num;
+            if(sum1 > sum2){
+                num = deque1.poll();
+                sum2+=num;
+                sum1-=num;
+                deque2.add(num);
             }
-            else {
-                int num = q2.poll();
-                total1+=num;
-                total2-=num;
-                q1.add(num);
+            else if(sum1 < sum2){
+                num = deque2.poll();
+                sum1+=num;
+                sum2-=num;
+                deque1.add(num);
             }
-            
-            cnt ++;
-            
+            else{
+                return cnt;
+            }
+            cnt++;
         }
         
         return -1;
+        
     }
 }
