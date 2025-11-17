@@ -3,7 +3,6 @@ import java.util.stream.*;
 
 class Solution {
     
-    private static final long MAX = 300_000;
     public int solution(int[] queue1, int[] queue2) {
         
         long sum1 = Arrays.stream(queue1).sum();
@@ -12,18 +11,18 @@ class Solution {
         if((sum1+sum2)%2 != 0) return -1;
         
         int n = queue1.length;
-        Deque<Long> deque1 = new ArrayDeque<>();
-        Deque<Long> deque2 = new ArrayDeque<>();
+        Deque<Integer> deque1 = new ArrayDeque<>();
+        Deque<Integer> deque2 = new ArrayDeque<>();
         
         for(int i = 0; i < n; i++){
-            deque1.add((long)queue1[i]);
-            deque2.add((long)queue2[i]);
+            deque1.add(queue1[i]);
+            deque2.add(queue2[i]);
         }
         
         int cnt = 0;
-        while(cnt < MAX){
+        while(cnt <= 3*n){
             
-            long num;
+            int num;
             if(sum1 > sum2){
                 num = deque1.poll();
                 sum2+=num;
