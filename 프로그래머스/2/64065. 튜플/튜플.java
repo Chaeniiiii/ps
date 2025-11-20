@@ -3,32 +3,27 @@ import java.util.*;
 class Solution {
     public int[] solution(String s) {
         
-        String[] t = s.split("},");
-        for(int i = 0; i < t.length; i++){
-            t[i] = t[i].replace("{","").replace("}","");
+        String[] set = s.split("},");
+        for(int i = 0; i < set.length; i++){
+            set[i] = set[i].replaceAll("\\{","").replaceAll("\\}","");
         }
-        Arrays.sort(t,(a,b) -> a.length() - b.length());
         
-        ArrayList<Integer> arr = new ArrayList<>();        
+        Arrays.sort(set,(a,b) -> a.length() - b.length());
+        ArrayList<Integer> arr = new ArrayList<>();
         
-        for(String str : t){
-            
-            String newStr = str;
-            String[] number = newStr.split(",");
-            
-            for(int i = 0; i < number.length; i++){
-                int num = Integer.parseInt(number[i]);
-                if(!arr.contains(num)){
-                    arr.add(num);
-                }
+        for(String str : set){
+            String[] numbers = str.split(",");
+            for(String strNum : numbers){
+                int num = Integer.parseInt(strNum);
+                if(!arr.contains(num)) arr.add(num);
             }
         }
         
-        int[] result = new int[arr.size()];
-        for(int i = 0; i < result.length; i++){
+        int[] result = new int[arr.size()];        
+        for(int i = 0; i < arr.size(); i++){
             result[i] = arr.get(i);
         }
-    
+        
         return result;
         
     }
