@@ -1,30 +1,49 @@
 import java.util.*;
 
 class Solution {
+    
+    private static class Topping{
+        
+        int cnt; //토핑 개수
+        int idx; //토핑의 첫 등장 인덱스
+        
+        private Topping(int cnt, int idx){
+            this.cnt = cnt;
+            this.idx = idx;
+        }
+    }
+    
     public int solution(int[] topping) {
         
-        int cnt = 0;
-        Map<Integer,Integer> rightM = new HashMap<>();
-        Map<Integer,Integer> leftM = new HashMap<>();
+        Map<Integer,Topping> map = new HashMap<>();
         
-        for(int i : topping){
-            rightM.put(i,rightM.getOrDefault(i,0)+1);            
-        }
-        
-        for(int tp : topping){
-    
-            leftM.put(tp,leftM.getOrDefault(tp,0)+1);
-            
-            if(rightM.get(tp) == 1){
-                rightM.remove(tp);
+        for(int i = 0; i < topping.length; i++){
+            int tp = topping[i];
+            if(map.containsKey(tp)){
+                map.get(tp).cnt++;
             }
-            else rightM.put(tp,rightM.get(tp)-1);
-            
-            if(leftM.size() == rightM.size()) cnt++;
-                
+            else{
+                map.put(tp, new Topping(1,i));
+            }
         }
         
-        return cnt;
+        int[] cut = new int[2];
+        cut[1] = map.keySet().size();
+        
+        int result = 0;
+        for(int i = 0; i < topping.length; i++){
+            
+            int nowTp = topping[i];
+            if(map.get(nowTp).idx == i) cut[0]++;
+            map.get(nowTp).cnt--;
+            
+            if(map.get(nowTp).cnt <= 0) cut[1]--;
+            if(cut[0] == cut[1]) result++;
+                        
+        }
+        
+        return result;
+        
         
     }
 }
