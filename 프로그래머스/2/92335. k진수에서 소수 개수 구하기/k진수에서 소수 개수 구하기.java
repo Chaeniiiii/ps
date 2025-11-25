@@ -3,30 +3,32 @@ import java.util.*;
 class Solution {
     public int solution(int n, int k) {
         
+        String tN = transNum(n,k);
+        
+        int cnt = 0;
         StringBuilder sb = new StringBuilder();
-        while(n >= k){
-            sb.insert(0,n%k);
-            n /= k;
-        }
-        
-        sb.insert(0,n);
-        
-        String[] number = sb.toString().split("0");
-        int result = 0;
-        
-        for(String num : number){
-            if("".equals(num) || num == null || num.isEmpty()) continue;
-            if(isPrime(Long.parseLong(num))) result++;
+        for(int i = tN.length()-1; i >= 0; i--){
+            
+            char c = tN.charAt(i);
+            
+            if(c == '0'){
+                if(sb.length() > 0 && isPrime(sb.toString())) cnt++;
+                sb = new StringBuilder();
+            } 
+            else{
+                sb.insert(0,c);    
+            }
             
         }
         
-        
-        return result;
+        return cnt;
         
     }
     
-    private static boolean isPrime(long num){
-     
+    private static boolean isPrime(String str){
+        
+        long num = Long.parseLong(str);
+        
         if(num == 0 || num == 1) return false;
         
         for(int i = 2; i <= Math.sqrt(num); i++){
@@ -34,5 +36,21 @@ class Solution {
         }
         
         return true;
+        
     }
+    
+    private static String transNum(int n, int k){
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while(n > 0){
+            sb.insert(0,n%k);
+            n/=k;
+        }
+        
+        sb.insert(0,n);
+        return sb.toString();
+        
+    }
+    
 }
