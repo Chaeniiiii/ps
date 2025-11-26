@@ -1,21 +1,16 @@
 class Solution {
-    
-    private static final int MAX = 600001;
-    private static final int MOD = 1000000007;
+
+    private static final int MAX = 1_000_000_007;
     
     public int solution(int n) {
-        
-        int [] dp = new int[MAX];
-        
-        dp[1] = 1;
-        dp[2] = 2;
-        
-        for(int i = 3; i<=n; i++){
-            dp[i] = (dp[i-2] + dp[i-1]) % MOD;
+        int a = 1;
+        int b = 1;
+        for (int i = 0; i < n - 1; i++) {
+            int fib = (a + b) % MAX;
+            a = b;
+            b = fib;
         }
-
-        return dp[n];
-        
+        return b;
     }
-    
+
 }
