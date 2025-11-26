@@ -1,16 +1,19 @@
+import java.util.*;
+
 class Solution {
-
-    private static final int MAX = 1_000_000_007;
     
+    private static final int MAX = 1_000_000_007;
     public int solution(int n) {
-        int a = 1;
-        int b = 1;
-        for (int i = 0; i < n - 1; i++) {
-            int fib = (a + b) % MAX;
-            a = b;
-            b = fib;
+        
+        int[] dp = new int[n];
+        dp[0] = 1; 
+        dp[1] = 2;
+        
+        for(int i = 2; i < n; i++){
+            dp[i] = (dp[i-1] + dp[i-2]) % MAX;
         }
-        return b;
+        
+        return dp[n-1];
+        
     }
-
 }
