@@ -1,37 +1,30 @@
+import java.util.*;
+
 class Solution {
-    
-    private static final int SIZE = 5;
-    private static char [] aeiou;
-    
-    private static int total;
-    private static boolean check;
-    
     public int solution(String word) {
+        int[] weight = {781, 156, 31, 6, 1};
+        Map<Character,Integer> map = init();
         
-        aeiou = new char[]{'A','E','I','O','U'};
+        int answer = 0;
         
-        total = 0;
-        check = false;
-        dfs("",word);
+        for (int i = 0; i < word.length(); i++) {
+            answer += map.get(word.charAt(i)) * weight[i] + 1;
+        }
         
-        return total;
-        
+        return answer;
     }
     
-    private static void dfs(String str,String word){
-
-        if(str.equals(word)) {
-            check = true;
-            return;
-        }
-        if(str.length() >= SIZE) return;
+    private static Map<Character,Integer> init(){
         
-        for(int i = 0; i<SIZE; i++){
-            if(check) return;
-            total++;
-            dfs(str+aeiou[i],word);
-        }
+        Map<Character,Integer> map = new HashMap<>();
+        map.put('A',0);
+        map.put('E',1);
+        map.put('I',2);
+        map.put('O',3);
+        map.put('U',4);
         
+        return map;
+            
     }
     
 }
