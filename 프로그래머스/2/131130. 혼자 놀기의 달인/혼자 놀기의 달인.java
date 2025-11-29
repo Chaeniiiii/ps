@@ -2,44 +2,48 @@ import java.util.*;
 
 class Solution {
     
+    private static int result = 0;
+    
+    private static ArrayList<ArrayList<Integer>> box;
+    private static boolean[] visit;
+    
     public int solution(int[] cards) {
         
-        ArrayList<Integer> result = new ArrayList<>();
-        Deque<Integer> deque;
+        box = new ArrayList<>();
         
         boolean[] visited = new boolean[cards.length+1];
         
-        int num = 0; //확인한 카드 개수
         for(int i = 0; i < cards.length; i++){
-            
             if(visited[i]) continue;
-            
-            int cnt = 0; //현재까지 확인한 카드 개수 
-            
-            deque = new ArrayDeque<>();
-            deque.add(i);
-            
-            while(!deque.isEmpty()){
-                
-                int idx = deque.poll();
-                
-                if(visited[idx]) break;
-                visited[idx] = true;
-                deque.add(cards[idx] - 1);
-                cnt++;
-               
+            int now = cards[i] - 1;
+            ArrayList<Integer> arr = new ArrayList<>();
+            while(!visited[now]){
+                visited[now] = true;
+                arr.add(now+1);
+                now = cards[now] - 1;
             }
-            
-            result.add(cnt);
-            
+            box.add(arr);
         }
         
-        if(result.size() <= 1) return 0;
-        result.sort((a,b) -> b - a);
+        if(box.size() <= 1) return 0;
+        visit = new boolean[box.size()];
+        dfs(0,0,1);
         
-        return result.get(0) * result.get(1);
+        return result;
+        
+    }
+    
+    private static void dfs(int dep, int st, int cnt){
+        
+        if(dep == 2){
+            result = Math.max(result,cnt);
+            return;
+        }
+        
+        for(int i = st; i < box.size(); i++){
+            dfs(dep+1,i+1,cnt*box.get(i).size());
+        }
         
     }
     
 }
-
