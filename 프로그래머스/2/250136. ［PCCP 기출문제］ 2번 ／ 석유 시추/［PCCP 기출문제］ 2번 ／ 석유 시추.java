@@ -4,89 +4,71 @@ class Solution {
     
     private static int n,m;
     
-    private static int[][] land;
-    private static boolean[][] visited;
-    
-    private static int[] amount;
-    
     private static int[] dx = new int[]{-1,1,0,0};
     private static int[] dy = new int[]{0,0,-1,1};
     
-    private static class Pos{
-        int x;
-        int y;
-        
-        private Pos(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
+    private static int[] oil;
+    private static int[][] land;
+    private static boolean[][] visited;
     
     public int solution(int[][] land) {
-            
-        m = land.length; //가로
-        n = land[0].length; //세로
         
         this.land = land;
-        amount = new int[n];
-        visited = new boolean[m][n];
+        n = land.length;
+        m = land[0].length;
         
-        for(int i = 0; i < m ; i++){
-            for(int j = 0; j < n; j++){
-                if(land[i][j] == 0 || visited[i][j]) continue;
+        oil = new int[m];
+        visited = new boolean[n][m];
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(visited[i][j] || land[i][j] == 0) continue;
                 visited[i][j] = true;
-                bfs(new Pos(i,j));
+                bfs(i,j);
             }
         }
         
-        int result = 0;
-        for(int i = 0; i < n ; i++){
-            result = Math.max(result, amount[i]);
-        }
-        
-        return result;
+        Arrays.sort(oil);
+        return oil[m-1];
         
     }
     
-    private static void bfs(Pos st){
+    private static void bfs(int x, int y){
         
-        int min = st.y;
-        int max = st.y;
-        int cnt = 1;
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.add(new int[]{x,y});
         
-        Deque<Pos> deque = new ArrayDeque<>();
-        deque.add(st);
+        int cnt = 0;
+        boolean[] oilVisited = new boolean[m];
+        oilVisited[y] = true;
         
         while(!deque.isEmpty()){
             
-            Pos pos = deque.poll();
+            int[] now = deque.poll();
+            cnt++;
             
-            for(int i = 0; i < 4; i++){
-                int mvX = pos.x + dx[i];
-                int mvY = pos.y + dy[i];
+            for(int k = 0; k < 4; k++){
                 
-                if(mvX < 0 || mvY < 0 || mvX >= m || mvY >= n || land[mvX][mvY] == 0 || visited[mvX][mvY]) continue;
+                int mvX = now[0] + dx[k];
+                int mvY = now[1] + dy[k];
                 
-                min = Math.min(mvY,min);
-                max = Math.max(mvY,max);
-                deque.add(new Pos(mvX,mvY));
+                if(isIn(mvX,mvY)) continue;
+                deque.add(new int[]{mvX,mvY});
                 visited[mvX][mvY] = true;
-                cnt++;
+                oilVisited[mvY] = true;
                 
             }
             
         }
         
-        getAmount(min, max, cnt);
+        for(int i = 0; i < m; i++){
+            if(oilVisited[i]) oil[i] += cnt;
+        }
         
     }
     
-    private static void getAmount(int min, int max, int cnt){
-        
-        for(int i = min; i < max + 1; i++){
-            amount[i] += cnt;
-        }
-        
+    private static boolean isIn(int x, int y){
+        if(x < 0 || y < 0 || x >= n || y >= m || land[x][y] == 0 || visited[x][y]) return true;
+        return false;
     }
     
 }
