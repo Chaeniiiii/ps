@@ -2,28 +2,44 @@ class Solution {
     public String solution(int n, int t, int m, int p) {
         
         StringBuilder sb = new StringBuilder();
+        sb.append(0);
+        sb.append(1);
         
-        int idx = 0;
-        
-        while(sb.toString().length() < t*m){
-            sb.append(Integer.toString(idx,n).toUpperCase());
-            idx ++;
-        }
-        
-        String number = sb.toString();
-        sb = new StringBuilder();
-        
-        idx = p-1;
-        while(sb.toString().length() < t){
+        int num = 2;
+        while(sb.length() <= t*m){
             
-            if(idx >= number.length()) break;
-
-            sb.append(number.charAt(idx));
-            idx += m;
+            String str = getNum(n,num);
+            for(char c : str.toCharArray()){
+                sb.append(c);
+            }
+            num++;
             
         }
         
-        return sb.toString();
+        StringBuilder result = new StringBuilder();
+        int st = p-1;
+        while(result.length() < t){
+            result.append(sb.charAt(st));
+            st+=m;
+        }
+        return result.toString();
         
     }
+    
+    private static String getNum(int n, int num){
+        
+        StringBuilder sb = new StringBuilder();
+        while(num > 0){
+            int div = num % n;
+            num /= n;
+            
+            if(div >= 10) sb.append((char)('A' + (div - 10)));
+            else sb.append(div);
+            
+        }
+        
+        return sb.reverse().toString();
+        
+    }
+    
 }
