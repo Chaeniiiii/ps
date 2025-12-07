@@ -1,16 +1,18 @@
+import java.util.*;
+
 class Solution {
     public long solution(int r1, int r2) {
-       
-        long cnt = 0;
         
-        for(int x = 1; x <= r2; x++){
-            int maxY = (int) Math.floor(Math.sqrt((1.0 * r2*r2) - (1.0 * x * x)));
-            int minY = (int) Math.ceil(Math.sqrt((1.0 * r1*r1) - (1.0 * x * x)));
+        long result = 0;
+        
+        for(int i = 1; i <= r2; i++){
+            long maxY = (long)Math.floor(Math.sqrt(Math.pow(r2,2) - Math.pow(i,2)));
+            long minY = (long)Math.ceil(Math.sqrt(Math.pow(r1,2) - Math.pow(i,2)));
             
-            cnt += (maxY - minY + 1);
+            result += (maxY - minY + 1);
         }
         
-        return cnt * 4;
+        return result * 4;
         
     }
 }
