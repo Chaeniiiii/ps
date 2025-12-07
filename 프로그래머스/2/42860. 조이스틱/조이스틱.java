@@ -2,25 +2,25 @@ import java.util.*;
 
 class Solution {
     public int solution(String name) {
-        
-        int result = 0;
-        int mvCnt = name.length() - 1;
 
-        for(int i = 0 ; i < name.length(); i++){
-            
-            result += Math.min((int)(name.charAt(i) - 'A') , 'Z' - name.charAt(i) + 1);
-            
-            int nxtIdx = i + 1;
-            
-            while(nxtIdx < name.length() && name.charAt(nxtIdx) == 'A'){
-                nxtIdx ++;
-            }
-            
-            mvCnt = Math.min(mvCnt, Math.min(i * 2 + (name.length() - nxtIdx), i + (name.length() - nxtIdx) * 2));
-            
+        int n = name.length();
+        
+        int cnt = 0;
+        for(int i = 0; i < n; i++){
+            char c = name.charAt(i);
+            cnt += Math.min(c - 'A', 'Z' - c + 1);
         }
         
-        return result + mvCnt;
+        int mv = n - 1;
+        for(int i = 0; i < n; i++){
+            int nxt = i + 1;
+            while(nxt < n && name.charAt(nxt) == 'A'){
+                nxt++;
+            }
+            mv = Math.min(mv,Math.min(2*i + (n-nxt),  i + 2*(n-nxt)));
+        }
+        
+        return cnt+mv;
         
     }
 }
