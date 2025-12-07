@@ -2,20 +2,22 @@ import java.util.*;
 
 class Solution {
     public long solution(int cap, int n, int[] deliveries, int[] pickups) {
-        
-        int d = 0, p = 0;
+
         long result = 0;
-        for(int t = n-1; t >= 0; t --){
+        int d = 0, p = 0;
+        
+        for(int i = n - 1; i >= 0; i--){
             
-            d -= deliveries[t];
-            p -= pickups[t];
+            d -= deliveries[i];
+            p -= pickups[i];
             
             while(d < 0 || p < 0){
-                d += cap;
-                p += cap;
+                d+=cap;
+                p+=cap;
                 
-                result += (t + 1) * 2;
+                result += (i + 1) * 2; 
             }
+            
         }
         
         return result;
