@@ -2,32 +2,31 @@ import java.util.*;
 
 class Solution {
     public int[] solution(long begin, long end) {
-        int[] answer = new int[(int)(end-begin) + 1];
         
-        for(long i=begin; i<=end; i++){
-            answer[(int)(i-begin)] = (int)maxDivisor(i);
-        }
-        return answer;
+        int b = (int)begin;
+        int e = (int)end;
         
-    }
-    
-    public static long maxDivisor(long num){
-        int result = 1;
-
-        if(num == 1){
-            return 0;
-        }
-
-        for(int i=2; i<=Math.sqrt(num); i++){
-            if(num % i == 0){
-                if(num / i <= 10000000){
-                    result = Math.max(result, (int) (num / i));
-                    break;
-                }else{
-                    result = Math.max(result, i);
+        int[] result = new int[e-b+1];
+        
+        for(int i = b; i <= e; i++){
+            
+            result[i-b] = 1;
+            
+            for(int j = 2; j <= Math.sqrt(i); j++){
+                if(i % j == 0){
+                    int p = i / j; 
+                    if(p > j && p < 10000001){
+                        result[i-b] = p;
+                        break;
+                    }
+                    else result[i-b] = j;
                 }
             }
         }
+        
+        if(b == 1) result[0] = 0;
         return result;
+        
     }
-}
+    
+} 
