@@ -4,21 +4,21 @@ class Solution {
     public int solution(int[] elements) {
         
         int size = elements.length;
-        
         Set<Integer> set = new HashSet<>();
         
-        for(int lt = 0; lt<size; lt++){
-            int arg = 1;
-            while(arg <= size){
-                
+        for(int i = 1; i <= size; i++){
+            
+            for(int lt = 0; lt < size; lt++){
                 int cnt = 0;
-                for(int i = lt; i<lt+arg; i++) {
-                    cnt +=elements[i%size];
+                
+                for(int k = lt; k < lt + i; k++){
+                    cnt+=elements[k%size];
                 }
                 set.add(cnt);
-                arg ++;
             }
         }
+        
         return set.size();
+        
     }
 }
