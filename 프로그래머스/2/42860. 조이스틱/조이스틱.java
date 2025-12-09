@@ -2,13 +2,11 @@ import java.util.*;
 
 class Solution {
     public int solution(String name) {
-
-        int n = name.length();
         
-        int cnt = 0;
-        for(int i = 0; i < n; i++){
-            char c = name.charAt(i);
-            cnt += Math.min(c - 'A', 'Z' - c + 1);
+        int n = name.length();
+        int result = 0;
+        for(char c : name.toCharArray()){
+            result += Math.min(c - 'A', 'Z' - c + 1);
         }
         
         int mv = n - 1;
@@ -17,10 +15,10 @@ class Solution {
             while(nxt < n && name.charAt(nxt) == 'A'){
                 nxt++;
             }
-            mv = Math.min(mv,Math.min(2*i + (n-nxt),  i + 2*(n-nxt)));
+            mv = Math.min(mv, Math.min(i*2 + n - nxt, 2*(n-nxt)+i));
         }
         
-        return cnt+mv;
+        return result + mv;
         
     }
 }
