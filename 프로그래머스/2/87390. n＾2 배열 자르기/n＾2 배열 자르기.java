@@ -1,20 +1,21 @@
 import java.util.*;
 
 class Solution {
-    
-    public long[] solution(int n, long left, long right) {
+    public int[] solution(int n, long left, long right) {
         
-        int len = (int)(right-left+1);
-        long [] result = new long[len];
+        int lt = (int)left;
+        int rt = (int)right;
         
-        int idx = 0;
-        for(long i = left; i<=right; i++){
+        int[] result = new int[rt -  lt + 1];
+        for(long i = left; i <= right; i++){
+            long q = i / n; 
+            long d = i % n; 
             
-            long a = i/n;
-            long b = i%n;
-
-            result[idx] = Math.max(a,b)+1;
-            idx++;
+            long st = q + 1; 
+            long cnt = 0; 
+            if(d >= st)  cnt = Math.abs(d - st) + 1;
+            int idx = (int)(i - lt);
+            result[idx] = (int)(st + cnt);
             
         }
         
