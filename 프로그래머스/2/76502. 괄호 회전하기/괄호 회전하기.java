@@ -10,15 +10,16 @@ class Solution {
             sb.append(s.charAt(i));
         }
         
-        int lt = 0, rt = n - 1, cnt = 0;
+        int lt = 0, cnt = 0;
         while(lt < n){
             
-            if(isCorrect(sb.toString())) cnt++;
-            lt++;
-            rt = (rt + 1) % n;
+            if(isPossible(sb.toString())) cnt++;
             
+            sb.append(s.charAt(lt));
             sb.deleteCharAt(0);
-            sb.append(s.charAt(rt));
+            
+            lt++;
+            
             
         }
         
@@ -26,10 +27,9 @@ class Solution {
         
     }
     
-    private static boolean isCorrect(String str){
+    private static boolean isPossible(String str){
         
         Deque<Character> deque = new ArrayDeque<>();
-        
         for(int i = 0; i < str.length(); i++){
             char c = str.charAt(i);
             if(c == '{' || c == '[' || c == '('){
@@ -37,14 +37,11 @@ class Solution {
                 continue;
             }
             if(deque.isEmpty()) return false;
-            
             char prev = deque.peekLast();
-            if(c == '}' && prev != '{') return false;
             if(c == ']' && prev != '[') return false;
+            if(c == '}' && prev != '{') return false;
             if(c == ')' && prev != '(') return false;
-            
             deque.pollLast();
-            
         }
         
         return deque.size() == 0 ? true : false;
