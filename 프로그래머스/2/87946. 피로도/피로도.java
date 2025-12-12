@@ -2,36 +2,37 @@ import java.util.*;
 
 class Solution {
     
-    private static boolean [] visited;
-    private static int total;
+    private static int n,result;
+    
+    private static int[][] dungeons;
+    private static boolean[] visited;
     
     public int solution(int k, int[][] dungeons) {
-    
-        total = 0;
-        visited = new boolean[dungeons.length];
-        dfs(0,k,dungeons);
         
-        return total;
+        n = dungeons.length;
+        result = 0;
+        
+        this.dungeons = dungeons;
+        visited = new boolean[n];
+        
+        dfs(-1,0,k);
+        return result;
         
     }
     
-    private static void dfs(int dep, int k, int [][] dungeons){
+    private static void dfs(int st, int dep, int k){
         
-        if(dep > dungeons.length) return;
+        result = Math.max(result,dep);
         
-        for(int i = 0; i<dungeons.length; i++){
-            
-            if(!visited[i] && dungeons[i][0] <= k){
-                
-                visited[i] = true;
-                dfs(dep+1,k-dungeons[i][1],dungeons);
-                visited[i] = false;
-                
-            }
+        for(int i = 0; i < n; i++){
+        
+            if(visited[i] || dungeons[i][0] > k) continue;
+            visited[i] = true;
+            dfs(i,dep+1,k-dungeons[i][1]);
+            visited[i] = false;
             
         }
         
-        total = Math.max(dep,total);
-        
     }
+    
 }
