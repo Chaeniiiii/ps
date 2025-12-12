@@ -3,26 +3,17 @@ import java.util.*;
 class Solution {
     public int solution(int[] citations) {
         
-        int len = citations.length;
+        int n = citations.length;
+        int hIdx;
+        
         Arrays.sort(citations);
         
-        int hIdx = len;
-        
-        while(hIdx >= 0){
-            
-            for(int i = 0; i<len; i++){
-                if(citations[i] >= hIdx){
-                    if(i <= hIdx && (len-i) >= hIdx) return hIdx;
-                    break;
-                }
-            }
-            
-            hIdx --;
-             
-            
+        for(int i = 0; i < n; i++){
+            hIdx = n - i;
+            if(hIdx <= citations[i]) return hIdx;
         }
         
-        return hIdx;
+        return 0;
         
     }
 }
