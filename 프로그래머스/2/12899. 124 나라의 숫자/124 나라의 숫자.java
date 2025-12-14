@@ -1,28 +1,26 @@
-class Solution {
+import java.util.*;
 
-    private static final int MOD = 3;
-    
+class Solution {
     public String solution(int n) {
         
         StringBuilder sb = new StringBuilder();
-        String[] numbers = {"4", "1", "2"};
         
-        int num = n;
-        
-        while(num > 0){
+        while(n > 0){
             
-            int remain = num % MOD;
-            num /= MOD;
+            int div = n % 3;
+            n /= 3;
             
-            if(remain == 0) num --;
-
-            sb.append(numbers[remain]);
+            if(div == 0){
+                n--;
+                div = 4;
+            }
             
+            sb.append(div);
+                 
         }
         
         return sb.reverse().toString();
         
+        
     }
-    
-   
 }
