@@ -3,30 +3,30 @@ import java.util.*;
 class Solution {
     public int[] solution(long begin, long end) {
         
-        int b = (int)begin;
-        int e = (int)end;
+        int[] result = new int[(int)(end - begin + 1)];
         
-        int[] result = new int[e-b+1];
-        
-        for(int i = b; i <= e; i++){
+        for(long i = begin; i <= end; i++){
             
-            result[i-b] = 1;
+            int idx = (int)(i - begin);
+            result[idx] = 1;
             
-            for(int j = 2; j <= Math.sqrt(i); j++){
-                if(i % j == 0){
-                    int p = i / j; 
-                    if(p > j && p < 10000001){
-                        result[i-b] = p;
-                        break;
-                    }
-                    else result[i-b] = j;
+            for(long k = 2; k <= (long)Math.sqrt(i); k++){
+                if(i % k != 0) continue;
+                int num = (int)(i/k);
+                if(num > 10000000){
+                    result[idx] = (int)k;
                 }
+                else{
+                    result[idx] = num;
+                    break;
+                }
+                
             }
+            
         }
         
-        if(b == 1) result[0] = 0;
+        if(begin == 1) result[0] = 0;
         return result;
         
     }
-    
-} 
+}
