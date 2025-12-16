@@ -4,24 +4,23 @@ class Solution {
     public int solution(int cacheSize, String[] cities) {
         
         if(cacheSize == 0) return cities.length * 5;
-
-        ArrayList<String> cache = new ArrayList<>();
-        int time = 0;
-
-        for(String city : cities) {
-            city = city.toLowerCase(); 
-
-            if(cache.remove(city)) { 
-                time += 1;
-            } else {
-                time += 5;
-                if(cache.size() == cacheSize) {
-                    cache.remove(0);
-                }
+        
+        ArrayList<String> arr = new ArrayList<>();
+        int cnt = 0;
+        for(int i = 0; i < cities.length; i++){
+            String city = cities[i].toUpperCase();
+            if(arr.contains(city)){
+                cnt++;
+                arr.remove(arr.indexOf(city));
             }
-            cache.add(city); 
+            else{
+                cnt+=5;
+                if(arr.size() == cacheSize) arr.remove(0);
+            }
+            arr.add(city);
         }
-
-        return time;
+        
+        return cnt;
+        
     }
 }
