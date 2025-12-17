@@ -3,25 +3,27 @@ import java.util.*;
 class Solution {
     public int[] solution(String s) {
         
-        String[] set = s.split("},");
-        for(int i = 0; i < set.length; i++){
-            set[i] = set[i].replaceAll("\\{","").replaceAll("\\}","");
-        }
+        String[] tuple = s.split("},");
+        Map<Integer,Integer> map = new HashMap<>();
         
-        Arrays.sort(set,(a,b) -> a.length() - b.length());
-        ArrayList<Integer> arr = new ArrayList<>();
-        
-        for(String str : set){
-            String[] numbers = str.split(",");
-            for(String strNum : numbers){
-                int num = Integer.parseInt(strNum);
-                if(!arr.contains(num)) arr.add(num);
+        for(String str : tuple){
+            
+            str = str.replace("{","").replace("}","");
+            String[] newStr = str.split(",");
+            
+            for(int i = 0; i < newStr.length; i++){
+                int num = Integer.parseInt(newStr[i]);
+                map.put(num,map.getOrDefault(num,0)+1);
             }
+            
         }
         
-        int[] result = new int[arr.size()];        
-        for(int i = 0; i < arr.size(); i++){
-            result[i] = arr.get(i);
+        ArrayList<Integer> keySet = new ArrayList<>(map.keySet());
+        keySet.sort((a,b) -> map.get(b) - map.get(a));
+        
+        int[] result = new int[keySet.size()];
+        for(int i = 0; i < keySet.size(); i++){
+            result[i] = keySet.get(i);
         }
         
         return result;
