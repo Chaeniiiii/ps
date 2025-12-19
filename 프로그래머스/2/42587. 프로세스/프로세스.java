@@ -1,49 +1,29 @@
 import java.util.*;
 
 class Solution {
-    
-    private static class Process {
-        
-        int num;
-        int priority;
-        
-        private Process(int num, int priority){
-            this.num = num;
-            this.priority = priority;
-        }
-    }
-    
     public int solution(int[] priorities, int location) {
         
-        ArrayList<Integer> arr = new ArrayList<>();
-        Deque<Process> deque = new ArrayDeque<>();
+        int[] newP = priorities.clone();
+        Arrays.sort(newP);
         
-        for(int i = 0; i<priorities.length; i++){
-            deque.add(new Process(i,priorities[i]));
-            arr.add(priorities[i]);
+        Deque<Integer> deque = new ArrayDeque<>();
+        for(int i = 0; i < priorities.length; i++){
+            deque.add(i);
         }
         
-        arr.sort((a,b) -> b-a);
-        
-        int idx = 0;
-        int seq = 1;
-
+        int pIdx = newP.length - 1, idx, cnt = 0;
         while(!deque.isEmpty()){
-            if(idx >= priorities.length) break;
             
-            Process process = deque.poll();
-           
-            if(process.priority == arr.get(idx)){
-                if(process.num == location) return seq;
-                else idx ++;
-                seq ++;
-            }
-            else {
-                deque.add(process);
+            idx = deque.poll();
+            if(idx == location && newP[pIdx] == priorities[idx]) return cnt + 1;
+            if(newP[pIdx] > priorities[idx]) deque.add(idx);
+            else{
+                pIdx--;
+                cnt++;
             }
         }
         
-        return seq;
+        return cnt;
         
     }
 }
