@@ -3,40 +3,39 @@ import java.util.*;
 class Solution {
     
     private static class Num{
-        
-        int idx;
         int n;
-        
-        private Num(int idx, int n){
-            this.idx = idx;
+        int idx;
+        private Num(int n, int idx){
             this.n = n;
+            this.idx = idx;
         }
     }
     
     public int[] solution(int[] numbers) {
         
-        PriorityQueue<Num> pq = new PriorityQueue<>((a,b) -> a.n - b.n);
-        pq.add(new Num(0,numbers[0]));
-        
         int[] result = new int[numbers.length];
-        Arrays.fill(result,-1);
+        PriorityQueue<Num> pq = new PriorityQueue<>((a,b) -> a.n - b.n);
+        pq.add(new Num(numbers[0],0));
         
         for(int i = 1; i < numbers.length; i++){
             
-            int now = numbers[i];
-            
+            int num = numbers[i];
             while(!pq.isEmpty()){
-                Num prev = pq.peek();
-                if(prev.n >= now) break;
-                pq.poll();
-                result[prev.idx] = now;
+                
+                if(pq.peek().n >= num) break;
+                result[pq.poll().idx] = num;
+                
             }
-            pq.add(new Num(i,now));
+            
+            pq.add(new Num(num,i));
             
         }
         
-        return result;
+        while(!pq.isEmpty()){
+            result[pq.poll().idx] = -1;
+        }
         
+        return result;
         
     }
 }
