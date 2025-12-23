@@ -2,16 +2,19 @@ import java.util.*;
 
 class Solution {
     public int solution(String word) {
-        int[] weight = {781, 156, 31, 6, 1};
+        
+        int[] num = new int[]{781,156,31,6,1};
         Map<Character,Integer> map = init();
         
-        int answer = 0;
-        
-        for (int i = 0; i < word.length(); i++) {
-            answer += map.get(word.charAt(i)) * weight[i] + 1;
+        int cnt = 0;
+        for(int i = word.length() - 1; i >= 0; i--){
+            
+            cnt += map.get(word.charAt(i)) * num[i] + 1;
+            
         }
         
-        return answer;
+        return cnt;
+        
     }
     
     private static Map<Character,Integer> init(){
@@ -24,7 +27,7 @@ class Solution {
         map.put('U',4);
         
         return map;
-            
+        
     }
     
 }
