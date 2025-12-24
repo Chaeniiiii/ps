@@ -3,20 +3,27 @@ import java.util.*;
 class Solution {
     public String solution(int n, int t, int m, int p) {
         
-        StringBuilder sb = new StringBuilder();
-        sb.append(0).append(1);
+        StringBuilder convertN = new StringBuilder();
+        convertN.append(0);
+        int num = 1;
         
-        int num = 2;
-        while(sb.length() < t * m){
-            sb.append(getNum(num,n));
+        while(convertN.length() <= t * m){
+            
+            String str = getNum(num,n);
+            for(char c : str.toCharArray()){
+                convertN.append(c);
+            }
+                
             num++;
+            
         }
         
-        int st = p - 1;
+        String conv = convertN.toString();
         StringBuilder result = new StringBuilder();
         
+        int st = p-1;
         while(result.length() < t){
-            result.append(sb.charAt(st));
+            result.append(conv.charAt(st));
             st+=m;
         }
         
@@ -24,15 +31,14 @@ class Solution {
         
     }
     
-    private static String getNum(int num, int n){
+    private static String getNum(int n, int k){
         
         StringBuilder sb = new StringBuilder();
-        int div;
-        while(num > 0){
-            div = num % n;
-            num /= n;
-            
-            if(div >= 10) sb.append((char)('A' + (div - 10)));
+        
+        while(n > 0){
+            int div = n % k;
+            n /= k;
+            if(div > 9) sb.append((char)('A' + (div - 10)));
             else sb.append(div);
         }
         
