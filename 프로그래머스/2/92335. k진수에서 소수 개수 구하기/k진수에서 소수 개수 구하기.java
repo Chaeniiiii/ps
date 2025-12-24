@@ -3,35 +3,36 @@ import java.util.*;
 class Solution {
     public int solution(int n, int k) {
         
-        String tN = transNum(n,k);
-        
-        int cnt = 0;
+        String str = getNum(n,k);
+
         StringBuilder sb = new StringBuilder();
-        for(int i = tN.length()-1; i >= 0; i--){
-            
-            char c = tN.charAt(i);
-            
+        int cnt = 0, idx = str.length() - 1;
+        
+        while(idx >= 0){
+            char c = str.charAt(idx);
             if(c == '0'){
-                if(sb.length() > 0 && isPrime(sb.toString())) cnt++;
+                if(isPrime(sb.reverse().toString())) cnt++;
                 sb = new StringBuilder();
-            } 
-            else{
-                sb.insert(0,c);    
             }
-            
+            else{
+                sb.append(c);
+            }
+            idx--;
         }
         
+        if(sb.length() > 0 && isPrime(sb.reverse().toString())) return cnt + 1;
         return cnt;
         
     }
     
     private static boolean isPrime(String str){
         
+        if(str.length() == 0) return false;
+        
         long num = Long.parseLong(str);
+        if(num < 2) return false;
         
-        if(num == 0 || num == 1) return false;
-        
-        for(int i = 2; i <= Math.sqrt(num); i++){
+        for(int i = 2; i <= (int)Math.sqrt(num); i++){
             if(num % i == 0) return false;
         }
         
@@ -39,17 +40,20 @@ class Solution {
         
     }
     
-    private static String transNum(int n, int k){
+    private static String getNum(int n, int k){
+        
+        if(n < k) return String.valueOf(n);
         
         StringBuilder sb = new StringBuilder();
         
         while(n > 0){
-            sb.insert(0,n%k);
-            n/=k;
+            
+            sb.append(n % k);
+            n /= k;
+            
         }
         
-        sb.insert(0,n);
-        return sb.toString();
+        return sb.reverse().toString();
         
     }
     
