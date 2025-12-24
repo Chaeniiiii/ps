@@ -1,60 +1,50 @@
 import java.util.*;
 
 class Solution {
-    
-    private static Map<String,Integer> map;
-    
     public int[] solution(String msg) {
         
-        map = new HashMap<>();
-        init();
-    
-        StringBuilder sb;
+        Map<String,Integer> map = init();
+        
         ArrayList<Integer> arr = new ArrayList<>();
-        
-        int pt = 0, idx = 27;
-        
-        while(pt < msg.length()){
+        int seq = 27, i = 0;
+
+        while(i < msg.length()){
             
-            sb = new StringBuilder();
-            sb.append(msg.charAt(pt));
-            pt++;
-            
-            while(pt < msg.length() && map.containsKey(sb.toString()+ msg.charAt(pt))){
+            StringBuilder sb = new StringBuilder();
+            sb.append(msg.charAt(i));
+            i++;
                 
-                sb.append(msg.charAt(pt));
-                pt++;
-                
+            while(i < msg.length() && map.containsKey(sb.toString() + msg.charAt(i))){
+                sb.append(msg.charAt(i));
+                i++;
             }
             
-            String str = sb.toString();
-            arr.add(map.get(str));
+            arr.add(map.get(sb.toString()));
             
-            if(pt < msg.length()){
-                map.put(str+msg.charAt(pt),idx);
-                idx++;    
+            if(i < msg.length()){
+                map.put(sb.toString() + msg.charAt(i) , seq);
+                seq++;
             }
-            
-            
         }
         
         int[] result = new int[arr.size()];
-        for(int i = 0 ; i < result.length; i++){
-            result[i] = arr.get(i);
+        for(int k = 0; k < arr.size(); k++){
+            result[k] = arr.get(k);
         }
         
         return result;
         
     }
     
-    private static void init(){
+    private static Map<String,Integer> init(){
         
-        char c = 'A';
+        Map<String,Integer> map = new HashMap<>();
         
-        for(int i = 1; i <= 26; i++){
-            map.put(String.valueOf(c),i);
-            c++;
+        for(char c = 'A'; c <= 'Z'; c++){
+            map.put(String.valueOf(c), c-'A'+1);
         }
+        
+        return map;
         
     }
     
