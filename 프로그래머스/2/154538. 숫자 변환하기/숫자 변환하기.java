@@ -2,23 +2,26 @@ import java.util.*;
 
 class Solution {
     
-    private static final int MAX = 1_000_000;
+    private static int result;
     
     public int solution(int x, int y, int n) {
+        result = Integer.MAX_VALUE;
+        dfs(x,y,n,0);
         
-        int[] dp = new int[MAX+1];
-        Arrays.fill(dp,MAX);
-        dp[x] = 0;
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+    
+    private static void dfs(int x, int y, int n, int cnt){
         
-        for(int i = x; i <= y; i++){
-            for(int num : new int[]{i*2,i*3,i+n}){
-                if(num > MAX) continue;
-                dp[num] = Math.min(dp[num],dp[i]+1);
-            }
-        }        
+        if(x > y) return;
+        if(x == y){
+            result = Math.min(result,cnt);
+            return;
+        }
         
-        return dp[y] == MAX ? -1 : dp[y];
-        
+        dfs(x*2,y,n,cnt+1);
+        dfs(x*3,y,n,cnt+1);
+        dfs(x+n,y,n,cnt+1);
         
     }
 }
