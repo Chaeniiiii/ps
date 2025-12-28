@@ -1,33 +1,24 @@
 import java.util.*;
 
 class Solution {
-    
     public int solution(int[] order) {
         
         Deque<Integer> deque = new ArrayDeque<>();
-        int size = order.length;
-        
-        int num = 1; //택배상자 번호
-        int cnt = 0; //실린 택배 개수
-        
-        for(int i = 0; i<size; i++){
+        int num = 1, cnt = 0;
             
-            int now = order[i];
-            
-            while(num <= now){
+        for(int i = 0 ; i < order.length; i++){
+            while(num <= order[i]){
                 deque.add(num);
-                num ++;
+                num++;
             }
-
-            // System.out.println(new ArrayList<>(deque).toString());
-            
-            if(deque.pollLast() != now) break;
-            if(num > size + 1) break;
-                
-            cnt ++;
-            
+            if(deque.isEmpty()) break;
+            if(deque.peekLast() == order[i]){
+                deque.pollLast();
+                cnt++;
+            }
+            else if(deque.peekLast() > order[i]) break;
         }
-        
+            
         return cnt;
         
     }
