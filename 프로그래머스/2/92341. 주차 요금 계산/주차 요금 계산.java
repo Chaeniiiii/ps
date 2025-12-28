@@ -2,95 +2,86 @@ import java.util.*;
 
 class Solution {
     
-    private static int[] fees;
+    private static final int MAX = 1439;
     
-    //차량의 입출차 시간 기록
     private static class Car{
         
-        PriorityQueue<Integer> st;
-        PriorityQueue<Integer> en;
+        ArrayList<Integer> in = new ArrayList<>();
+        ArrayList<Integer> out = new ArrayList<>();
         
-        private Car(){
-            this.st = new PriorityQueue<>();
-            this.en = new PriorityQueue<>();
+        private Car(int inT){
+            in.add(inT);
+            out.add(MAX);
         }
-        
         
     }
     
     public int[] solution(int[] fees, String[] records) {
         
-        this.fees = fees;
+        Set<String> carN = new TreeSet<>();
+        Map<String,Car> map = new HashMap<>();
         
-        Map<String,Car> map = new TreeMap<>();
-        for(int i = 0; i < records.length; i++){
+        for(String record : records){
             
-            String[] rcd = records[i].replaceAll(":"," ").split(" ");
+            String[] r = record.split(" ");
             
-            int h = Integer.parseInt(rcd[0]) * 60;
-            int m = Integer.parseInt(rcd[1]);
+            String carNum = r[1]; //차량 번호
+            int time = getT(r[0]); //입출차 시간 
             
-            String number = rcd[2];
-            String action = rcd[3];
-
-            Car car = map.containsKey(number) ? map.get(number) : new Car();
-            
-            switch(action){
-                case "IN" :
-                    car.st.add(h+m);
+            switch(r[2]){
+                case "IN":
+                    if(map.containsKey(carNum)){
+                        map.get(carNum).in.add(time);
+                        map.get(carNum).out.add(MAX);
+                    }
+                    else{
+                        map.put(carNum,new Car(time));
+                    }
                     break;
-                case "OUT" : 
-                    car.en.add(h+m);
+                case "OUT":
+                    ArrayList<Integer> carOut = map.get(carNum).out;
+                    carOut.set(carOut.size() - 1, time);
                     break;
             }
             
-            map.put(number,car);
+            carN.add(carNum);
             
         }
         
-        int[] result = new int[map.size()];
-
-        int i = 0;
-        for(String key : map.keySet()){
+        int[] result = new int[carN.size()];
+        int idx = 0;
+        
+        for(String num : carN){
+            Car car = map.get(num);
+            int price = 0, total = 0;
             
-            Car car = map.get(key);
-            int odd = car.st.size() - car.en.size();
-            while(odd-- > 0){
-                car.en.add(1439);
+            for(int i = 0; i < car.in.size(); i++){
+                int inT = car.in.get(i);
+                int outT = car.out.get(i);
+                total += outT - inT;
+                
             }
-            
-            int size = car.st.size();
-            int cnt = 0;
-            while(size-- > 0){
-                cnt += calc(car);
+            if(total >= fees[0]){
+                price+=fees[1];
+                total-= fees[0];
+                price += (total / fees[2]) * fees[3] + (total % fees[2] == 0 ? 0 : fees[3]);
             }
-            
-            result[i] = calc2(cnt);
-            i++;
-            
+            else{
+                price+=fees[1];
+            }
+            result[idx] = price;
+            idx++;
         }
         
         return result;
-
-    }
-    
-    private static int calc(Car car){
-        
-        int stT = car.st.poll();
-        int enT = car.en.poll();
-        
-        int time = enT - stT;
-        return time;
         
     }
     
-    private static int calc2(int time){
+    private static int getT(String t){
         
-        if(time <= fees[0]) return fees[1];
-        
-        time -= fees[0];
-        return fees[1] + (time / fees[2] * fees[3]) + (time % fees[2] == 0 ? 0 : fees[3]);
-         
+        String[] time = t.split(":");
+        return Integer.parseInt(time[0])*60 + Integer.parseInt(time[1]);
+            
     }
     
 }
