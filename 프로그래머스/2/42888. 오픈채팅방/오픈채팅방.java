@@ -2,66 +2,65 @@ import java.util.*;
 
 class Solution {
     
-    private static final String ENT = "Enter";
-    private static final String LVE = "Leave";
-    private static final String CHG = "Change";
-    
-    private static class User{
-        String id;
-        int cmd;
+    private static class Member{
         
-        private User(String id){
-            this.id = id;
+        String nickname;
+        ArrayList<Integer> action;  //0 : enter, 1 : leave
+        
+        private Member(){
+            action = new ArrayList<>();
         }
         
-        private void setCmd(int cmd){
-            this.cmd = cmd;
+        private void updateNickname(String nickname){
+            this.nickname = nickname;
         }
         
+        private void addAction(int act){
+            this.action.add(act);
+        }
     }
+    
     public String[] solution(String[] record) {
         
-        Map<String,String> map = new HashMap<>();
-        ArrayList<User> arr = new ArrayList<>();
+        ArrayList<String> seq = new ArrayList<>();
+        Map<String,Member> map = new HashMap<>();
         
-        for(String s : record){
+        for(String rc : record){
             
-            String [] str = s.split(" ");
+            String[] str = rc.split(" ");
+            String action = str[0];
+            String id = str[1];
             
-            User user = new User(str[1]);
-            
-            switch(str[0]){
-                case ENT:
-                    map.put(str[1],str[2]);
-                    user.setCmd(0);
-                    arr.add(user);
-                    break;
-                case LVE:
-                    user.setCmd(1);
-                    arr.add(user);
-                    break;
-                case CHG:
-                    map.put(str[1],str[2]); 
-                    break;
-                default:
-                    break;
+            Member member = new Member();
+            if(!map.containsKey(id)){
+                map.put(id,member);
+            }
+            else{
+                member = map.get(id);
             }
             
+            switch(action){
+                case "Enter" :
+                    member.updateNickname(str[2]);
+                    member.addAction(0);
+                    seq.add(id);
+                    break;
+                case "Change" :
+                    member.updateNickname(str[2]);
+                    break;
+                case "Leave" :
+                    member.addAction(1);
+                    seq.add(id);
+                    break;
+            }
         }
         
-        String [] result = new String[arr.size()];
-        StringBuilder sb;
-        
-        for(int i = 0; i<arr.size(); i++){
-            
-            sb = new StringBuilder();
-            sb.append(map.get(arr.get(i).id));
-            
-            if(arr.get(i).cmd == 0) sb.append("님이 들어왔습니다.");
-            else sb.append("님이 나갔습니다.");
-            
-            result[i] = sb.toString();
-            
+        String[] result = new String[seq.size()];
+        for(int i = 0; i < result.length; i++){
+            Member member = map.get(seq.get(i));
+            int action = member.action.get(0);
+            result[i] = member.nickname + "님이" + (action == 0 ? " 들어왔습니다." : " 나갔습니다.");
+            member.action.remove(0);
         }
         
         return result;
