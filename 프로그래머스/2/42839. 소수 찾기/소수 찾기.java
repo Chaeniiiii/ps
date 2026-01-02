@@ -2,57 +2,55 @@ import java.util.*;
 
 class Solution {
     
-    private static int result = 0;
-    
+    private static int cnt;
     private static String numbers;
     
+    private static Set<Integer> set;
     private static boolean[] visited;
-    private static Map<Integer,Integer> map;
     
     public int solution(String numbers) {
         
+        cnt = 0;
+        set = new HashSet<>();
         this.numbers = numbers;
         visited = new boolean[numbers.length()];
-        map = new HashMap<>();
         
-        dfs(new StringBuilder(),0);
+        dfs(0,new StringBuilder());
         
-        return result;
+        return cnt;
         
     }
     
-    private static void dfs(StringBuilder sb, int dep){
-        
-        int len = sb.length();
+    private static void dfs(int dep, StringBuilder sb){
         
         if(dep > numbers.length()) return;
-        if(len > 0 && dep <= numbers.length()){
-            int num = Integer.parseInt(sb.toString());
-            if(map.get(num) == null && isPrime(num)) result++;
-        }
+        
+        if(sb.length() > 0 && isPrime(sb.toString())) cnt++;
         
         for(int i = 0; i < numbers.length(); i++){
             if(visited[i]) continue;
             visited[i] = true;
             sb.append(numbers.charAt(i));
-            dfs(sb,dep+1);
+            dfs(dep+1,sb);
             sb.deleteCharAt(sb.length()-1);
             visited[i] = false;
         }
         
     }
     
-    private static boolean isPrime(int num){
+    private static boolean isPrime(String str){
         
-        if(num == 0 || num == 1) return false;
-        map.put(num,map.getOrDefault(num,0)+1);
+        int num = Integer.parseInt(str);
+        if(set.contains(num) || num == 0 || num == 1) return false;
+        set.add(num);
         
-        for(int i = 2; i <= Math.sqrt(num); i++){
+        for(int i = 2; i <= (int)Math.sqrt(num); i++){
             if(num % i == 0) return false;
         }
         
         return true;
         
     }
+    
     
 }
