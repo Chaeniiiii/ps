@@ -1,14 +1,12 @@
 import java.util.*;
 
 class Solution {
-    
     public int[] solution(int n) {
         
-        int[][] board = new int[n][n];
         int max = (n*(n+1))/2;
+        int[][] board = new int[n][n];
         
-        int x = -1 ,y = 0, cnt = 1;
-        
+        int x = -1, y = 0, num = 1;
         for(int i = 0; i < n; i++){
             for(int j = i; j < n; j++){
                 if(i % 3 == 0) x++;
@@ -17,18 +15,17 @@ class Solution {
                     x--;
                     y--;
                 }
-                board[x][y] = cnt;
-                cnt++;
+                board[x][y] = num;
+                num++;
             }
-        }        
+        }
         
-        int[] result = new int[max];
         int idx = 0;
+        int[] result = new int[max];
         for(int i = 0; i < n; i++){
             for(int j = 0; j <= i; j++){
                 if(board[i][j] == 0) continue;
-                result[idx] = board[i][j];
-                idx++;
+                result[idx++] = board[i][j];
             }
         }
         
