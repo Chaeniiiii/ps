@@ -3,34 +3,35 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] sequence, int k) {
         
-        int lt = 0, rt = 0, sum = sequence[rt];
-        int[] result = new int[]{0,Integer.MAX_VALUE};
+        int lt = 0, rt = 0;
+        int[] result = new int[2];
         
-        while(rt < sequence.length && lt <= rt){
+        int len = Integer.MAX_VALUE;
+        int cnt = 0;
+        
+        while(rt < sequence.length){
             
-            System.out.printf("%d %d %d\n",lt,rt,sum);
+            cnt+=sequence[rt];
             
-            if(sum < k){
-                rt++;
-                sum += sequence[rt];
-                
+            while(cnt > k){
+                cnt-=sequence[lt++];
             }
-            else if(sum > k){
-                sum -=sequence[lt];
-                lt++;
-            }
-            else{
-                if(result[1] - result[0] > rt - lt){
+            
+            if(cnt == k){
+                if(rt - lt < len){
+                    len = rt - lt;
                     result[0] = lt;
                     result[1] = rt;
                 }
-                rt++;
-                sum += sequence[rt];
             }
+            
+            rt++;
             
         }
         
+        
         return result;
+        
         
     }
 }
