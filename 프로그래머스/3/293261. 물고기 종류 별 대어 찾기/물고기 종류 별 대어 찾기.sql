@@ -1,8 +1,15 @@
-select fi.id, fni.fish_name, fi.length
-from FISH_INFO fi left join FISH_NAME_INFO fni on fi.fish_type = fni.fish_type
-where fi.length = (
-    select max(fi2.length)
-    from fish_info fi2
-    where fi2.fish_type = fi.fish_type
-)
-order by fi.id;
+SELECT 
+    fi.id,
+    fni.fish_name,
+    fi.length
+FROM fish_info fi
+JOIN (
+    SELECT fish_type, MAX(length) AS max_length
+    FROM fish_info
+    GROUP BY fish_type
+) m
+ON fi.fish_type = m.fish_type
+AND fi.length = m.max_length
+JOIN fish_name_info fni
+ON fi.fish_type = fni.fish_type
+ORDER BY fi.id;
