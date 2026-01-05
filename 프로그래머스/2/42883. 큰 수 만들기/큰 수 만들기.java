@@ -5,33 +5,23 @@ class Solution {
         
         StringBuilder sb = new StringBuilder();
         
-        int len = number.length();
-        int start = 0;
+        int len = number.length() - k;
+        int st = 0;
         
-        int answerLen = len-k;
-        
-        while(answerLen > 0){
+        for(int i = 0; i < len; i++){
             
-            char max = '0';
-            int maxIdx = start;
-            
-            for(int i = start; i<=start+k; i++){
-                if(max < number.charAt(i)){
-                    maxIdx = i;
-                    max = number.charAt(i);
-                }
+            int max = 0;
+            for(int j = st; j <= i + k; j++){
+                if(number.charAt(j) - '0' > max){
+                    max = number.charAt(j) - '0';
+                    st = j + 1;
+                } 
             }
-            
-            k-=(maxIdx-start);
-            
-            start = maxIdx+1;
-            answerLen --;
             
             sb.append(max);
             
         }
         
         return sb.toString();
-        
     }
 }
