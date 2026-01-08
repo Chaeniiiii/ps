@@ -2,62 +2,59 @@ import java.util.*;
 
 class Solution {
     
-    private static int[] parent;
+    private static int[][] wires;
     
-    private static void union(int x, int y){
-        
-        x = find(x);
-        y = find(y);
-
-        if(x < y){
-            parent[y] = x;
-        }
-        else{
-            parent[x] = y;
-        }
-    }
-    
-    private static int find(int x){
-        
-        if(x != parent[x]) return parent[x] = find(parent[x]);
-        return parent[x];
-        
-    }
+    private static boolean[] visited;
+    private static Map<Integer,ArrayList<Integer>> map;
     
     public int solution(int n, int[][] wires) {
         
+        this.wires = wires;
+        init();
+        
         int result = Integer.MAX_VALUE;
+        for(int i = 0; i < wires.length; i++){
+            visited = new boolean[n+1];
+            visited[wires[i][0]] = true;
+            int cnt = dfs(n,i,wires[i][0]);
+            result = Math.min(Math.abs((n - cnt) - cnt),result);
+        }
+        
+        return result;
+        
+    }
+    
+    private static int dfs(int n, int p, int now){
+        
+        int cnt = 1;
+        
+        for(int child : map.get(now)){
+            if(visited[child]) continue;
+            if(now == wires[p][0] && child == wires[p][1]) continue;
+            if(now == wires[p][1] && child == wires[p][0]) continue;
+            visited[child] = true;
+            cnt += dfs(n,p,child);
+        }
+        
+        return cnt;
+        
+    }
+    
+    
+    private static void init(){
+        
+        map = new HashMap<>();
         
         for(int i = 0; i < wires.length; i++){
             
-            parent = new int[n+1];
-            for(int k = 1; k <= n; k++){
-                parent[k] = k;
-            }
+            int v = wires[i][0];
+            int u = wires[i][1];
             
-            for(int j = 0; j < wires.length; j++){
-                if(i == j) continue;
-                union(wires[j][0],wires[j][1]);
-            }
-            
-            for(int k = 1; k <= n; k++){
-                parent[k] = find(parent[k]);
-            }
-            
-            Map<Integer,Integer> map = new HashMap<>();
-            for(int k = 1; k <= n ; k++){
-                map.put(parent[k],map.getOrDefault(parent[k],0)+1);            
-            }        
-
-            int total = 0;
-            for(int key : map.keySet()){
-                total = Math.abs(total - map.get(key));
-            }
-
-            result = Math.min(result,total);
+            map.computeIfAbsent(v,c -> new ArrayList<>()).add(u);
+            map.computeIfAbsent(u,c -> new ArrayList<>()).add(v);
+                
         }
-
-        return result;    
         
     }
+    
 }
