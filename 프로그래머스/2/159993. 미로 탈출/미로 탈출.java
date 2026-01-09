@@ -2,78 +2,93 @@ import java.util.*;
 
 class Solution {
     
-    private static Pos st,en,lb;
+    private static int n,m,result;
+    private static Pos st, en, lb;
+    private static int[][] board;
+    
+    private static int[] dx = new int[]{-1,1,0,0};
+    private static int[] dy = new int[]{0,0,-1,1};
     
     private static class Pos{
-        int x;
-        int y;
-        int open;
+        int x,y;
         
-        private Pos(int x, int y, int open){
+        private Pos(int x, int y){
             this.x = x;
             this.y = y;
-            this.open = open;
         }
     }
     
     public int solution(String[] maps) {
         
-        int n = maps.length;
-        int m = maps[0].length();
-        
+        n = maps.length;
+        m = maps[0].length();
+        board = new int[n][m];
+            
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
-                char s = maps[i].charAt(j);
-                switch(s){
+                char c = maps[i].charAt(j);
+                switch(c){
                     case 'S':
-                        st = new Pos(i,j,0);
+                        board[i][j] = -1;
+                        st = new Pos(i,j);
                         break;
                     case 'E':
-                        en = new Pos(i,j,0);
+                        board[i][j] = -1;
+                        en = new Pos(i,j);
                         break;
                     case 'L':
-                        lb = new Pos(i,j,1);
+                        board[i][j] = 2;
+                        lb = new Pos(i,j);
                         break;
-                    default:
+                    case 'O':
+                        board[i][j] = 0;
+                        break;
+                    case 'X':
+                        board[i][j] = 1;
                         break;
                 }
             }
         }
         
+        result = 0;
+        if(bfs(st,lb) == -1) return -1;
+        if(bfs(lb,en) == -1) return -1;
+        
+        return result;
+        
+    }
+    
+    private static int bfs(Pos start, Pos end){
+        
+        int pass = 0;
+        
         Deque<Pos> deque = new ArrayDeque<>();
-        deque.add(st);
+        deque.add(start);
         
-        int[] dx = new int[]{-1,1,0,0};
-        int[] dy = new int[]{0,0,-1,1};
-        
-        int cnt = 0;
-        
-        boolean[][][] visited = new boolean[n][m][2];
-        visited[st.x][st.y][0] = true;
+        boolean[][] visited = new boolean[n][m];
+        visited[start.x][start.y] = true;
         
         while(!deque.isEmpty()){
             
             int size = deque.size();
-            
-            for(int i = 0; i < size; i++){
+            for(int i = 0 ; i < size; i++){
                 
-                Pos pos = deque.poll();
-                if(pos.x == lb.x && pos.y == lb.y) pos.open = 1;
-                if(pos.x == en.x && pos.y == en.y && pos.open == 1) return cnt;
+                Pos now = deque.poll();
+                if(now.x == end.x && now.y == end.y) return result;
                 
                 for(int k = 0 ; k < 4; k++){
-                    int mvX = pos.x + dx[k];
-                    int mvY = pos.y + dy[k];
+                    int mx = now.x + dx[k];
+                    int my = now.y + dy[k];
                     
-                    if(mvX < 0 || mvY < 0 || mvX >= n || mvY >= m || visited[mvX][mvY][pos.open] || maps[mvX].charAt(mvY) == 'X') continue;
-                    deque.add(new Pos(mvX,mvY,pos.open));
-                    visited[mvX][mvY][pos.open] = true;
+                    if(mx < 0 || my < 0 || mx >= n || my >= m || 
+                        visited[mx][my] || board[mx][my] == 1) continue;
+                    visited[mx][my] = true;
+                    deque.add(new Pos(mx,my));
                     
                 }
-                
             }
             
-            cnt++;
+            result++;
             
         }
         
