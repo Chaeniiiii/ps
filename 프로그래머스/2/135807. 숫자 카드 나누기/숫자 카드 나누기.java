@@ -1,45 +1,46 @@
 import java.util.*;
 
 class Solution {
-    
     public int solution(int[] arrayA, int[] arrayB) {
         
-        int answer = 0;
+        Arrays.sort(arrayA);   
+        int gcdA = getGcd(arrayA);
+        int gcdB = getGcd(arrayB); 
         
-        int aGCD = arrayA[0], bGCD = arrayB[0];
-        for(int i = 1; i<arrayA.length; i++){
-            aGCD = getGCD(aGCD, arrayA[i]);
-        }
+        if(gcdA <= 1 && gcdB <= 1 && gcdA == gcdB) return 0;
+        if(gcdA > gcdB && divCard(arrayB, gcdA)) return gcdA;
+        if(gcdA < gcdB && divCard(arrayA, gcdB)) return gcdB;
         
-        for(int i = 1; i<arrayB.length; i++){
-            bGCD = getGCD(bGCD, arrayB[i]);
-        }
-        
-        if(aGCD > bGCD){
-            if(canDivide(arrayB,aGCD)) answer = Math.max(answer,aGCD);
-        }
-        else if(aGCD < bGCD){
-            if(canDivide(arrayA,bGCD)) answer = Math.max(answer,bGCD);
-        }
-        
-        return answer;
+        return 0;
         
     }
     
-    private static boolean canDivide(int [] arr, int num){
+    private static int getGcd(int[] arr){
         
-        for(int n : arr){
-            if(n%num ==0) return false;
+        if(arr.length == 1) return arr[0];
+        
+        int gcd = calcGcd(arr[0],arr[1]);
+        for(int i = 2; i < arr.length - 1; i++){
+            gcd = calcGcd(gcd,arr[i]);
+        }
+        
+        return gcd;
+        
+    }
+    
+    private static int calcGcd(int a, int b){
+        if(b == 0) return a;
+        return calcGcd(b,a%b);
+    }
+    
+    private static boolean divCard(int[] arr, int gcd){
+        
+        for(int i = 0 ; i < arr.length; i++){
+            if(arr[i] % gcd == 0)  return false;
         }
         
         return true;
         
     }
     
-    private static int getGCD(int num1, int num2){
-        
-        if(num1 % num2 == 0) return num2;
-        return getGCD(num2,num1%num2);
-        
-    }
 }
