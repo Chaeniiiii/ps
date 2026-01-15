@@ -2,61 +2,101 @@ import java.util.*;
 
 class Solution {
     
-    private static int n, m;
-    private static char[][] map;
-    private static int[] dx = {-1,1,0,0};
-    private static int[] dy = {0,0,-1,1};
+    private static int n,m;
+    private static int[][] map;
+    
+    private static Pos st,en;
+    
+    private static boolean[][][] visited;
+    private static int[] dx = new int[]{-1,1,0,0};
+    private static int[] dy = new int[]{0,0,-1,1};
+    
+    private static class Pos{
+        int x;
+        int y;
+        private Pos(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
     
     public int solution(String[] board) {
+        
         n = board.length;
         m = board[0].length();
-        map = new char[n][m];
         
-        int startX = 0, startY = 0;
+        map = new int[n][m];
+        visited = new boolean[n][m][4];
         
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                map[i][j] = board[i].charAt(j);
-                if(map[i][j] == 'R'){
-                    startX = i;
-                    startY = j;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m ; j++){
+                char c = board[i].charAt(j);
+                switch(c){
+                    case 'D':
+                        map[i][j] = 1;
+                        break;
+                    case 'R':
+                        st = new Pos(i,j);
+                        break;
+                    case 'G':
+                        en = new Pos(i,j);
+                        break;
+                        
                 }
-            }
+            } 
         }
         
-        return bfs(startX, startY);
+        return bfs();
+            
     }
     
-    private int bfs(int sx, int sy){
+    private static int bfs(){
         
-        Deque<int[]> deque = new ArrayDeque<>();
-        boolean[][] visited = new boolean[n][m];
-        deque.add(new int[]{sx, sy, 0});
-        visited[sx][sy] = true;
+        Deque<Pos> deque = new ArrayDeque<>();
+        deque.add(st);
         
+        int cnt = 0;
         while(!deque.isEmpty()){
-            int[] cur = deque.poll();
-            int x = cur[0], y = cur[1], cnt = cur[2];
             
-            if(map[x][y] == 'G') return cnt;
-            
-            for(int k=0;k<4;k++){
-                int nx = x;
-                int ny = y;
+            int size = deque.size();
+
+            for(int i = 0; i < size; i++){
                 
-                while(true){
-                    int tx = nx + dx[k];
-                    int ty = ny + dy[k];
-                    if(tx<0 || ty<0 || tx>=n || ty>=m) break;
-                    if(map[tx][ty] == 'D') break;
-                    nx = tx; ny = ty;
+                Pos now = deque.poll();
+                if(now.x == en.x && now.y == en.y) return cnt;
+                
+                for(int k = 0; k < 4; k++){
+                    int mx = now.x + dx[k];
+                    int my = now.y + dy[k];
+                    if(mx < 0 || my < 0 || mx >= n || my >= m || map[mx][my] == 1 || visited[mx][my][k]) continue;
+                    Pos nxt = go(mx,my,k);
+                    deque.add(nxt);
+                    
                 }
-                if(!visited[nx][ny]){
-                    visited[nx][ny] = true;
-                    deque.add(new int[]{nx, ny, cnt+1});
-                }
+                
             }
+            cnt++;
         }
+        
         return -1;
+        
     }
+    
+    private static Pos go(int x, int y, int k){
+        
+        visited[x][y][k] = true;
+        while(true){
+            int mx = x + dx[k];
+            int my = y + dy[k];
+            if(mx < 0 || my < 0 || mx >= n || my >= m || map[mx][my] == 1 || visited[mx][my][k]) break;
+            x = mx;
+            y = my;
+            visited[mx][my][k] = true;
+        }
+        
+        return new Pos(x,y);
+        
+    }
+    
+    
 }
