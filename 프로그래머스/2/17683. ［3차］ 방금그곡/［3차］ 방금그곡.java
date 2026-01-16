@@ -1,51 +1,67 @@
 import java.util.*;
 
 class Solution {
+    
+    private static class Music{
+        
+        String name;
+        int time;
+        
+        private Music(String name, int time){
+            this.name = name;
+            this.time = time;
+        }
+        
+    }
+    
     public String solution(String m, String[] musicinfos) {
         
-        int maxPlayTime = 0;
-        String answer = "(None)";
+        Music music = new Music("",0);
+        m = getCode(m);
         
-        for (String music : musicinfos) {
+        for(int i = 0; i < musicinfos.length; i++){
             
-            String[] info = music.split(",");
-            int total = getTime(info[0], info[1]); // 재생 시간 계산
-           
-            String sheet = getSheet(info[3]);
-            String neoSheet = getSheet(m);
+            String[] infos = musicinfos[i].split(",");
             
-            String totalSheet = "";
-            for(int i = 0; i<total; i++){
-                totalSheet+=(sheet.charAt(i%sheet.length()));
+            int t = getTime(infos[0],infos[1]);
+            String name = infos[2];
+            StringBuilder code = new StringBuilder(getCode(infos[3]));
+            StringBuilder sb = new StringBuilder(code.toString());
+            
+            while(t > code.length()){
+                code.append(sb);
             }
+            code.setLength(t);
             
-            if(totalSheet.contains(neoSheet)){
-                if(maxPlayTime >= total) continue;
-                maxPlayTime = total;
-                answer = info[2];
+            if(!code.toString().contains(m)) continue;
+            if(music.name.equals("") || music.time < t){
+                music = new Music(name,t);
             }
             
         }
         
-        return answer;
-    }
-    
-    private static String getSheet(String sh){
-        
-        sh = sh.replace("A#","a").replace("B#","b").replace("C#","c")
-            .replace("D#","d").replace("F#","f").replace("G#","g");
-        
-        return sh;
+        return music.name.equals("") ? "(None)" : music.name;
         
     }
     
-    private static int getTime(String start, String end) {
-        String[] sTime = start.split(":");
-        String[] eTime = end.split(":");
+    private static String getCode(String code){
         
-        int startTime = Integer.parseInt(sTime[0]) * 60 + Integer.parseInt(sTime[1]);
-        int endTime = Integer.parseInt(eTime[0]) * 60 + Integer.parseInt(eTime[1]);
+        return code.replace("C#","c").replace("D#","d")
+            .replace("F#","f").replace("G#","g").replace("A#","a")
+            .replace("B#","C").replace("E#","F");
         
-        return endTime - startTime;
     }
+    
+    private static int getTime(String sStr, String eStr){
+        
+        String[] stT = sStr.split(":");
+        String[] enT = eStr.split(":");
+        
+        int st = Integer.parseInt(stT[0]) * 60 + Integer.parseInt(stT[1]);
+        int en = Integer.parseInt(enT[0]) * 60 + Integer.parseInt(enT[1]);
+        
+        return en - st;
+        
+    }
+    
 }
