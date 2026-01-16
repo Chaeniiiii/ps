@@ -1,54 +1,35 @@
 import java.util.*;
 
 class Solution {
-    
-    private static long [] dp;
-    
     public int[] solution(int n, long k) {
         
-        ArrayList<Integer> arr = new ArrayList<>();
-        int [] result = new int[n];
+        int[] result = new int[n];
+        int idx = 0, origin = n;
+        long total = 1;
+        k--;
         
-        dp = new long[n+1];
-        dp[0] = dp[1] = 1;
+        ArrayList<Integer> number = new ArrayList<>();
+        for(int i = 1; i <= n; i++){
+            number.add(i);
+            total *= i;
+        }
         
-        int num = n-1;
-        
-        for(int i = 1; i<=n; i++) arr.add(i);
-        
-        for(int i = 0; i<n; i++){
+        while(idx < origin){
             
-            int idx = 0;
-            long f = getFactorial(num);
+            long unit = total / n;
+            int p = (int)(k / unit);
             
+            result[idx] = number.get(p);
+            number.remove(p);
             
-            idx += (int)(k/f);
-            if(k % f == 0) idx--;
+            total /= n;
+            k %= unit;
+            n--;
+            idx++;
             
-            
-            if(idx >= arr.size()){
-                result[i] = arr.get(0);
-                break;
-            }
-            
-            k-=(f*idx);
-            result[i] = arr.get(idx);
-            arr.remove(arr.get(idx));
-            
-            num--;
-
         }
         
         return result;
-        
-    }
-    
-    private static long getFactorial(int num){
-        
-        if(num == 0 || num == 1) return 1;
-        if(dp[num] != 0) return dp[num]; 
-        
-        return dp[num] = num * getFactorial(num-1);
         
     }
 }
