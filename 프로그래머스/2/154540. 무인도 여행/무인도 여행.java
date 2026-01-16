@@ -11,31 +11,28 @@ class Solution {
     
     public int[] solution(String[] maps) {
         
+        this.maps = maps;
         n = maps.length;
         m = maps[0].length();
         
-        this.maps = maps;
         visited = new boolean[n][m];
-        
         ArrayList<Integer> arr = new ArrayList<>();
+        
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
                 char c = maps[i].charAt(j);
-                if(!Character.isDigit(c) || visited[i][j]) continue;
+                if(c == 'X' || visited[i][j]) continue;
                 visited[i][j] = true;
-                arr.add(bfs(i,j));
+                int cnt = bfs(i,j);
+                if(cnt == 0) continue;
+                arr.add(cnt);
             }
         }
         
         if(arr.size() == 0) return new int[]{-1};
+        arr.sort((a,b) -> a - b);
         
-        int[] result = new int[arr.size()];
-        for(int i = 0; i < result.length; i++){
-            result[i] = arr.get(i);
-        }
-        
-        Arrays.sort(result);
-        return result;
+        return arr.stream().mapToInt(Integer::intValue).toArray();
         
     }
     
@@ -45,27 +42,26 @@ class Solution {
         deque.add(new int[]{x,y});
         
         int cnt = 0;
+        
         while(!deque.isEmpty()){
             
             int[] now = deque.poll();
-            int nx = now[0];
-            int ny = now[1];
-            cnt+= (int)maps[nx].charAt(ny) - '0';
+            cnt+=maps[now[0]].charAt(now[1]) - '0';
             
             for(int i = 0; i < 4; i++){
-                int mvX = nx + dx[i];
-                int mvY = ny + dy[i];
+                int mx = now[0] + dx[i];
+                int my = now[1] + dy[i];
                 
-                if(mvX < 0 || mvY < 0 || mvX >= n || mvY >= m || visited[mvX][mvY]) continue;
-                if(!Character.isDigit(maps[mvX].charAt(mvY))) continue;
-                visited[mvX][mvY] = true;
-                deque.add(new int[]{mvX,mvY});
+                if(mx < 0 || my < 0 || mx >= n || my >= m || visited[mx][my] || maps[mx].charAt(my) == 'X') continue;
+                deque.add(new int[]{mx,my});
+                visited[mx][my] = true;
             }
-            
+                        
         }
         
         return cnt;
         
     }
+    
     
 }
