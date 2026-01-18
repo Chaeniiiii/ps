@@ -3,27 +3,44 @@ import java.util.*;
 class Solution {
     public int solution(int[][] data, int col, int row_begin, int row_end) {
         
+        int c = col-1;
+        int rb = row_begin - 1;
+        int re = row_end - 1;
+        
+        //1. data col 열을 기준으로 정렬 
         Arrays.sort(data, (a,b) -> {
-            if(a[col - 1] == b[col - 1]){
+            if(a[c] == b[c]){
                 return b[0] - a[0];
             }
-            return a[col-1] - b[col-1];
+            return a[c] - b[c];
         });
         
-        int result = 0;
-        int cnt;
+        int[] div = new int[re - rb + 1];
+        int idx = 0;
+        for(int i = rb; i <= re; i++){
+            div[idx] = mod(data[i], i+1);
+            idx++;
+        }
         
-        for(int i = row_begin - 1; i < row_end ; i++){
-            cnt = 0;
-            int mod = i + 1;
-            
-            for(int j = 0; j < data[i].length; j++){
-                cnt += data[i][j] % mod;
-            }
-            result^=cnt;
-        } 
+        int result = div[0];
+    
+        for(int i = 1; i < div.length; i++){
+            result ^= div[i];
+        }
         
         return result;
         
     }
+    
+    private static int mod(int[] d, int i){
+        
+        int sum = 0;
+        for(int k = 0; k < d.length; k++){
+            sum+=d[k] % i;
+        }
+        
+        return sum;
+        
+    }
+    
 }
