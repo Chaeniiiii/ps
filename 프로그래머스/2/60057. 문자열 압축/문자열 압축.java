@@ -1,39 +1,56 @@
 import java.util.*;
 
 class Solution {
+    
+    private static String s;
+    
     public int solution(String s) {
         
-        int result = s.length(); 
-
-        for (int cut = 1; cut <= s.length() / 2; cut++) {
-            
-            StringBuilder sb = new StringBuilder();
-            
-            String prev = s.substring(0, cut);
-            int cnt = 1;
-
-            for (int i = cut; i < s.length(); i += cut) {
-                
-                int end = Math.min(i + cut, s.length());
-                String cur = s.substring(i, end);
-
-                if (cur.equals(prev)) cnt++;
-                else {
-                    if (cnt > 1) sb.append(cnt);
-                    sb.append(prev);
-                    prev = cur;
-                    cnt = 1;
-                    
-                }
+        this.s = s;
+        int len = s.length(); 
+        int result = len;
+        
+        for(int i = 1; i <= len/2; i++){
+            result = Math.min(result,div(i));
+        }
+        
+        return result;
+        
+    }
+    
+    private static int div(int cut){
+        
+        StringBuilder sb = new StringBuilder();
+        StringBuilder total = new StringBuilder();
+        
+        Deque<String> deque = new ArrayDeque<>();
+        int i = 0;
+        
+        for(; i < s.length();){
+            sb = new StringBuilder();
+            while(i < s.length() && sb.length() < cut){
+                sb.append(s.charAt(i));
+                i++;
             }
-
-            if (cnt > 1) sb.append(cnt);
-            sb.append(prev);
-
-            result = Math.min(result, sb.length());
+            
+            String str = sb.toString();
+            if(deque.isEmpty() || deque.peekLast().equals(str)){
+                deque.add(str);
+            }
+            else{
+                total.append(deque.size() < 2 ? deque.peekLast() : deque.size() + deque.peekLast());
+                deque = new ArrayDeque<>();
+                deque.add(str);
+            }
             
         }
-
-        return result;
+        
+        if(sb.length() > 0){
+            total.append(deque.size() < 2 ? deque.peekLast() : deque.size() + deque.peekLast());
+        }
+        
+        return total.length();
+        
     }
+    
 }
