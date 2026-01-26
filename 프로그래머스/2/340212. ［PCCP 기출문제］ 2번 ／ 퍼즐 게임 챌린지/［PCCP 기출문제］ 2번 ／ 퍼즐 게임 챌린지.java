@@ -2,48 +2,53 @@ import java.util.*;
 
 class Solution {
     
+    private static long limit;
+    private static int[] diffs, times;
+    
     public int solution(int[] diffs, int[] times, long limit) {
+    
+        this.limit = limit;
+        this.diffs = diffs;
+        this.times = times;
         
-        long lt = 1, rt = limit;
+        int lt = 1, rt = 100_000;
         
         while(lt <= rt){
             
-            long mid = (lt + rt) / 2;
-            
-            if(isCorrect(mid,diffs,times,limit)){
+            int mid = (lt + rt) / 2;
+            if(game(mid)){
                 rt = mid - 1;
             }
             else{
-                lt = mid + 1;                
+                lt = mid + 1;
             }
             
-        }
+        }   
         
-        return (int)lt;
+        return lt;
         
     }
     
-    private static boolean isCorrect(long level, int[] diffs, int[] times, long limit){
+    private static boolean game(int level){
         
-        long t = 0;
-        int prevT = 0;
+        long time = 0;
         
-        for(int i = 0 ; i < diffs.length; i++){
-            
-            int df = diffs[i];
-            if(df > level){
-                t += ((times[i] + prevT) * (df - level) + times[i]);
+        for(int i = 0; i < diffs.length; i++){
+            int dif = diffs[i];
+            int nowT = times[i];
+            if(dif <= level){;
+                time += nowT;
             }
             else{
-                t += times[i];
+                long prevT = (i == 0 ? 0 : times[i-1]);
+                int fault = dif - level;
+                
+                time += (nowT + prevT) * fault;
+                time += nowT;
             }
-            
-            prevT = times[i];
-            
         }
         
-        if(t > limit) return false;
-        return true;
+        return time <= limit ? true : false;
         
     }
     
