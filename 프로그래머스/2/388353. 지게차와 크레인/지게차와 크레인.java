@@ -2,95 +2,110 @@ import java.util.*;
 
 class Solution {
     
-    private static int n,m, result;
+    private static int n,m;
     
-    private static String[] storage;
+    private static char[][] board;
     private static boolean[][] visited;
     
     private static int[] dx = new int[]{-1,1,0,0};
     private static int[] dy = new int[]{0,0,-1,1};
     
     public int solution(String[] storage, String[] requests) {
-
+        
         n = storage.length;
         m = storage[0].length();
-        
-        result = n*m;
-        
-        this.storage = storage;
+        board = new char[n][m];
         visited = new boolean[n][m];
         
-        for(String r : requests){
+        for(int i = 0; i < n; i++){
+            String str = storage[i];
+            for(int j = 0; j < m; j++){
+                board[i][j] = str.charAt(j);
+            }
+        }
+        
+        for(int i = 0; i < requests.length; i++){
             
-            if(r.length() == 1){
-                useCar(r.charAt(0));
+            String now = requests[i];
+            if(now.length() == 1){
+                fork(now.charAt(0));
             }
             else{
-                useCrane(r.charAt(0));
+                crane(now);
             }
             
-            //System.out.println(result);
+        }
+        
+        int cnt = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!visited[i][j]) cnt++;
+            }
+        }
+        
+        return cnt;
+        
+    }
+    
+    private static void fork(char c){
+        
+        Deque<int[]> deque = new ArrayDeque<>();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(board[i][j] == c && !visited[i][j]){
+                    if(isPossible(i,j)) deque.add(new int[]{i,j});
+                }
+            }
+        }
+        
+        while(!deque.isEmpty()){
+            
+            int[] now = deque.poll();
+            visited[now[0]][now[1]] = true;
             
         }
         
-        return result;
-        
     }
     
-    private static void useCar(char c){
-        
-        boolean[][] map = new boolean[n][m];
-        
-        //테두리 확인(가로)
-        for(int i = 0; i < m; i++){
-            //가장 위쪽
-            if(!map[0][i]) dfs(0,i,c,map);
-            //가장 아래쪽
-            if(!map[n-1][i]) dfs(n-1,i,c,map);
-        }
-        
-        //테두리 확인(세로)
-        for(int i = 0; i < n; i++){
-            //가장 왼쪽
-            if(!map[i][0]) dfs(i,0,c,map);
-            //가장 오른쪽
-            if(!map[i][m-1]) dfs(i,m-1,c,map);
-        }
-        
-    }
-    
-    private static void useCrane(char c){
+    private static void crane(String now){
         
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
-                if(visited[i][j] || storage[i].charAt(j) != c) continue;
-                visited[i][j] = true;
-                result--;
+                if(board[i][j] == now.charAt(0)){
+                    visited[i][j] = true;
+                }
             }
         }
+        
     }
     
-    private static void dfs(int x, int y, char c, boolean[][] map){
+    private static boolean isPossible(int sx, int sy){
         
-        map[x][y] = true;
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.add(new int[]{sx,sy});
         
-        if(!visited[x][y]){
-            if(storage[x].charAt(y) == c){
-                visited[x][y] = true;
-                result--;  
+        boolean[][] nowV = new boolean[n][m];
+        
+        while(!deque.isEmpty()){
+            
+            int[] now = deque.poll();
+            int x = now[0];
+            int y = now[1];
+            nowV[x][y] = true;
+            
+            for(int i = 0; i < 4; i++){
+                
+                int mx = x + dx[i];
+                int my = y + dy[i];
+                
+                if(mx < 0 || my < 0 || mx >= n || my >= m) return true;
+                if(!nowV[mx][my] && visited[mx][my]) deque.add(new int[]{mx,my});
+                
             }
-            return;
+            
         }
         
-        for(int k = 0; k < 4; k++){
-            int mvX = x + dx[k];
-            int mvY = y + dy[k];
-            
-            if(mvX < 0 || mvY < 0 || mvX >= n || mvY >= m || map[mvX][mvY]) continue;
-            map[mvX][mvY] = true;
-            dfs(mvX,mvY,c,map);
-            
-        }
+        return false;
         
     }
     
