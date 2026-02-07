@@ -3,29 +3,30 @@ import java.util.*;
 class Solution {
     public int[] solution(long begin, long end) {
         
-        int[] result = new int[(int)(end - begin + 1)];
+        int len = (int)(end - begin + 1);
+        int[] result = new int[len];
         
-        for(long i = begin; i <= end; i++){
-            
-            int idx = (int)(i - begin);
-            result[idx] = 1;
-            
-            for(long k = 2; k <= (long)Math.sqrt(i); k++){
-                if(i % k != 0) continue;
-                int num = (int)(i/k);
-                if(num > 10000000){
-                    result[idx] = (int)k;
-                }
-                else{
-                    result[idx] = num;
-                    break;
-                }
-                
+        int idx = len - 1;
+        for(long i = end; i >= Math.max(begin,2); i--){
+            if(result[idx] > 1){
+                idx--;
+                continue;
             }
+            
+            long max = 1;
+            for(int k = 2; k <= Math.ceil(Math.sqrt(i)); k++){
+                if(i % k == 0){
+                    long pair = i / k;
+                    if(pair > 10_000_000) max = k;
+                    else max = Math.max(max,pair);
+                }
+            }
+            
+            result[idx] = (int)max;
+            idx--;
             
         }
         
-        if(begin == 1) result[0] = 0;
         return result;
         
     }
