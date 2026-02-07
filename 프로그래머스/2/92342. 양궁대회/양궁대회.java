@@ -3,71 +3,64 @@ import java.util.*;
 class Solution {
     
     private static final int size = 10;
-    private static int n,result;
-    private static int[] info;
-    private static int[] lion;
+    
+    private static int[] info, result;
+    private static int n, diff;
     
     public int[] solution(int n, int[] info) {
-    
-        this.n = n;
+        
         this.info = info;
+        this.n = n;
         
-        result = -1;
-        lion = new int[size + 1];
+        diff = 0;
+        result = new int[size+1];
+        dfs(0,0,new int[size+1]);
         
-        dfs(0,0,new int[size + 1]);
-        
-        return result == -1 ? new int[]{-1} : lion;
-    }
-    
-    private static void dfs(int idx, int dep, int[] newArr){
-        
-        int[] arr = newArr.clone();
-        
-        if(dep == n){
-            calc(arr);
-            return;
-        }
-        
-        for(int i = idx; i <= size; i++){
-            
-            arr[i]++;
-            if(arr[i] <= info[i] + 1) dfs(i,dep+1,arr);
-            arr[i]--;
-            
-        }
+        return diff == 0 ? new int[]{-1} : result;
         
     }
     
-    private static void calc(int[] newArr){
+    private static void dfs(int st, int cnt, int[] lion){
         
-        int a = 0;
-        int b = 0;
-        for(int i = 0; i <= size; i++){
-            if(info[i] == 0 && newArr[i] == 0) continue;
-            if(info[i] < newArr[i]) a+=size-i;
-            else b += size-i;
-        }
-        
-        int newScore = a <= b ? -1 : a - b;
-        if(newScore == -1) return;
-        
-        if(result < newScore){
-            lion = newArr.clone();
-            result = newScore;
-        }
-        else if(result == newScore){
-            for(int i = size; i >= 0; i--){
-                if(newArr[i] > lion[i]){
-                    lion = newArr.clone();
-                    break;
-                }
-                else if(newArr[i] < lion[i]){
-                    break;
-                }
+        if(cnt > n) return;
+        if(cnt == n){
+            int l = 0, p = 0;
+            for(int i = 0; i <= size; i++){
+                if(info[i] == 0 && lion[i] == 0) continue;
+                if(info[i] >= lion[i]) p += size - i;
+                else l += size - i;
             }
-            result = newScore;
+            
+            int newDiff = l - p;
+            if(l > p){
+                if(diff < newDiff){
+                    diff = newDiff;
+                }
+                else if(diff == newDiff){
+                   for(int i = size; i >= 0; i--){
+                        if(lion[i] < result[i]){
+                            return;
+                        }
+                       else if(lion[i] > result[i]) break;
+                   }
+                }
+                else return;
+                result = lion.clone();
+            }
+            
+            return;
+            
         }
+        
+        if(st > size) return;
+        
+        //이번 판 진다고 가정
+        dfs(st+1,cnt,lion);
+        //이번 판 이긴다고 가정
+        int brw = st == size ? n - cnt : info[st] + 1;
+        lion[st] = brw;
+        dfs(st+1,cnt+brw,lion);
+        lion[st] = 0;
         
     }
     
