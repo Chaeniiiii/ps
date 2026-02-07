@@ -3,26 +3,29 @@ import java.util.*;
 class Solution {
     public int[] solution(long begin, long end) {
         
-        int len = (int)(end - begin + 1);
-        int[] result = new int[len];
+        int len = (int)(end - begin);
+        int[] result = new int[len+1];
+        Arrays.fill(result,1);
+        result[0] = 0;
         
-        int idx = len - 1;
-        for(long i = end; i >= Math.max(begin,2); i--){
-            if(result[idx] > 1){
-                idx--;
-                continue;
+        boolean[] visited = new boolean[len+1];
+        
+        int idx = len;
+        for(long st = end; st >= begin; st--){
+            if(visited[idx]) idx--;
+            if(idx == 0) break;
+            
+            int gcd = getGcd(end, st);
+            result[idx] = gcd;
+            
+            int newIdx = idx;
+            
+            while(newIdx > st){
+                result[newIdx] = gcd;
+                visited[newIdx] = true;
+                newIdx -= gcd;
             }
             
-            long max = 1;
-            for(int k = 2; k <= Math.ceil(Math.sqrt(i)); k++){
-                if(i % k == 0){
-                    long pair = i / k;
-                    if(pair > 10_000_000) max = k;
-                    else max = Math.max(max,pair);
-                }
-            }
-            
-            result[idx] = (int)max;
             idx--;
             
         }
@@ -30,4 +33,15 @@ class Solution {
         return result;
         
     }
+    
+    private static int getGcd(long end, long num){
+        
+        for(int i = (int)num - 1 ; i >= 2; i--){
+            if(num % i == 0) return i;
+        }
+        
+        return 1;
+        
+    }
+    
 }
