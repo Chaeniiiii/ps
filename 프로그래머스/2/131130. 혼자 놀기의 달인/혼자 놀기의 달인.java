@@ -1,49 +1,31 @@
 import java.util.*;
 
 class Solution {
-    
-    private static int result = 0;
-    
-    private static ArrayList<ArrayList<Integer>> box;
-    private static boolean[] visit;
-    
     public int solution(int[] cards) {
         
-        box = new ArrayList<>();
+        int len = cards.length;
+        boolean[] visited = new boolean[len];
         
-        boolean[] visited = new boolean[cards.length+1];
+        ArrayList<Integer> number = new ArrayList<>();
         
         for(int i = 0; i < cards.length; i++){
-            if(visited[i]) continue;
-            int now = cards[i] - 1;
-            ArrayList<Integer> arr = new ArrayList<>();
-            while(!visited[now]){
-                visited[now] = true;
-                arr.add(now+1);
-                now = cards[now] - 1;
+            if(visited[i]) continue; 
+            
+            int k = i, cnt = 0;
+            while(!visited[k]){
+                cnt++;
+                visited[k] = true;
+                k = cards[k] - 1;
             }
-            box.add(arr);
+            
+            number.add(cnt);
+            
         }
         
-        if(box.size() <= 1) return 0;
-        visit = new boolean[box.size()];
-        dfs(0,0,1);
+        if(number.size() == 1) return 0;
+        number.sort((a,b) -> b - a);
         
-        return result;
+        return number.get(0) * number.get(1);
         
     }
-    
-    private static void dfs(int dep, int st, int cnt){
-        
-        if(dep == 2){
-            result = Math.max(result,cnt);
-            return;
-        }
-        
-        for(int i = st; i < box.size(); i++){
-            dfs(dep+1,i+1,cnt*box.get(i).size());
-        }
-        
-    }
-    
 }
