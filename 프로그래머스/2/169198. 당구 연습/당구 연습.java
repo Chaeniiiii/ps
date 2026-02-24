@@ -1,43 +1,41 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(int m, int n, int startX, int startY, int[][] balls) {
+    public int[] solution(int m, int n, int stx, int sty, int[][] balls) {
         
         int[] result = new int[balls.length];
         
-        for(int i = 0; i < balls.length; i++){
-            int ballX = balls[i][0];
-            int ballY = balls[i][1];
+        for(int t = 0; t < balls.length; t++){
             
-            double x = startX - ballX;
-            double y = startY - ballY;
+            int tx = balls[t][0];
+            int ty = balls[t][1];
+            int min = Integer.MAX_VALUE;
             
-            double l = Math.pow((startX + ballX),2) + Math.pow(y,2);
-            double r = Math.pow((m - startX) + (m - ballX),2) + Math.pow(y,2);
-            
-            double d = Math.pow((startY + ballY),2) + Math.pow(x,2);
-            double t = Math.pow((n - startY) + (n - ballY),2) + Math.pow(x,2);
-           
-            
-            int minV = (int)Math.min(Math.min(l,r),Math.min(d,t));
-            if(x == 0){
-                if(y > 0){
-                    minV = (int)Math.min(Math.min(l,r),t);
-                }
-                else{
-                    minV = (int)Math.min(Math.min(l,r),d);
-                }
-            }
-            else if(y == 0){
-                if(x > 0){
-                    minV = (int)Math.min(Math.min(d,t),r);
-                }
-                else{
-                    minV = (int)Math.min(Math.min(d,t),l);
-                }
+            //우측 벽을 기준으로 대칭 
+            if(!(stx < tx && sty == ty)){
+                int calc = (int)(Math.pow((m-stx)+(m-tx),2) + Math.pow(Math.abs(sty - ty),2));
+                min = Math.min(min,calc);    
             }
             
-            result[i] = minV;
+            //좌측 벽을 기준으로 대칭
+            if(!(stx > tx && sty == ty)){
+                int calc = (int)(Math.pow(stx+tx,2) + Math.pow(Math.abs(sty - ty),2));
+                min = Math.min(min,calc);
+            }
+            
+            //아래 벽을 기준으로 대칭
+            if(!(stx == tx && sty > ty)){
+                int calc = (int)(Math.pow(sty+ty,2) + Math.pow(Math.abs(stx - tx),2));
+                min = Math.min(min,calc);
+            }
+            
+            //위 벽을 기준으로 대칭
+            if(!(stx == tx && sty < ty)){
+                int calc = (int)(Math.pow((n-sty) + (n-ty),2) + Math.pow(Math.abs(stx - tx),2));
+                min = Math.min(min,calc);
+            }
+            
+            result[t] = min;
             
         }
         
