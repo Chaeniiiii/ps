@@ -4,83 +4,68 @@ class Solution {
     
     private static final int MAX = 8;
     
-    private static ArrayList<String> arr;
+    private static int result;
+    private static char[] frd;
     private static boolean[] visited;
-    private static char[] kakao;
+    private static String[] data;
     
     public int solution(int n, String[] data) {
         
-        init();
+        this.data = data;
+        frd = new char[]{'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
         
-        arr = new ArrayList<>();
+        result = 0;
         visited = new boolean[MAX];
-        dfs(0,0, new StringBuilder());
+        dfs(new StringBuilder());
         
-        int cnt = 0;
-        for(String seq : arr){
-            boolean check = true;
-            for(int i = 0 ; i < data.length; i++){
-                String cmdStr = data[i];
-                char me = cmdStr.charAt(0);
-                char frd = cmdStr.charAt(2);
-                int num = cmdStr.charAt(4) - '0';
-
-                char cmd = cmdStr.charAt(3);
-                
-                int meIdx = seq.indexOf(me);
-                int frdIdx = seq.indexOf(frd);
-                int d = Math.abs(meIdx-frdIdx) - 1;
-                
-                switch(cmd){
-                    case '=':
-                        if(d != num) check &= false;
-                        break;
-                    case '>':
-                        if(d <= num) check &= false;
-                        break;
-                    case '<':
-                        if(d >= num) check &= false;
-                        break;
-                }
-                if(!check){
-                    break;
-                }
-            }
-            if(check) cnt++;
-        }
-        return cnt;
-    }
-    
-    private static void init(){
-        
-        kakao = new char[8];
-        
-        kakao[0] = 'A';
-        kakao[1] = 'C';
-        kakao[2] = 'F';
-        kakao[3] = 'J';
-        kakao[4] = 'M';
-        kakao[5] = 'N';
-        kakao[6] = 'R';
-        kakao[7] = 'T';
+        return result;
         
     }
     
-    private static void dfs(int st,int dep, StringBuilder sb){
+    private static void dfs(StringBuilder sb){
         
-        if(dep == MAX){
-            arr.add(sb.toString());
+        if(sb.length() == 8){
+            if(isPossible(sb)) result++;
             return;
         }
         
         for(int i = 0; i < MAX; i++){
             if(visited[i]) continue;
-            sb.append(kakao[i]);
             visited[i] = true;
-            dfs(i+1,dep+1,sb);
-            visited[i] = false;
+            sb.append(frd[i]);
+            dfs(sb);
             sb.deleteCharAt(sb.length()-1);
+            visited[i] = false;
         }
+        
+    }
+    
+    private static boolean isPossible(StringBuilder sb){
+        
+        for(int i = 0; i < data.length; i++){
+            String str = data[i];
+            String a = String.valueOf(str.charAt(0)); //본인
+            String b = String.valueOf(str.charAt(2)); //상대방
+            char c = str.charAt(3); //조건
+            int d = str.charAt(4) - '0';//거리
+            
+            int realD = Math.abs(sb.indexOf(a) - sb.indexOf(b)) - 1;
+            switch(c){
+                case '<':
+                    if(realD >= d) return false;
+                    break;
+                case '>':
+                    if(realD <= d) return false;
+                    break;
+                case '=':
+                    if(Math.abs(realD - d) != 0) return false;
+                    break;
+                        
+            }
+            
+        }
+        
+        return true;
         
     }
     
