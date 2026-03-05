@@ -2,30 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] cards) {
-        
         int len = cards.length;
+        
         boolean[] visited = new boolean[len];
+        ArrayList<Integer> arr = new ArrayList<>();
         
-        ArrayList<Integer> number = new ArrayList<>();
-        
-        for(int i = 0; i < cards.length; i++){
-            if(visited[i]) continue; 
+        for(int i = 0; i < len; i++){
             
-            int k = i, cnt = 0;
-            while(!visited[k]){
+            int cnt = 0;
+            int idx = i;
+            
+            while(!visited[idx]){
                 cnt++;
-                visited[k] = true;
-                k = cards[k] - 1;
+                visited[idx] = true;
+                idx = cards[idx] - 1;
             }
             
-            number.add(cnt);
+            arr.add(cnt);
             
         }
         
-        if(number.size() == 1) return 0;
-        number.sort((a,b) -> b - a);
-        
-        return number.get(0) * number.get(1);
+        arr.sort((a,b) -> b- a);
+        return arr.size() < 2 ? 0 : arr.get(0) * arr.get(1);
         
     }
 }
