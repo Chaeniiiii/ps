@@ -2,46 +2,33 @@ import java.util.*;
 
 class Solution {
     public int[] solution(long begin, long end) {
+
+        int size = (int)(end - begin + 1); 
+        int[] result = new int[size];
         
-        int len = (int)(end - begin);
-        int[] result = new int[len+1];
         Arrays.fill(result,1);
-        result[0] = 0;
+        result[0] = begin == 1 ? 0 : 1;
         
-        boolean[] visited = new boolean[len+1];
-        
-        int idx = len;
-        for(long st = end; st >= begin; st--){
-            if(visited[idx]) idx--;
-            if(idx == 0) break;
+        for(long i = end; i >= begin; i--){
             
-            int gcd = getGcd(end, st);
-            result[idx] = gcd;
+            int idx = (int)(i - begin);
+            if(result[idx] > 1) continue;
             
-            int newIdx = idx;
-            
-            while(newIdx > st){
-                result[newIdx] = gcd;
-                visited[newIdx] = true;
-                newIdx -= gcd;
+            for(int j = 2; j <= (int)Math.sqrt(i); j++){
+                int pair;
+                if(i % j == 0){
+                    pair = (int)(i / j);
+                    if(pair <= 10_000_000){
+                        result[idx] = pair;
+                        break;
+                    }
+                    else result[idx] = Math.max(result[idx],j);
+                }
             }
-            
-            idx--;
             
         }
         
         return result;
         
     }
-    
-    private static int getGcd(long end, long num){
-        
-        for(int i = (int)num - 1 ; i >= 2; i--){
-            if(num % i == 0) return i;
-        }
-        
-        return 1;
-        
-    }
-    
 }
