@@ -1,24 +1,24 @@
-import java.util.*;
-
 class Solution {
     public int solution(String name) {
-        
-        int n = name.length();
-        int result = 0;
-        for(char c : name.toCharArray()){
-            result += Math.min(c - 'A', 'Z' - c + 1);
-        }
-        
-        int mv = n - 1;
-        for(int i = 0; i < n; i++){
-            int nxt = i + 1;
-            while(nxt < n && name.charAt(nxt) == 'A'){
-                nxt++;
+
+        int answer = 0;
+        int move = name.length() - 1;
+
+        for(int i = 0; i < name.length(); i++){
+
+            char c = name.charAt(i);
+            answer += Math.min(c - 'A', 'Z' - c + 1);
+
+            int next = i + 1;
+
+            while(next < name.length() && name.charAt(next) == 'A'){
+                next++;
             }
-            mv = Math.min(mv, Math.min(i*2 + n - nxt, 2*(n-nxt)+i));
+
+            move = Math.min(move, i*2 + name.length() - next);
+            move = Math.min(move, i + 2*(name.length() - next));
         }
-        
-        return result + mv;
-        
+
+        return answer + move;
     }
 }
