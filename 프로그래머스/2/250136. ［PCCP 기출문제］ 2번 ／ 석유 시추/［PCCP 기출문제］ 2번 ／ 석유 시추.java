@@ -2,74 +2,69 @@ import java.util.*;
 
 class Solution {
     
-    private static int n,m;
-    private static int[] amount;
-    private static boolean[][] visited;
+    private int row, col;
     
-    private static int[] dx = new int[]{-1,1,0,0};
-    private static int[] dy = new int[]{0,0,-1,1};
+    private int[] size;
+    private int[][] land;
+    private boolean[][] visited;
+    
+    private int[] dx = new int[]{-1,1,0,0};
+    private int[] dy = new int[]{0,0,-1,1};
     
     public int solution(int[][] land) {
         
-        n = land.length;
-        m = land[0].length;
+        row = land.length;
+        col = land[0].length;
+
+        this.land = land;
+        size = new int[col];
+        visited = new boolean[row][col];
         
-        amount = new int[m];
-        visited = new boolean[n][m];
-        
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
                 if(land[i][j] == 0 || visited[i][j]) continue;
-                visited[i][j] = true;
-                bfs(i,j,land);
+                bfs(i,j);                
             }
         }
         
-        Arrays.sort(amount);
-        return amount[m-1];
+        int result = 0;
+        for(int i = 0; i < col; i++){
+            result = Math.max(result,size[i]);
+        }
+        
+        return result;
         
     }
     
-    private static void bfs(int x, int y, int[][] land){
+    private void bfs(int x, int y){
         
         Deque<int[]> deque = new ArrayDeque<>();
         deque.add(new int[]{x,y});
+        visited[x][y] = true;
         
-        int min = y;
-        int max = y;
-        int cnt = 0;
+        int min = y, max = y, cnt = 1;
         
         while(!deque.isEmpty()){
             
             int[] now = deque.poll();
-            cnt++;
             
-            for(int i = 0; i < 4; i++){
-                int mvX = now[0] + dx[i];
-                int mvY = now[1] + dy[i];
+            for(int k = 0; k < 4; k++){
+                int nx = now[0] + dx[k];
+                int ny = now[1] + dy[k];
                 
-                if(!isIn(mvX,mvY) || land[mvX][mvY] == 0) continue;
-                visited[mvX][mvY] = true;
-                deque.add(new int[]{mvX,mvY});
-                
-                min = Math.min(min,mvY);
-                max = Math.max(max,mvY);
-                
+                if(nx < 0 || ny < 0 || nx >= row || ny >= col || land[nx][ny] == 0 || visited[nx][ny]) continue;
+                deque.add(new int[]{nx,ny});
+                visited[nx][ny] = true;
+                min = Math.min(min,ny);
+                max = Math.max(max,ny);
+                cnt++;
             }
             
         }
         
         for(int i = min; i <= max; i++){
-            amount[i] += cnt;
+            size[i] += cnt;
         }
         
     }
-    
-    private static boolean isIn(int x, int y){
-        
-        if(x < 0 || y < 0 || x >= n || y >= m || visited[x][y]) return false;
-        return true;
-        
-    }
-    
 }
