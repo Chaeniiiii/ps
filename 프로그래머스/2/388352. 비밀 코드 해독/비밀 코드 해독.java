@@ -2,57 +2,59 @@ import java.util.*;
 
 class Solution {
     
-    private int n, size, cnt;
+    private int size = 5;
+    
+    private int n,result;
     private int[][] q;
     private int[] ans;
     
     public int solution(int n, int[][] q, int[] ans) {
-        
-        cnt = 0;
-        size = q[0].length;
+
         this.n = n;
         this.q = q;
         this.ans = ans;
         
-        dfs(1, new ArrayList<>());
-        return cnt;
+        result = 0;
+        dfs(1,0,new boolean[n+1]);
+        
+        return result;
         
     }
     
-    private void dfs(int idx, ArrayList<Integer> arr){
+    private void dfs(int num, int dep, boolean[] arr){
         
-        if(arr.size() == size){
-            if(isPossible(arr)){
-                cnt++;
-                return;
-            }
+        if(dep == size){
+            if(isPossible(arr)) result ++;
+            return;
         }
         
-        for(int i = idx; i <= n; i++){
-            arr.add(i);
-            dfs(i+1,arr);
-            arr.remove(arr.size() - 1);
-        }
+        for(int i = num; i <= n; i++){
+            
+            arr[i] = true;
+            dfs(i+1,dep+1,arr);
+            arr[i] = false;
+            
+        }        
         
     }
     
-    private boolean isPossible(ArrayList<Integer> arr){
+    private boolean isPossible(boolean[] arr){
         
         for(int i = 0; i < q.length; i++){
-            int[] number = q[i];
+            
             int cnt = 0;
-            for(int j = 0 ; j < size; j++){
-                int num = number[j];
-                for(int k = 0; k < size; k++){
-                    if(num == arr.get(k)) cnt++;
-                }
+            int[] qArr = q[i];
+            
+            for(int j = 0; j < size; j++){
+                if(arr[qArr[j]]) cnt++;
             }
             
-            if(ans[i] != cnt) return false;
+            if(cnt != ans[i]) return false;
             
         }
         
         return true;
+        
         
     }
     
