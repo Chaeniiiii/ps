@@ -2,67 +2,93 @@ import java.util.*;
 
 class Solution {
     
-    private static class Task {
+    private int st;
+    
+    private class Assign{
         
         String name;
         int st;
-        int lt;
-
-        private Task(String name, int st, int lt) {
+        int div;
+        
+        private Assign(String name, int st, int div){
             this.name = name;
             this.st = st;
-            this.lt = lt;
+            this.div = div;
         }
         
+        private void updateT(int div){
+            this.div -= div;
+        }
+        
+            
     }
     
     public String[] solution(String[][] plans) {
         
-        PriorityQueue<Task> tasks = new PriorityQueue<>((a, b) -> a.st - b.st);
+        ArrayList<Assign> arr = new ArrayList<>();
+        for(int i = 0 ; i < plans.length; i++){
+            String[] plan = plans[i];
+            int time = calcT(plan[1]);
+            arr.add(new Assign(plan[0],time,Integer.parseInt(plan[2])));
+        }
         
-        for (String[] plan : plans) {
-            tasks.add(new Task(plan[0], convertToMinute(plan[1]), Integer.parseInt(plan[2])));
-        }
-
-        Deque<Task> paused = new ArrayDeque<>();
-        ArrayList<String> finished = new ArrayList<>();
-
-        Task now = tasks.poll();
-        int time = now.st;
-
-        while (!tasks.isEmpty()) {
-            Task next = tasks.peek();
-            int availableTime = next.st - time;
-
-            if (now.lt > availableTime) {
-                now.lt -= availableTime;
-                paused.push(now);
-                time = next.st;
-            } else {
-                time += now.lt;
-                finished.add(now.name);
-                if (!paused.isEmpty()) {
-                    now = paused.pop();
-                } else {
-                    now = tasks.poll();
-                    time = now.st;
+        arr.sort((a,b) -> a.st - b.st);
+        
+        String[] result = new String[plans.length];
+        Deque<Assign> deque = new ArrayDeque<>();
+        int idx = 0;
+        
+        for(int i = 0; i < arr.size() - 1; i++){
+            
+            Assign now = arr.get(i);
+            Assign nxt = arr.get(i+1);
+            
+            int nowT = now.div;
+            int t = nxt.st - now.st;
+            
+            if(nowT <= t){
+                t -= nowT;
+                result[idx++] = now.name;
+                
+                while(t > 0 && !deque.isEmpty()){
+                    
+                    Assign wait = deque.pollLast();
+                    if(wait.div <= t){
+                        t -= wait.div;
+                        result[idx++] = wait.name;
+                    }
+                    else{
+                        wait.updateT(t);
+                        t = 0;
+                        deque.add(wait);
+                    }
                 }
-                continue;
             }
-            now = tasks.poll();
+            else{
+                now.updateT(t);
+                deque.add(now);
+            }
+            
         }
 
-        finished.add(now.name);
-        while (!paused.isEmpty()) {
-            finished.add(paused.pop().name);
+        result[idx++] = arr.get(arr.size() - 1).name;
+        while(!deque.isEmpty()){
+            result[idx++] = deque.pollLast().name;
         }
-
-        return finished.toArray(new String[0]);
+        
+        return result;
+        
+        
+        
     }
-
-    private int convertToMinute(String time) {
+    
+    private int calcT(String time){
+        
         String[] t = time.split(":");
-        return Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+        int h = Integer.parseInt(t[0])*60;
+        int m = Integer.parseInt(t[1]);
+        
+        return h + m;
+        
     }
-
 }
