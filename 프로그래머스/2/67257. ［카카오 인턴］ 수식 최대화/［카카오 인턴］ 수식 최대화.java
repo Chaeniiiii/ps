@@ -2,104 +2,110 @@ import java.util.*;
 
 class Solution {
     
-    private static long result;
+    private ArrayList<Character> optType;
     
-    private static boolean[] visited;
-    private static ArrayList<Long> num;
-    private static ArrayList<Character> ope;
-    private static ArrayList<Character> opeKinds;
+    private ArrayList<Character> opt;
+    private ArrayList<Long> num;
+    
+    private boolean[] visited;
+    
+    private long result;
     
     public long solution(String expression) {
         
         result = 0;
-        num = new ArrayList<>();
-        ope = new ArrayList<>();
-        opeKinds = new ArrayList<>();
+        Set<Character> optSet = new HashSet<>();
         
+        opt = new ArrayList<>();
+        num = new ArrayList<>();
+        
+        //1. 연산자랑 숫자 각각 뽑기
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < expression.length(); i++){
             char c = expression.charAt(i);
-            if(!Character.isDigit(c)){
-                ope.add(c);
-                if(!opeKinds.contains(c)) opeKinds.add(c);
+            if(Character.isDigit(c)){
+                sb.append(c);
+                if(i == expression.length() - 1) num.add(Long.parseLong(sb.toString()));
+            }
+            else{
+                optSet.add(c);
+                opt.add(c);
                 num.add(Long.parseLong(sb.toString()));
                 sb = new StringBuilder();
-                continue;
             }
-            sb.append(c);
         }
-        
-        num.add(Long.parseLong(sb.toString()));
 
-        visited = new boolean[opeKinds.size()];
+        optType = new ArrayList<>(optSet);
+        visited = new boolean[optType.size()];
+        //2.연산자 조합 생성
         dfs(0,new ArrayList<>());
         
         return result;
         
     }
     
-    private static void dfs(int dep, ArrayList<Character> seq){
+    private void dfs(int dep, ArrayList<Character> arr){
         
-        if(dep == opeKinds.size()){
-            calc(seq);
+        if(dep == optType.size()){
+            //3. 조합에 따라 수식 계산
+            result = Math.max(result,Math.abs(calc(arr)));
             return;
         }
         
-        for(int i = 0; i < opeKinds.size(); i++){
+        for(int i = 0; i < optType.size(); i++){
             if(visited[i]) continue;
             visited[i] = true;
-            seq.add(opeKinds.get(i));
-            dfs(dep+1,seq);
-            seq.remove(seq.size() - 1);
+            arr.add(optType.get(i));
+            dfs(dep+1,arr);
+            arr.remove(arr.size() - 1);
             visited[i] = false;
         }
         
     }
     
-    private static void calc(ArrayList<Character> seq){
+    private long calc(ArrayList<Character> arr){
         
+        ArrayList<Character> newOpt = new ArrayList<>(opt);
         ArrayList<Long> newNum = new ArrayList<>(num);
-        ArrayList<Character> newOpe = new ArrayList<>(ope);
+
+        int size = newOpt.size();
+        int idx = 0;
         
-        for(char c : seq){
-            
-            for(int i = 0; i < newOpe.size();){
-                
-                if(newOpe.get(i) == c){
-                    
+        while(idx < arr.size()){
+        
+            char c = arr.get(idx);
+            for(int i = 0; i < size; i++){
+                if(newOpt.get(i) == c){
+                    newOpt.remove(i);
                     long a = newNum.get(i);
                     long b = newNum.get(i+1);
-                    long res = 0;
-                    
+                    long number = 0;
                     switch(c){
                         case '+':
-                            res = a+b;
-                            break;
-                        case '*':
-                            res = a*b;
+                            number = a + b;
                             break;
                         case '-':
-                            res = a-b;
+                            number = a - b;
+                            break;
+                        case '*':
+                            number = a * b;
+                            break;
+                        default:
                             break;
                     }
-                    
-                    newOpe.remove(i);
-                    
                     newNum.remove(i+1);
-                    newNum.set(i,res);
+                    newNum.set(i,number);
+                    
+                    i--;
                     
                 }
-                else{
-                    i++;
-                }
-                 
+                size = newOpt.size();
             }
-            
+            idx++;
         }
         
-        result = Math.max(result,Math.abs(newNum.get(0)));
+        return newNum.get(0);
         
     }
-        
     
 }
