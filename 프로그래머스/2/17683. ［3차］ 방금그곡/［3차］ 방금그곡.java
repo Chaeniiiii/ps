@@ -1,67 +1,90 @@
 import java.util.*;
 
 class Solution {
-    
-    private static class Music{
-        
-        String name;
-        int time;
-        
-        private Music(String name, int time){
-            this.name = name;
-            this.time = time;
-        }
-        
-    }
-    
     public String solution(String m, String[] musicinfos) {
         
-        Music music = new Music("",0);
-        m = getCode(m);
+        int maxT = 0;
+        String result = "(None)";
         
         for(int i = 0; i < musicinfos.length; i++){
+            String musicinfo = musicinfos[i];
+            String[] info = musicinfo.split(",");
             
-            String[] infos = musicinfos[i].split(",");
+            String st = info[0];
+            String en = info[1];
+            String title = info[2];
+            String musicS = info[3];
             
-            int t = getTime(infos[0],infos[1]);
-            String name = infos[2];
-            StringBuilder code = new StringBuilder(getCode(infos[3]));
-            StringBuilder sb = new StringBuilder(code.toString());
+            //1. 시간 계산
+            int t = calcT(st,en);
             
-            while(t > code.length()){
-                code.append(sb);
-            }
-            code.setLength(t);
+            //2. 악보 변환 및 재생된 악보 계산
+            String newMusicS = calcMusicS(t, musicS);
             
-            if(!code.toString().contains(m)) continue;
-            if(music.name.equals("") || music.time < t){
-                music = new Music(name,t);
+            //3. 네오가 찾는 음악이 맞는지 확인
+            if(isCorrect(newMusicS, calcS(m)) && t > maxT){
+                maxT = t;
+                result = title;
             }
             
         }
         
-        return music.name.equals("") ? "(None)" : music.name;
+        return result;
         
     }
     
-    private static String getCode(String code){
-        
-        return code.replace("C#","c").replace("D#","d")
-            .replace("F#","f").replace("G#","g").replace("A#","a")
-            .replace("B#","C").replace("E#","F");
+    private boolean isCorrect(String newS, String find){
+    
+        return newS.contains(find);
         
     }
     
-    private static int getTime(String sStr, String eStr){
+    private String calcMusicS(int t, String musicS){
+        //샵 변환
+        musicS = calcS(musicS);
         
-        String[] stT = sStr.split(":");
-        String[] enT = eStr.split(":");
+        int len = musicS.length();
         
-        int st = Integer.parseInt(stT[0]) * 60 + Integer.parseInt(stT[1]);
-        int en = Integer.parseInt(enT[0]) * 60 + Integer.parseInt(enT[1]);
-        
-        return en - st;
+        //재생된 길이가 악보의 길이보다 짧다면
+        if(len >= t){
+            return musicS.substring(0,t);
+        }
+        else{
+            int p = t / len;
+            int d = t % len;
+            
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < p; i++){
+                sb.append(musicS);
+            }
+            sb.append(musicS.substring(0,d));
+            return sb.toString();
+        }
         
     }
     
+    private String calcS(String musicS){
+        return musicS.replaceAll("C#","c")
+            .replaceAll("D#","d")
+            .replaceAll("E#","e")
+            .replaceAll("F#","f")
+            .replaceAll("G#","g")
+            .replaceAll("A#","a")
+            .replaceAll("B#","b");
+    }
+    
+    private int calcT(String st, String en){
+        
+        String[] stStr = st.split(":");
+        String[] enStr = en.split(":");
+        
+        int sth = Integer.parseInt(stStr[0]) * 60;
+        int stm = Integer.parseInt(stStr[1]);
+        
+        int enh = Integer.parseInt(enStr[0]) * 60;
+        int enm = Integer.parseInt(enStr[1]);
+        
+        return (enh + enm) - (sth + stm);
+        
+    }
 }
