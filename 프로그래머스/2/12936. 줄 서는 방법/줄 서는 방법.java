@@ -3,29 +3,27 @@ import java.util.*;
 class Solution {
     public int[] solution(int n, long k) {
         
-        int[] result = new int[n];
-        int idx = 0, origin = n;
-        long total = 1;
-        k--;
-        
-        ArrayList<Integer> number = new ArrayList<>();
+        long factorial = 1;
+        ArrayList<Integer> arr = new ArrayList<>();
         for(int i = 1; i <= n; i++){
-            number.add(i);
-            total *= i;
+            arr.add(i);
+            factorial *= i;
         }
         
-        while(idx < origin){
+        int[] result = new int[n];
+        int idx = 0;
+
+        k--;
+        while(idx < n){
             
-            long unit = total / n;
-            int p = (int)(k / unit);
+            factorial /= (n-idx); //앞자리부터 차례대로 수가 하나씩 고정되었을 때, 가질 수 있는 순열의 개수
             
-            result[idx] = number.get(p);
-            number.remove(p);
+            int p = (int)(k / factorial);
             
-            total /= n;
-            k %= unit;
-            n--;
-            idx++;
+            result[idx++] = arr.get(p);
+            arr.remove(p);
+            
+            k %= factorial;
             
         }
         
