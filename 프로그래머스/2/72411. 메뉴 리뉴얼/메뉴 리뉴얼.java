@@ -1,59 +1,65 @@
 import java.util.*;
 
 class Solution {
+    
+    private Map<String,Integer> newMenu;
+    
     public String[] solution(String[] orders, int[] course) {
         
-        PriorityQueue<String> pq = new PriorityQueue<>((a,b) -> a.compareTo(b));
+        List<String> arr = new ArrayList<>();
         
-        for(int c : course){
-            Map<String,Integer> map = new HashMap<>();
-            for(String order : orders){
-                char[] od = order.toCharArray();
-                Arrays.sort(od);
-                dfs(od,0,0,c,map, new StringBuilder());
-            }
-            int maxCnt = 0;
-            Deque<String> deque = new ArrayDeque<>();
-            for(String key : map.keySet()){
-                //System.out.printf("%s %d\n",key,map.get(key));
-                if(map.get(key) < 2) continue;
-                if(deque.isEmpty() || map.get(key) == maxCnt){
-                    deque.add(key);
-                    maxCnt = map.get(key);
-                }
-                else if(map.get(key) > maxCnt){
-                    deque.clear();
-                    deque.add(key);
-                    maxCnt = map.get(key);
-                }
-            }
-            while(!deque.isEmpty()){
-                pq.add(deque.poll());
-            }
+        for(int i = 0; i < orders.length; i++){
+            String order = orders[i];
+            char[] charArr = order.toCharArray();
+            Arrays.sort(charArr);
+            orders[i] = new String(charArr);
         }
         
-        int size = pq.size();
-        String[] result = new String[size];
-        for(int i = 0; i < size; i++){
-            result[i] = pq.poll();
+        for(int i = 0; i < course.length; i++){
+            newMenu = new HashMap<>();
+            List<String> newArr = new ArrayList<>();
+            
+            for(int j = 0; j < orders.length; j++){
+                if(orders[j].length() < course[i]) continue;
+                dfs(orders[j],new StringBuilder(),course[i],0);
+            }
+            
+            int maxCnt = 0;
+            for(String key : newMenu.keySet()){
+                if(maxCnt > newMenu.get(key) || newMenu.get(key) < 2) continue;
+                if(maxCnt < newMenu.get(key)) newArr = new ArrayList<>();
+                maxCnt = newMenu.get(key);
+                newArr.add(key);
+            }
+            
+            for(String key : newArr){
+                arr.add(key);
+            }
+            
+        }
+        
+        arr.sort((a,b) -> a.compareTo(b));
+        String[] result = new String[arr.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = arr.get(i);
         }
         
         return result;
         
-        
     }
     
-    private static void dfs(char[] str,int idx, int dep, int c, Map<String,Integer> map, StringBuilder sb){
+    private void dfs(String order,StringBuilder sb, int cnt, int dep){
         
-        if(dep == c){
-            map.put(sb.toString(),map.getOrDefault(sb.toString(),0)+1);
+        if(cnt == sb.length()){
+            String menu = sb.toString();
+            newMenu.put(menu,newMenu.getOrDefault(menu,0)+1);
             return;
         }
         
-        for(int i = idx; i < str.length; i++){
-            sb.append(str[i]);
-            dfs(str,i+1,dep+1,c,map,sb);
-            sb.delete(sb.length()-1,sb.length());
+        for(int i = dep; i < order.length(); i++){
+            sb.append(order.charAt(i));
+            dfs(order,sb,cnt,i+1);
+            sb.deleteCharAt(sb.length() - 1);
         }
         
     }
