@@ -2,53 +2,68 @@ import java.util.*;
 
 class Solution {
     
-    private static Map<Integer, ArrayList<Road>> map;
-    private static int[] minDist;
-    private static int total;
-    
-    private static class Road {
-        int node;
-        int dist;
-
-        private Road(int node, int dist){
-            this.node = node;
-            this.dist = dist;
+    private class Node{
+        int v;
+        int d;
+        
+        private Node(int v, int d){
+            this.v = v;
+            this.d = d;
         }
     }
     
     public int solution(int N, int[][] road, int K) {
-        map = new HashMap<>();
         
-        for (int[] info : road) {
-            map.computeIfAbsent(info[0], v -> new ArrayList<>()).add(new Road(info[1], info[2]));
-            map.computeIfAbsent(info[1], v -> new ArrayList<>()).add(new Road(info[0], info[2]));
-        }
-
-        minDist = new int[N + 1];
-        Arrays.fill(minDist, Integer.MAX_VALUE);
-        
-        total = 0;
-
-        dfs(1, K, 0);
-        
-        for (int i = 1; i <= N; i++) {
-            if (minDist[i] <= K) total++;
+        //그래프 생성        
+        Map<Integer,ArrayList<Node>> graph = new HashMap<>();
+        for(int i = 0; i < road.length; i++){
+            int[] r = road[i];
+            int a = r[0];
+            int b = r[1];
+            int d = r[2];
+            
+            graph.computeIfAbsent(a, v -> new ArrayList<>()).add(new Node(b,d));
+            graph.computeIfAbsent(b, v -> new ArrayList<>()).add(new Node(a,d));
         }
         
-        return total;
+        //다익스트라 수행
+        int[] result = dijkstra(N,graph,1);
+        int cnt = 0;
+        for(int i = 1; i <= N; i++){
+            if(result[i] <= K) cnt++;
+        }
+        
+        return cnt;
+        
     }
     
-    private static void dfs(int current, int K, int cnt) {
-        // 현재까지 거리가 이미 저장된 최소 거리보다 길면 중단
-        if (cnt >= minDist[current]) return;
-
-        minDist[current] = cnt;
-
-        for (Road next : map.get(current)) {
-            int nextDist = cnt + next.dist;
-            if (nextDist <= K) {
-                dfs(next.node, K, nextDist);
+    private int[] dijkstra(int n,Map<Integer,ArrayList<Node>> graph, int st){
+        
+        int[] result = new int[n+1];
+        boolean[] visited = new boolean[n+1];
+        Arrays.fill(result,Integer.MAX_VALUE);
+        
+        PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.d - b.d);
+        pq.add(new Node(st,0));
+        visited[st] = true;        
+        result[st] = 0;
+        
+        while(!pq.isEmpty()){
+            
+            Node now = pq.poll();
+            visited[now.v] = true;
+            
+            
+            for(Node child : graph.get(now.v)){
+                if(visited[child.v]) continue;
+                int cost = now.d + child.d;
+                result[child.v] = Math.min(result[child.v],cost);
+                pq.add(new Node(child.v,cost));
             }
         }
-    }
+        
+        return result;
+        
+    } 
+    
 }
