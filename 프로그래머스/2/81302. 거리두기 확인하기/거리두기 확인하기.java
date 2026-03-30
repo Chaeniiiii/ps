@@ -2,85 +2,63 @@ import java.util.*;
 
 class Solution {
     
-    private static final int SIZE = 5;
+    private final int SIZE = 5;
     
-    private static final int [] dx = {-1,1,0,0};
-    private static final int [] dy = {0,0,-1,1};
-    
-    private static boolean [][] visited;
-    
-    private static class Pos {
-        
-        int x;
-        int y;
-        
-        private Pos(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-        
-    }
+    private int[] dx = new int[]{-1,1,0,0};
+    private int[] dy = new int[]{0,0,-1,1};
+    private boolean[][] visited;
     
     public int[] solution(String[][] places) {
         
-        int tc = places.length;
-        int [] result = new int[tc];
-        
-        for(int t = 0; t<tc; t++){
-            result[t] = simulate(places[t]);
+        int[] result = new int[places.length];
+        for(int t = 0; t < places.length; t++){
+            String[] pc = places[t];
+            boolean possible = true;
+            visited = new boolean[SIZE][SIZE];
+            for(int i = 0; i < SIZE; i++){
+                for(int j = 0; j < SIZE; j++){
+                    if(pc[i].charAt(j) == 'P'){
+                        if(bfs(i,j,pc) == 0){
+                            possible = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            result[t] = possible ? 1 : 0;
         }
         
         return result;
         
     }
     
-    private static int simulate(String [] place){
+    private int bfs(int x, int y, String[] pc){
         
-        visited = new boolean[SIZE][SIZE];
-        
-        for(int i = 0; i < SIZE; i++){
-            for(int j = 0; j < SIZE; j++){
-                if(place[i].charAt(j) == 'P' && !visited[i][j]){
-                    visited[i][j] = true;
-                    if(bfs(place,new Pos(i,j)) == 0) return 0;
-                }
-            }
-        }
-        
-        return 1;
-    }
-    
-    private static int bfs(String [] place, Pos pos){
-        
-        Deque<Pos> deque = new ArrayDeque<Pos>();
-        deque.add(pos);
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.add(new int[]{x,y});
+        visited[x][y] = true;
         
         while(!deque.isEmpty()){
             
-            Pos mv = deque.poll();
+            int[] now = deque.poll();
             
-            for(int i = 0; i < 4; i++){
+            for(int k = 0; k < 4; k++){
                 
-                int mvX = mv.x + dx[i];
-                int mvY = mv.y + dy[i];
+                int nx = now[0] + dx[k];
+                int ny = now[1] + dy[k];
                 
-                if(mvX < 0 || mvY < 0 || mvX >= SIZE || mvY >= SIZE || visited[mvX][mvY] 
-                        || place[mvX].charAt(mvY) == 'X') continue;
-                if(place[mvX].charAt(mvY) == 'P') return 0;
+                if(nx < 0 || ny < 0 || nx >= SIZE || ny >= SIZE || visited[nx][ny] || pc[nx].charAt(ny) == 'X') continue;
+                if(pc[nx].charAt(ny) == 'P') return 0;
                 
-                if(Math.abs(pos.x - mvX) + Math.abs(pos.y - mvY) >= 2) continue;
-                
-                deque.add(new Pos(mvX,mvY));
-                visited[mvX][mvY] = true;
-                   
+                if(Math.abs(x - nx) + Math.abs(y - ny) >= 2) continue;
+                deque.add(new int[]{nx,ny});
+                visited[nx][ny] = true;
+                 
             }
             
         }
         
         return 1;
         
-        
     }
-    
-    
 }
