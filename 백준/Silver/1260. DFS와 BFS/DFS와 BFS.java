@@ -5,7 +5,6 @@ public class Main {
 
     private static int n,m;
     private static ArrayList<Integer>[] graph;
-    
     public static void main(String[] args) throws Exception{
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,16 +58,22 @@ public class Main {
         deque.add(start);
 
         boolean[] visited = new boolean[n+1];
+        visited[start] = true;
+
+        sb.append(start).append(" ");
 
         while (!deque.isEmpty()) {
 
             int now = deque.poll();
-            if(visited[now]) continue;
-            visited[now] = true;
-            sb.append(now).append(" ");
+
 
             for(int child : graph[now]){
+                if(visited[child]) continue;
+                
                 deque.add(child);
+                visited[child] = true;
+
+                sb.append(child).append(" ");
             }
 
         }
