@@ -32,36 +32,29 @@ public class Main {
             graph[i].sort( (a,b) -> a - b);
         }
 
-        ArrayList<Integer> dfsR = dfs(start, new ArrayList<>(), new boolean[n+1]);
-        for(int i = 0; i < dfsR.size(); i++){
-            System.out.printf("%d ",dfsR.get(i));
-        }
-        System.out.println();
-        ArrayList<Integer> bfsR = bfs(start);
-        for(int i = 0; i < bfsR.size(); i++){
-            System.out.printf("%d ",bfsR.get(i));
-        }
+        System.out.println(dfs(start, new StringBuilder(), new boolean[n+1]).toString());
+        System.out.println(bfs(start));
 
     }
 
-    private static ArrayList<Integer> dfs(int start, ArrayList<Integer> result, boolean[] visited){
+    private static StringBuilder dfs(int start, StringBuilder sb, boolean[] visited){
 
-        if(visited[start]) return result;
+        if(visited[start]) return sb;
 
-        result.add(start);
+        sb.append(start).append(" ");
         visited[start] = true;
 
         for(int child : graph[start]){
-            dfs(child,result,visited);
+            dfs(child,sb,visited);
         }
 
-        return result;
+        return sb;
 
     }
 
-    private static ArrayList<Integer> bfs(int start){
+    private static StringBuilder bfs(int start){
 
-        ArrayList<Integer> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         Deque<Integer> deque = new ArrayDeque<>();
         deque.add(start);
 
@@ -72,7 +65,7 @@ public class Main {
             int now = deque.poll();
             if(visited[now]) continue;
             visited[now] = true;
-            result.add(now);
+            sb.append(now).append(" ");
 
             for(int child : graph[now]){
                 deque.add(child);
@@ -80,7 +73,7 @@ public class Main {
 
         }
 
-        return result;
+        return sb;
 
     }
 
