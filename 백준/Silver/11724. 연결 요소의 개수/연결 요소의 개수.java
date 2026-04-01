@@ -4,7 +4,6 @@ import java.io.*;
 
 public class Main {
     
-    private static ArrayList<Integer>[] graph;
     private static int[] parent;
 
     public static void main(String[] args) throws Exception{
@@ -15,11 +14,9 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        graph = new ArrayList[n+1];
         parent = new int[n+1];
 
         for(int i = 1; i <= n; i++){
-            graph[i] = new ArrayList<>();
             parent[i] = i;
         }
 
@@ -29,9 +26,6 @@ public class Main {
 
             int v = Integer.parseInt(st.nextToken());
             int u = Integer.parseInt(st.nextToken());
-
-            graph[v].add(u);
-            graph[u].add(v);
 
             union(v,u);
 
