@@ -36,7 +36,7 @@ public class Main {
             union(v,u);
 
         }
-        
+
         Set<Integer> set = new HashSet<>();
         for(int i = 1; i <= n; i++){
             set.add(find(i));
@@ -58,8 +58,8 @@ public class Main {
 
     private static int find(int x){
 
-        if(parent[x] != x) return find(parent[x]);
-        return x;
+        if(parent[x] != x) return parent[x] = find(parent[x]);
+        return parent[x];
     }
 
 }
