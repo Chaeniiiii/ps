@@ -1,15 +1,10 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    private static int n, m, cnt;
-    private static boolean[] visited;
+    private static int n, m;
+    
 
     public static void main(String[] args) throws Exception{
         
@@ -33,8 +28,6 @@ public class Main {
             graph[u].add(v);
         }
 
-        cnt = 0;
-        visited = new boolean[n+1];
         System.out.println(bfs(1,graph));
 
     }   
@@ -43,6 +36,8 @@ public class Main {
 
         Deque<int[]> deque = new ArrayDeque<>();
         deque.add(new int[]{start,0});
+        
+				boolean[] visited = new boolean[n+1];
         visited[start] = true;
                 
         int cnt = 0;
