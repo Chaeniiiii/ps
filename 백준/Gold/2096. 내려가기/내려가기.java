@@ -30,18 +30,14 @@ public class Main{
                     minR[2] = maxR[2] = c3;
                 }
                 else{
-                    if(j == 0){
-                        minR[j] = c1 + Math.min(min1,min2);
-                        maxR[j] = c1 + Math.max(max1,max2);
-                    }
-                    if(j == 1){
-                        minR[j] = c2 + Math.min(min3,Math.min(min1,min2));
-                        maxR[j] = c2 + Math.max(max3,Math.max(max1,max2));
-                    }
-                    if(j == 2){
-                        minR[j] = c3 + Math.min(min3,min2);
-                        maxR[j] = c3 + Math.max(max3,max2);
-                    }
+                        minR[0] = c1 + Math.min(min1,min2);
+                        maxR[0] = c1 + Math.max(max1,max2);
+
+                        minR[1] = c2 + Math.min(min3,Math.min(min1,min2));
+                        maxR[1] = c2 + Math.max(max3,Math.max(max1,max2));
+
+                        minR[2] = c3 + Math.min(min3,min2);
+                        maxR[2] = c3 + Math.max(max3,max2);
                 }
             }
         }
