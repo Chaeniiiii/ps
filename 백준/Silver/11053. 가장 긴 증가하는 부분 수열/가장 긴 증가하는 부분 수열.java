@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+
+    private static int[] dp;
     public static void main(String[] args) throws Exception{
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,12 +15,9 @@ public class Main {
             number[i] = Integer.parseInt(st.nextToken());
         }
 
-        int[] dp = new int[n];
-        for(int i = 0; i < n; i++){
-            dp[i] = 1;
-            for(int j = 0; j < n; j++){
-                if(number[j] < number[i]) dp[i] = Math.max(dp[i],dp[j]+1);
-            }
+        dp = new int[n];
+        for(int i = 0; i < n; i++){ 
+            lis(i,number);
         }
 
         int result = 1;
@@ -27,6 +26,21 @@ public class Main {
         }
 
         System.out.println(result);
+
+    }
+
+    private static int lis(int n, int[] number){
+
+        if(dp[n] != 0) return dp[n];
+        dp[n] = 1;
+
+        for(int i = n - 1; i >= 0; i--){
+            if(number[i] < number[n]){
+                dp[n] = Math.max(dp[n], lis(i,number) + 1);
+            }
+        }
+
+        return dp[n];
 
     }
 }
