@@ -5,6 +5,7 @@ public class Main {
 
     private static int[] color;
     public static void main(String[] args) throws Exception{
+        
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         int t = Integer.parseInt(br.readLine());
@@ -30,38 +31,39 @@ public class Main {
                 graph[u].add(v);
             }
 
-            color = new int[n+1];
             String result = "YES";
+            color = new int[n+1];
+
             for(int i = 1; i <= n; i++){
                 if(color[i] != 0) continue;
-                if(!bfs(n, i, graph)){
+                if(!bfs(i, graph)){
                     result = "NO";
                     break;
                 }
             }
-
+          
             System.out.println(result);
             
         }
 
     }
 
-    private static boolean bfs(int n, int st, ArrayList<Integer>[] graph){
+    private static boolean bfs(int start, ArrayList<Integer>[] graph){
 
         Deque<Integer> deque = new ArrayDeque<>();
-        deque.add(st);
+        deque.add(start);
 
-        color[st] = 1;
+        color[start] = 1;
 
-        while(!deque.isEmpty()){
-
+        while (!deque.isEmpty()) {
+            
             int now = deque.poll();
 
-            for(int child : graph[now]){
-                if(color[child] == color[now]) return false;
-                if(color[child] != 0) continue;
-                color[child] = color[now] * -1;
-                deque.add(child);
+            for(int nxt : graph[now]){
+                if(color[nxt] == color[now]) return false;
+                if(color[nxt] != 0) continue;
+                color[nxt] = color[now] * -1;
+                deque.add(nxt);
             }
 
         }
@@ -69,5 +71,6 @@ public class Main {
         return true;
 
     }
+
 
 }
