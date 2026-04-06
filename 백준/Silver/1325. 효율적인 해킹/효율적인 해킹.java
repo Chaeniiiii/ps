@@ -3,25 +3,14 @@ import java.io.*;
 
 public class Main {
     
-    private static int n;
     private static List<Integer>[] graph;
-
-    private static class Node{
-        int num;
-        int cnt;
-
-        private Node(int num, int cnt){
-            this.num = num;
-            this.cnt = cnt;
-        }
-    }
 
     public static void main(String[] args) throws Exception{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
         graph = new ArrayList[n+1];
@@ -39,26 +28,17 @@ public class Main {
 
         boolean[] visited;
         int[] cnt = new int[n+1];
+        int maxCnt = 0;
+
         for(int i = 1; i <= n; i++){
             visited = new boolean[n+1];
             cnt[i] = bfs(i, visited);
+            if(cnt[i] > maxCnt) maxCnt = cnt[i];
         }
-        
-        ArrayList<Node> arr = new ArrayList<>();
-        for(int i = 1; i <= n; i++){
-            arr.add(new Node(i,cnt[i]));
-        }
-
-        arr.sort((a,b) -> {
-            if(a.cnt == b.cnt) return a.num - b.num;
-            return b.cnt - a.cnt;
-        });
 
         StringBuilder sb = new StringBuilder();
-        int maxCnt = arr.get(0).cnt;
-        for(Node node : arr){
-            if(node.cnt != maxCnt) break;
-            sb.append(node.num).append(" ");
+        for(int i = 1; i <= n; i++){
+            if(cnt[i] == maxCnt) sb.append(i).append(" ");
         }
 
         System.out.println(sb.toString());
