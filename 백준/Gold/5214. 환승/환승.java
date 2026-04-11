@@ -17,19 +17,19 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
 
         graph = new ArrayList[n+1];
-        tube = new ArrayList[n+m+1];
+        tube = new ArrayList[m];
 
         for(int i = 1; i <= n; i++){
             graph[i] = new ArrayList<>();
         }
         
         for(int i = 0; i < m; i++){
-            tube[n+i] = new ArrayList<>();
+            tube[i] = new ArrayList<>();
         }
 
         for(int i = 0; i < m; i++){
             st = new StringTokenizer(br.readLine());
-            int tb = n + i;
+            int tb = i;
             
             for(int j = 0; j < k; j++){
                 int num = Integer.parseInt(st.nextToken());
@@ -52,7 +52,7 @@ public class Main {
         boolean[] visitedNode = new boolean[n+1];
         visitedNode[1] = true;
 
-        boolean[] visitedTube = new boolean[n+m+1];
+        boolean[] visitedTube = new boolean[m];
 
         while(!deque.isEmpty()){
             
