@@ -2,43 +2,51 @@ import java.util.*;
 
 class Solution {
     
-    private static Map<Integer,ArrayList<Integer>> map;
-    private static boolean[] visited;
+    private int[] parent;
+    
+    private void union(int x, int y){
+        
+        x = find(x);
+        y = find(y);
+        
+        if(x > y) parent[y] = x;
+        else parent[x] = y;
+        
+    }
+    
+    private int find(int x){
+        
+        if(x != parent[x]) return parent[x] = find(parent[x]);
+        return x;
+        
+    }
     
     public int solution(int n, int[][] computers) {
         
-        map = new HashMap<>();
+        parent = new int[n];
         
-        for(int i = 1; i <= computers.length; i++){
-            map.put(i, new ArrayList<>());
-            for(int j = 1; j <= computers[i-1].length; j++){
-                if(computers[i-1][j-1] == 0) continue;
-                map.get(i).add(j);
+        for(int i = 0; i < n; i++){
+            parent[i] = i;
+        }
+        
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(computers[i][j] == 1){
+                    union(i,j);
+                }
             }
         }
         
-        visited = new boolean[map.size()+1];
-        int cnt = 0;
-        for(int i = 1; i <= map.size(); i++){
-            if(visited[i]) continue;
-            dfs(i);
-            cnt++;
+        for(int i = 0; i < n ; i++){
+            parent[i] = find(i);
         }
         
-        return cnt;
-                
-    }
-    
-    private static void dfs(int node){
-        
-        if(visited[node]) return;
-        visited[node] = true;
-        
-        for(int nxt : map.get(node)){
-            if(visited[nxt]) continue;
-            dfs(nxt);
+        Set<Integer> node = new HashSet<>();
+        for(int i = 0; i < n; i++){
+            node.add(parent[i]);
         }
         
+        return node.size();
+        
     }
-    
 }
