@@ -1,28 +1,27 @@
 import java.util.*;
 
 class Solution {
-    
     public long solution(int n, int[] works) {
         
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
-        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b-a);
         for(int work : works){
             pq.add(work);
         }
         
-        while(n-- > 0 && !pq.isEmpty()){
-            int now = pq.poll();
-            if(now > 0) pq.add(now - 1);
+        while(n -- > 0 && !pq.isEmpty()){
+            int divT = pq.poll() - 1;
+            if(divT == 0) continue;
             
+            pq.add(divT);
         }
         
-        long cnt = 0;
+        long result = 0;
         while(!pq.isEmpty()){
-            cnt += Math.pow(pq.poll(),2);
+            int num = pq.poll();
+            result += (num*num);
         }
         
-        return cnt;
+        return result;
         
     }
-    
 }
