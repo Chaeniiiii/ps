@@ -2,11 +2,11 @@ import java.util.*;
 
 class Solution {
     
-    private final long MOD = 1_000_000_007;
+    private final int MOD = 1_000_000_007;
     
     public int solution(int m, int n, int[][] puddles) {
         
-        long[][] dp = new long[m][n];
+        int[][] dp = new int[m][n];
         boolean[][] pd = new boolean[m][n];
         
         for(int [] puddle : puddles){
@@ -21,7 +21,7 @@ class Solution {
             }
         }
         
-        return (int)(dp[m-1][n-1] % MOD);
+        return dp[m-1][n-1] % MOD;
         
     }
 }
