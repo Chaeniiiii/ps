@@ -2,26 +2,26 @@ import java.util.*;
 
 class Solution {
     
+    private final long MOD = 1_000_000_007;
+    
     public int solution(int m, int n, int[][] puddles) {
         
-        final int MOD = 1_000_000_007;
+        long[][] dp = new long[m][n];
+        boolean[][] pd = new boolean[m][n];
         
-        boolean[][] puddle = new boolean[m+1][n+1];
-        int[][] dp = new int[m+1][n+1];
-        dp[1][1] = 1;
-        
-        for(int [] p : puddles){
-            puddle[p[0]][p[1]] = true;
+        for(int [] puddle : puddles){
+            pd[puddle[0]-1][puddle[1]-1] = true;
         }
         
-        for(int i = 1; i <= m ; i++){
-            for(int j = 1 ; j <= n; j++){
-                if(puddle[i][j]) continue;
-                if(i > 1) dp[i][j] = (dp[i][j] + dp[i-1][j]) % MOD;
-                if(j > 1) dp[i][j] = (dp[i][j] + dp[i][j-1]) % MOD;
+        dp[0][0] = 1;
+        for(int i = 0; i < m ; i++){
+            for(int j = 0; j < n; j++){
+                if(i+1 < m && !pd[i+1][j]) dp[i+1][j] += dp[i][j] % MOD;
+                if(j+1 < n && !pd[i][j+1]) dp[i][j+1] += dp[i][j] % MOD;
             }
         }
         
-        return dp[m][n];
+        return (int)(dp[m-1][n-1] % MOD);
+        
     }
 }
