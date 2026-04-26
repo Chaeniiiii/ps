@@ -2,40 +2,23 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] operations) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
         
-        PriorityQueue<Integer> minNum = new PriorityQueue<>();
-        PriorityQueue<Integer> maxNum = new PriorityQueue<>((a,b) -> b-a);
-        
-        for(int i = 0; i < operations.length; i++){
-            String[] op = operations[i].split(" ");
+        for (String operation : operations) {
+            String[] op = operation.split(" ");
             int num = Integer.parseInt(op[1]);
+            
+            if (op[0].equals("I")) {
+                map.put(num, map.getOrDefault(num, 0) + 1);
+            } else if (!map.isEmpty()) {
+                int key = (num == 1) ? map.lastKey() : map.firstKey();
                 
-            switch(op[0]){
-                case "I":
-                    minNum.add(num);
-                    maxNum.add(num);
-                    break;
-                case "D":
-                    if(maxNum.peek() == minNum.peek()){
-                        minNum.remove(maxNum.poll());
-                        maxNum.remove(minNum.poll());
-                        continue;
-                    }
-                    if(num == 1){
-                        minNum.remove(maxNum.poll());
-                    }
-                    else{
-                       maxNum.remove(minNum.poll());
-                    }
-                    break;
+                if (map.get(key) == 1) map.remove(key);
+                else map.put(key, map.get(key) - 1);
             }
         }
         
-        int[] result = new int[2];
-        if(!maxNum.isEmpty()) result[0] = maxNum.poll();
-        if(!minNum.isEmpty()) result[1] = minNum.poll();
-        
-        return result;
-        
+        if (map.isEmpty()) return new int[]{0, 0};
+        return new int[]{map.lastKey(), map.firstKey()};
     }
 }
