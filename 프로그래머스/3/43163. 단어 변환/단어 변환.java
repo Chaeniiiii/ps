@@ -1,57 +1,47 @@
 import java.util.*;
 
 class Solution {
+    
+    private int result;
+    private boolean[] visited;
+    
     public int solution(String begin, String target, String[] words) {
         
-        Deque<String> deque = new ArrayDeque<>();
-        deque.add(begin);
+        result = Integer.MAX_VALUE;
+        visited = new boolean[words.length];
         
-        boolean[] visited = new boolean[words.length];
-        int cnt = 0;
-        
-        while(!deque.isEmpty()){
-            
-            for(int k = 0; k < deque.size(); k++){
-                
-                String now = deque.poll();
-                
-                if(now.equals(target)){
-                    return cnt;
-                }
-            
-                for(int i = 0; i < words.length; i++){
-                    if(visited[i]) continue;
-                    if(check(words[i], now)){
-                        deque.add(words[i]);
-                        visited[i] = true;
-                    }
-                }
-                
-            }
-            
-            cnt++;
-            
-        }
-        
-        return 0;
+        dfs(0, begin, target, words);
+        return result == Integer.MAX_VALUE ? 0 : result;
         
     }
     
-    private static boolean check(String target, String origin){
+    private void dfs(int cnt, String begin, String target, String[] words){
         
-        int cnt = 0;
-        
-        for(int i = 0; i < origin.length(); i++){
-            
-            if(target.charAt(i) != origin.charAt(i)){
-                cnt++;
-            }         
-            
-            if(cnt > 1) return false;
-            
+        if(begin.equals(target)){
+            result = Math.min(result,cnt);
+            return;
         }
         
-        return cnt == 0 ? false : true;
+        for(int i = 0; i < words.length; i++){
+            if(visited[i]) continue;
+            if(isPossible(begin,words[i])){
+                visited[i] = true;
+                dfs(cnt+1, words[i], target,words); 
+                visited[i] = false;
+            }
+        }
+        
+    }
+    
+    private boolean isPossible(String begin, String target){
+        
+        int cnt = 0;
+        for(int i = 0; i < begin.length(); i++){
+            if(begin.charAt(i) != target.charAt(i)) cnt++;
+            if(cnt > 1) return false;
+        }
+        
+        return true;
         
     }
 }
