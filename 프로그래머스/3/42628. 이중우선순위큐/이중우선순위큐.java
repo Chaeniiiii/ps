@@ -3,43 +3,39 @@ import java.util.*;
 class Solution {
     public int[] solution(String[] operations) {
         
-        TreeMap<Integer,Integer> map = new TreeMap<>();
+        PriorityQueue<Integer> minNum = new PriorityQueue<>();
+        PriorityQueue<Integer> maxNum = new PriorityQueue<>((a,b) -> b-a);
         
-        for(String operate : operations){
-            
-            String [] cmd = operate.split(" ");
-            char c = cmd[0].charAt(0);
-            int num = Integer.parseInt(cmd[1]);
-            
-            if(c == 'I'){
-                map.put(num,map.getOrDefault(num,0)+1);
-            }
-            else{
-                if(map.isEmpty()) continue;
-                if(num == 1){
-                    int key = map.lastEntry().getKey();
-                    if(map.get(key) <= 1) map.remove(key);
-                    else map.put(key,map.get(key)-1);
-                }
-                else{
-                   int key = map.firstEntry().getKey();
-                    if(map.get(key) <= 1) map.remove(key);
-                    else map.put(key,map.get(key)-1);
-                }
+        for(int i = 0; i < operations.length; i++){
+            String[] op = operations[i].split(" ");
+            int num = Integer.parseInt(op[1]);
+                
+            switch(op[0]){
+                case "I":
+                    minNum.add(num);
+                    maxNum.add(num);
+                    break;
+                case "D":
+                    if(maxNum.peek() == minNum.peek()){
+                        minNum.remove(maxNum.poll());
+                        maxNum.remove(minNum.poll());
+                        continue;
+                    }
+                    if(num == 1){
+                        minNum.remove(maxNum.poll());
+                    }
+                    else{
+                       maxNum.remove(minNum.poll());
+                    }
+                    break;
             }
         }
         
-        if(map.size() == 0) return new int[]{0,0};
+        int[] result = new int[2];
+        if(!maxNum.isEmpty()) result[0] = maxNum.poll();
+        if(!minNum.isEmpty()) result[1] = minNum.poll();
         
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        
-        for(int key : map.keySet()){
-            min = Math.min(min,key);
-            max = Math.max(max,key);
-        }
-        
-        return new int[]{max,min};
+        return result;
         
     }
 }
