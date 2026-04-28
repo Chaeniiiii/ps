@@ -2,62 +2,61 @@ import java.util.*;
 
 class Solution {
     
-    private static class Genre {
-     
-        String name;
-        int t;
+    private class Album{
+        int idx;
+        int cnt;
         
-        private Genre(String name, int t){
-            this.name = name;
-            this.t = t;
+        private Album(int idx, int cnt){
+            this.idx = idx;
+            this.cnt = cnt;
         }
-        
     }
     
-    private static class Album {
+    private class Genre{
+        String gr;
+        int cnt;
         
-        int idx;
-        int play;
-        
-        private Album(int idx, int play){
-            this.idx = idx;
-            this.play = play;
+        private Genre(String gr, int cnt){
+            this.gr = gr;
+            this.cnt = cnt;
         }
-            
     }
     
     public int[] solution(String[] genres, int[] plays) {
         
-        Map<String,Integer> total = new HashMap<>();
-        Map<String,PriorityQueue<Album>> map = new HashMap<>();
+        Map<String,Integer> grArr = new HashMap<>();
+        Map<String,ArrayList<Album>> abArr = new HashMap<>();
         
-        for(int i = 0; i<genres.length; i++){
-            String gnr = genres[i];
-            total.put(gnr,total.getOrDefault(gnr,0)+plays[i]);
-            map.computeIfAbsent(gnr, k -> new PriorityQueue<>((o1, o2) -> o2.play - o1.play)).add(new Album(i,plays[i]));
+        for(int i = 0; i < genres.length; i++){
+            grArr.put(genres[i],grArr.getOrDefault(genres[i],0)+plays[i]);
+            abArr.computeIfAbsent(genres[i],v -> new ArrayList<>()).add(new Album(i,plays[i]));
         }
         
-        PriorityQueue<Genre> pq = new PriorityQueue<>((o1,o2) -> o2.t - o1.t);
-        for(String key : total.keySet()){
-            pq.add(new Genre(key,total.get(key)));
+        ArrayList<Genre> arr = new ArrayList<>();
+        for(String key : grArr.keySet()){
+            arr.add(new Genre(key,grArr.get(key)));
         }
         
-        ArrayList<Integer> result = new ArrayList<>();
+        arr.sort((a,b) -> b.cnt - a.cnt);
         
-        while(!pq.isEmpty()){
-            
-            String name = pq.poll().name;
-            
-            for(int i = 0; i<2; i++){
-                if(map.get(name).isEmpty()) break;
-                result.add(map.get(name).poll().idx);
+        ArrayList<Integer> answer = new ArrayList<>();
+        for(Genre genre : arr){
+            String key = genre.gr;
+            if(abArr.get(key).size() == 1){
+                answer.add(abArr.get(key).get(0).idx);
+            } 
+            else{
+                abArr.get(key).sort((a,b) -> b.cnt - a.cnt);
+                answer.add(abArr.get(key).get(0).idx);
+                answer.add(abArr.get(key).get(1).idx);
             }
-            
         }
         
-        int [] answer = new int[result.size()];
-        for(int i = 0; i<result.size(); i++) answer[i] = result.get(i);
+        int[] result = new int[answer.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = answer.get(i);
+        }
         
-        return answer;
+        return result;
     }
 }
