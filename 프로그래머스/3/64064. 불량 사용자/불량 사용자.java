@@ -1,47 +1,60 @@
 import java.util.*;
 
 class Solution {
+
+    private String[] user_id, banned_id;
+    private boolean[] visited;
+    private Set<String> set;
     
-    private static boolean [] visited;
-    private static Set<HashSet<String>> set;
-    
-    public int solution(String[] userId, String[] bannedId) {
+    public int solution(String[] user_id, String[] banned_id) {
+        
+        this.user_id = user_id;
+        this.banned_id = banned_id;
         
         set = new HashSet<>();
-        
-        dfs(new HashSet<>(),0,userId,bannedId);
+        visited = new boolean[user_id.length];
+        dfs(0,new ArrayList<>());
         
         return set.size();
         
     }
     
-    private static void dfs(HashSet<String> id, int dep, String[] userId, String[] bannedId){
+    private void dfs(int bndIdx, ArrayList<String> arr){
         
-        if(dep == bannedId.length){
-            set.add(id);
+        if(bndIdx == banned_id.length){
+            
+            ArrayList<String> newArr = new ArrayList<>(arr);
+            newArr.sort((a,b) -> a.compareTo(b));
+            StringBuilder sb = new StringBuilder();
+            
+            for(String str : newArr){
+                sb.append(str);
+            }
+            
+            if(set.contains(sb.toString())) return;
+            set.add(sb.toString());
+            
             return;
         }
         
-        for(int i = 0; i<userId.length; i++){
-            if(id.contains(userId[i])) continue;
-            
-            if(possible(userId[i],bannedId[dep])){
-                id.add(userId[i]);
-                dfs(new HashSet<>(id),dep+1,userId,bannedId);
-                id.remove(userId[i]);
-            }
+        for(int i = 0; i < user_id.length; i++){
+            if(visited[i] || !isPossible(user_id[i],banned_id[bndIdx])) continue;
+            visited[i] = true;
+            arr.add(user_id[i]);
+            dfs(bndIdx+1,arr);
+            arr.remove(arr.size()-1);
+            visited[i] = false;
         }
         
     }
     
-    private static boolean possible(String userId, String bannedId){
+    private boolean isPossible(String a, String b){
         
-        if(userId.length() != bannedId.length()) return false;
+        if(a.length() != b.length()) return false;
         
-        for(int i = 0; i<userId.length(); i++){
-            
-            if(bannedId.charAt(i) == '*') continue;
-            if(userId.charAt(i) != bannedId.charAt(i)) return false;
+        for(int i = 0; i < b.length(); i++){
+            if(b.charAt(i) == '*') continue;
+            if(a.charAt(i) != b.charAt(i)) return false;
         }
         
         return true;
