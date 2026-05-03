@@ -3,40 +3,36 @@ import java.util.*;
 class Solution {
     public int[] solution(String[] gems) {
         
-        Set<String> gemSet = new HashSet<>();
+        Set<String> set = new HashSet<>();
+        for(int i = 0; i < gems.length; i++){
+            set.add(gems[i]);
+        }
+        
         Map<String,Integer> map = new HashMap<>();
-        for(String gem : gems) gemSet.add(gem);
+        int lt = 0, rt = lt;
+        int minLen = gems.length;
         
-        int gemSize = gemSet.size();
-        int left = 0, right = 0, len = Integer.MAX_VALUE;
-        int [] result = new int[2];
-        
-        while(left <= right){
+        for(; rt < gems.length; rt++){
             
-            if(right >= gems.length) break;
-            map.put(gems[right],map.getOrDefault(gems[right],0)+1);
+            map.put(gems[rt],map.getOrDefault(gems[rt],0)+1);
             
-            while(map.size() == gemSize){
+            while(map.keySet().size() == set.size()){
                 
-                if(right - left < len){
-                    len = right - left;
-                    result[0] = left+1;
-                    result[1] = right+1;
+                if(minLen > rt - lt){
+                    minLen = rt - lt;
                 }
-
-                if(map.get(gems[left]) == 1) map.remove(gems[left]);
-                else map.put(gems[left],map.get(gems[left])-1);
                 
-                left ++;
-                
+                if(lt < gems.length - 1 && map.get(gems[lt+1]) > 0){
+                    lt++;
+                    if(map.get(gems[lt]) == 1) map.remove(gems[lt]);
+                    else map.put(gems[lt],map.get(gems[lt])-1);
+                }
+                else break;
             }
-            
-            
-            right ++;
             
         }
         
-        return result;
+        return new int[]{lt+1,rt};
         
     }
 }
