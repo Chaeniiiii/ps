@@ -2,22 +2,27 @@ import java.util.*;
 
 class Solution {
     
-    private static final int MAX = 200000000;
-        
+    private int[] stones;
+    private int k;
+    
     public int solution(int[] stones, int k) {
-        
-        int lt = 1, rt = MAX;
+
+        this.k = k;
+        this.stones = stones;
         int result = 0;
+        int lt = 1, rt = 200_000_000;
         
         while(lt <= rt){
             
             int mid = (lt + rt) / 2;
             
-            if(canCross(stones,k,mid)) {
+            if(isPossible(mid)){
                 lt = mid + 1;
-                result = Math.max(mid,result);
+                result = Math.max(result,mid);
             }
-            else rt = mid - 1;
+            else{
+                rt = mid - 1;
+            }
             
         }
         
@@ -25,21 +30,16 @@ class Solution {
         
     }
     
-    private static boolean canCross(int [] stones, int k, int niniz){
+    private boolean isPossible(int p){
         
-        int impossible = 0;
-        
-        for(int stone : stones){
-            
-            if(stone - niniz < 0) impossible ++;
-            else impossible = 0;
-            
-            if(impossible == k) return false;
-            
+        int pass = 0;
+        for(int i = 0; i < stones.length; i++){
+            if(stones[i] < p) pass++;
+            else pass = 0;
+            if(pass == k) return false;
         }
         
         return true;
-        
         
     }
     
