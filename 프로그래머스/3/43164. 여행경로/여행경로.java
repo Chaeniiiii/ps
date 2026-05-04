@@ -2,47 +2,44 @@ import java.util.*;
 
 class Solution {
     
-    private static String str;
-    private static boolean[] visited;
+    private String[][] tickets;
     
-    private static String[][] tickets;
+    private String[] result;
+    private boolean[] visited;
     
     public String[] solution(String[][] tickets) {
-    
+        
+        Arrays.sort(tickets,(a,b) -> a[1].compareTo(b[1]));
+        
         this.tickets = tickets;
+        result = new String[tickets.length + 1];
+        result[0] = "ICN";
+        
         visited = new boolean[tickets.length];
-            
-        StringBuilder sb = new StringBuilder();
-        sb.append("ICN");
-        
-        dfs(0,"ICN", sb);
-        
-        String[] result = str.split(",");
+        dfs("ICN",new ArrayList<>());
             
         return result;
         
     }
     
-    private static void dfs(int dep,  String start, StringBuilder sb){
+    private void dfs(String tk, ArrayList<String> routes){
         
-        if(dep == tickets.length){
-            String path = sb.toString();
-            if (str == null || path.compareTo(str) < 0) {
-                str = path;
+        if(routes.size() == tickets.length){
+            for(int i = 0; i < routes.size(); i++){
+                if(result[i+1] != null) return;
+                result[i+1] = routes.get(i);
             }
             return;
         }
         
-        for(int i = 0 ; i < tickets.length; i++){
-            if(!tickets[i][0].equals(start) || visited[i]) continue;
+        for(int i = 0; i < tickets.length; i++){
+            if(visited[i] || !tickets[i][0].equals(tk)) continue;
             visited[i] = true;
-            int len = sb.length();
-            sb.append(",").append(tickets[i][1]);
-            dfs(dep+1,tickets[i][1],sb);
-            sb.setLength(len);
+            routes.add(tickets[i][1]);
+            dfs(tickets[i][1],routes);
             visited[i] = false;
+            routes.remove(routes.size() - 1);
         }
-        
         
     }
 }
