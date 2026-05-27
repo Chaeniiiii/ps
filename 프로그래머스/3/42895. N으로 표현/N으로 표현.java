@@ -3,44 +3,41 @@ import java.util.*;
 class Solution {
     public int solution(int N, int number) {
         
-        if(N == number) return 1;
+        ArrayList<Set<Long>> arr = new ArrayList<>();
+        arr.add(new HashSet<>());
+        arr.get(0).add((long)N);
         
-        ArrayList<Set<Integer>> map = new ArrayList<>();
-        String strNum = String.valueOf(N);
+        String s = String.valueOf(N);
         
-        for(int i = 0; i <= 8; i++){
-            map.add(new HashSet<>());
-            if(i == 0) continue;
-            int originR = Integer.valueOf(strNum.repeat(i));
-            if(originR == number) return i;
-            map.get(i).add(originR);
-        }
-        
-        for(int i = 2; i <= 8; i++){
+        for(int i = 1; i <= 8; i++){
             
-            for(int j = 1; j <= i; j++){
-                for(int num : map.get(j)){
-                    for(int prevNum : map.get(i - j)){
-                        int a = num + prevNum;
-                        int b = num - prevNum;
-                        int c = num * prevNum;
-                        if(prevNum != 0){
-                            int d = num / prevNum;
-                            if(d == number) return i;
-                            map.get(i).add(d);
-                        }
-                        
-                        if(a == number || b == number || c == number ) return i;
-                        map.get(i).add(a);
-                        map.get(i).add(b);
-                        map.get(i).add(c);
-                        
+            arr.add(new HashSet<>());
+            int lt = 0, rt = i - 1;
+            while(rt >= 0){
+                for(long now : arr.get(lt)){
+                    for(long nxt : arr.get(rt)){
+                        if(nxt == number) return i;
+                        if(isPossible(now + nxt)) arr.get(i).add(now + nxt);
+                        if(isPossible(now - nxt)) arr.get(i).add(now - nxt);
+                        if(isPossible(now / nxt)) arr.get(i).add(now / nxt);
+                        if(isPossible(now * nxt)) arr.get(i).add(now * nxt);
                     }
                 }
+                
+                lt++;
+                rt--;
+                arr.get(i).add(Long.parseLong(s.repeat(i+1)));
+                
             }
+            
         }
         
         return -1;
         
     }
+    
+    private boolean isPossible(long num){
+        return num == 0 ? false : true;
+    }
+    
 }
