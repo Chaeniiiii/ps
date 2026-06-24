@@ -21,6 +21,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | ------- | ------- |
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
+| [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 ## Breadth-First Search
 | Problem Name | Difficulty |
 | ------- | ------- |
@@ -29,8 +30,14 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
+| [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 ## Memoization
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
+| [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
+## Recursion
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 <!---LeetCode Topics End-->
