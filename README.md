@@ -9,6 +9,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0739-daily-temperatures](https://github.com/Chaeniiiii/ps/tree/master/0739-daily-temperatures) |
+| [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
 ## Stack
 | Problem Name | Difficulty |
@@ -25,6 +26,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
+| [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
 | [1137-n-th-tribonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/1137-n-th-tribonacci-number/) | Easy |
 ## Breadth-First Search
@@ -47,4 +49,8 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
+## Hash Table
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 <!---LeetCode Topics End-->
