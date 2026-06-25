@@ -6,6 +6,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 ## Array
 | Problem Name | Difficulty |
 | ------- | ------- |
+| [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0739-daily-temperatures](https://github.com/Chaeniiiii/ps/tree/master/0739-daily-temperatures) |
@@ -23,6 +24,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0062-unique-paths](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0062-unique-paths/) | Medium |
+| [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
@@ -59,4 +61,8 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0062-unique-paths](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0062-unique-paths/) | Medium |
+## Matrix
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
 <!---LeetCode Topics End-->
