@@ -10,6 +10,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
 | [0120-triangle](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0120-triangle/) | Medium |
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
+| [0221-maximal-square](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0221-maximal-square/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0739-daily-temperatures](https://github.com/Chaeniiiii/ps/tree/master/0739-daily-temperatures) |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
@@ -32,6 +33,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
 | [0120-triangle](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0120-triangle/) | Medium |
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
+| [0221-maximal-square](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0221-maximal-square/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
@@ -72,5 +74,6 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | ------- | ------- |
 | [0063-unique-paths-ii](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0063-unique-paths-ii/) | Medium |
 | [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
+| [0221-maximal-square](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0221-maximal-square/) | Medium |
 | [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
 <!---LeetCode Topics End-->
