@@ -14,6 +14,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0739-daily-temperatures](https://github.com/Chaeniiiii/ps/tree/master/0739-daily-temperatures) |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
+| [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
 ## Stack
 | Problem Name | Difficulty |
 | ------- | ------- |
@@ -35,6 +36,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
+| [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
 | [1137-n-th-tribonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/1137-n-th-tribonacci-number/) | Easy |
 ## Breadth-First Search
 | Problem Name | Difficulty |
@@ -70,4 +72,5 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | ------- | ------- |
 | [0063-unique-paths-ii](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0063-unique-paths-ii/) | Medium |
 | [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
+| [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
 <!---LeetCode Topics End-->
