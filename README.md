@@ -35,6 +35,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0064-minimum-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0064-minimum-path-sum/) | Medium |
 | [0070-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0070-climbing-stairs/) | Easy |
 | [0072-edit-distance](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0072-edit-distance/) | Medium |
+| [0115-distinct-subsequences](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Hard/0115-distinct-subsequences/) | Hard |
 | [0120-triangle](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0120-triangle/) | Medium |
 | [0139-word-break](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0139-word-break/) | Medium |
 | [0198-house-robber](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0198-house-robber/) | Medium |
@@ -95,6 +96,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | ------- | ------- |
 | [0005-longest-palindromic-substring](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0005-longest-palindromic-substring/) | Medium |
 | [0072-edit-distance](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0072-edit-distance/) | Medium |
+| [0115-distinct-subsequences](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Hard/0115-distinct-subsequences/) | Hard |
 | [0139-word-break](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0139-word-break/) | Medium |
 | [0516-longest-palindromic-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0516-longest-palindromic-subsequence/) | Medium |
 | [0712-minimum-ascii-delete-sum-for-two-strings](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0712-minimum-ascii-delete-sum-for-two-strings/) | Medium |
