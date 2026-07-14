@@ -43,6 +43,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 | [0516-longest-palindromic-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0516-longest-palindromic-subsequence/) | Medium |
+| [0712-minimum-ascii-delete-sum-for-two-strings](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0712-minimum-ascii-delete-sum-for-two-strings/) | Medium |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
 | [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
@@ -96,6 +97,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0072-edit-distance](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0072-edit-distance/) | Medium |
 | [0139-word-break](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0139-word-break/) | Medium |
 | [0516-longest-palindromic-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0516-longest-palindromic-subsequence/) | Medium |
+| [0712-minimum-ascii-delete-sum-for-two-strings](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0712-minimum-ascii-delete-sum-for-two-strings/) | Medium |
 ## Trie
 | Problem Name | Difficulty |
 | ------- | ------- |
