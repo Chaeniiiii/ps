@@ -52,6 +52,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [1035-uncrossed-lines](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/1035-uncrossed-lines/) | Medium |
 | [1137-n-th-tribonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/1137-n-th-tribonacci-number/) | Easy |
 | [1143-longest-common-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/1143-longest-common-subsequence/) | Medium |
+| [1312-minimum-insertion-steps-to-make-a-string-palindrome](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Hard/1312-minimum-insertion-steps-to-make-a-string-palindrome/) | Hard |
 ## Breadth-First Search
 | Problem Name | Difficulty |
 | ------- | ------- |
@@ -104,6 +105,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0516-longest-palindromic-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0516-longest-palindromic-subsequence/) | Medium |
 | [0712-minimum-ascii-delete-sum-for-two-strings](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0712-minimum-ascii-delete-sum-for-two-strings/) | Medium |
 | [1143-longest-common-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/1143-longest-common-subsequence/) | Medium |
+| [1312-minimum-insertion-steps-to-make-a-string-palindrome](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Hard/1312-minimum-insertion-steps-to-make-a-string-palindrome/) | Hard |
 ## Trie
 | Problem Name | Difficulty |
 | ------- | ------- |
