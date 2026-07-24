@@ -15,6 +15,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0300-longest-increasing-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0300-longest-increasing-subsequence/) | Medium |
 | [0309-best-time-to-buy-and-sell-stock-with-cooldown](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0309-best-time-to-buy-and-sell-stock-with-cooldown/) | Medium |
 | [0322-coin-change](https://github.com/Chaeniiiii/ps/tree/master/0322-coin-change) |
+| [0714-best-time-to-buy-and-sell-stock-with-transaction-fee](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0714-best-time-to-buy-and-sell-stock-with-transaction-fee/) | Medium |
 | [0739-daily-temperatures](https://github.com/Chaeniiiii/ps/tree/master/0739-daily-temperatures) |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
@@ -48,6 +49,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | [0509-fibonacci-number](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0509-fibonacci-number/) | Easy |
 | [0516-longest-palindromic-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0516-longest-palindromic-subsequence/) | Medium |
 | [0712-minimum-ascii-delete-sum-for-two-strings](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0712-minimum-ascii-delete-sum-for-two-strings/) | Medium |
+| [0714-best-time-to-buy-and-sell-stock-with-transaction-fee](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0714-best-time-to-buy-and-sell-stock-with-transaction-fee/) | Medium |
 | [0740-delete-and-earn](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0740-delete-and-earn/) | Medium |
 | [0746-min-cost-climbing-stairs](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Easy/0746-min-cost-climbing-stairs/) | Easy |
 | [0931-minimum-falling-path-sum](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0931-minimum-falling-path-sum/) | Medium |
@@ -116,4 +118,8 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0300-longest-increasing-subsequence](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0300-longest-increasing-subsequence/) | Medium |
+## Greedy
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0714-best-time-to-buy-and-sell-stock-with-transaction-fee](https://github.com/Chaeniiiii/ps/tree/main/LeetCode/Medium/0714-best-time-to-buy-and-sell-stock-with-transaction-fee/) | Medium |
 <!---LeetCode Topics End-->
