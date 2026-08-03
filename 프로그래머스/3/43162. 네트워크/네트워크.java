@@ -2,51 +2,37 @@ import java.util.*;
 
 class Solution {
     
-    private int[] parent;
+    private int n;
     
-    private void union(int x, int y){
-        
-        x = find(x);
-        y = find(y);
-        
-        if(x > y) parent[y] = x;
-        else parent[x] = y;
-        
-    }
-    
-    private int find(int x){
-        
-        if(x != parent[x]) return parent[x] = find(parent[x]);
-        return x;
-        
-    }
+    private int[][] computers;
+    private boolean[] visited;
     
     public int solution(int n, int[][] computers) {
         
-        parent = new int[n];
+        this.n = n;
+        this.computers = computers;
+        
+        visited = new boolean[n];
+        
+        int cnt = 0;
+        for(int i = 0; i < n; i++){
+            if(visited[i]) continue;
+            dfs(i);
+            cnt++;
+        }
+        
+        return cnt;
+        
+    }
+    
+    private void dfs(int node){
+        
+        if(visited[node]) return;
+        visited[node] = true;
         
         for(int i = 0; i < n; i++){
-            parent[i] = i;
+            if(computers[node][i] == 1) dfs(i);
         }
-        
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                if(computers[i][j] == 1){
-                    union(i,j);
-                }
-            }
-        }
-        
-        for(int i = 0; i < n ; i++){
-            parent[i] = find(i);
-        }
-        
-        Set<Integer> node = new HashSet<>();
-        for(int i = 0; i < n; i++){
-            node.add(parent[i]);
-        }
-        
-        return node.size();
         
     }
 }
