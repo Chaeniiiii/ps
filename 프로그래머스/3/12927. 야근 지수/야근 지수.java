@@ -3,22 +3,22 @@ import java.util.*;
 class Solution {
     public long solution(int n, int[] works) {
         
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b-a);
-        for(int work : works){
-            pq.add(work);
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b - a);
+        for(int i = 0; i < works.length; i++){
+            pq.add(works[i]);
         }
         
-        while(n -- > 0 && !pq.isEmpty()){
-            int divT = pq.poll() - 1;
-            if(divT == 0) continue;
-            
-            pq.add(divT);
+        for(int i = 0; i < n; i++){
+            if(pq.isEmpty()) break;
+            int task = pq.poll();
+            if(task <= 1) continue;
+            pq.add(task - 1);
         }
         
         long result = 0;
         while(!pq.isEmpty()){
-            int num = pq.poll();
-            result += (num*num);
+            int div = pq.poll();
+            result += div * div;
         }
         
         return result;
