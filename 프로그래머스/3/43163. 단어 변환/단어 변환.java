@@ -2,46 +2,50 @@ import java.util.*;
 
 class Solution {
     
-    private int result;
+    private String[] words;
     private boolean[] visited;
     
+    private int result;
+    
     public int solution(String begin, String target, String[] words) {
-        
-        result = Integer.MAX_VALUE;
+
         visited = new boolean[words.length];
+        result = Integer.MAX_VALUE;
+        this.words = words;
         
-        dfs(0, begin, target, words);
+        dfs(0, begin,target);
+        
         return result == Integer.MAX_VALUE ? 0 : result;
         
     }
     
-    private void dfs(int cnt, String begin, String target, String[] words){
+    private void dfs(int dep, String begin, String target){
         
         if(begin.equals(target)){
-            result = Math.min(result,cnt);
+            result = Math.min(result,dep);
             return;
         }
         
         for(int i = 0; i < words.length; i++){
             if(visited[i]) continue;
-            if(isPossible(begin,words[i])){
-                visited[i] = true;
-                dfs(cnt+1, words[i], target,words); 
-                visited[i] = false;
-            }
+            
+            visited[i] = true;
+            if(isPossible(begin, words[i])) dfs(dep+1,words[i],target);
+            visited[i] = false;
         }
         
     }
     
-    private boolean isPossible(String begin, String target){
+    private boolean isPossible(String a, String b){
         
         int cnt = 0;
-        for(int i = 0; i < begin.length(); i++){
-            if(begin.charAt(i) != target.charAt(i)) cnt++;
+        for(int i = 0; i < a.length(); i++){
             if(cnt > 1) return false;
+            if(a.charAt(i) != b.charAt(i)) cnt++;
         }
         
-        return true;
+        return cnt < 2 ? true : false;
         
     }
+    
 }
