@@ -2,23 +2,54 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] operations) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
         
-        for (String operation : operations) {
-            String[] op = operation.split(" ");
-            int num = Integer.parseInt(op[1]);
+        PriorityQueue<Integer> max = new PriorityQueue<>((a,b) -> b - a);
+        PriorityQueue<Integer> min = new PriorityQueue<>();
+        
+        Map<Integer,Integer> map = new HashMap<>();
+        
+        for(int i = 0; i < operations.length; i++){
             
-            if (op[0].equals("I")) {
-                map.put(num, map.getOrDefault(num, 0) + 1);
-            } else if (!map.isEmpty()) {
-                int key = (num == 1) ? map.lastKey() : map.firstKey();
+            String[] op = operations[i].split(" ");
+            String cmd = op[0];
+            
+            int n = Integer.parseInt(op[1]);
+            
+            if(cmd.equals("I")){
+                map.put(n,map.getOrDefault(n,0)+1);
+                max.add(n);
+                min.add(n);
+            }
+            else{
+                PriorityQueue<Integer> now = n == 1 ? max : min;
+                if(now.isEmpty()) continue;
                 
-                if (map.get(key) == 1) map.remove(key);
-                else map.put(key, map.get(key) - 1);
+                int number = now.poll();
+                while(map.get(number) <= 0 && !now.isEmpty()){
+                    number = now.poll();
+                }
+                map.put(number,map.get(number) - 1);
             }
         }
         
-        if (map.isEmpty()) return new int[]{0, 0};
-        return new int[]{map.lastKey(), map.firstKey()};
+        int[] result = new int[2];
+        while(!max.isEmpty()){
+            int num = max.poll();
+            if(map.get(num) > 0){
+                result[0] = num;
+                break;
+            }
+        }
+        
+        while(!min.isEmpty()){
+            int num = min.poll();
+            if(map.get(num) > 0){
+                result[1] = num;
+                break;
+            }
+        }
+        
+        return result;
+        
     }
 }
