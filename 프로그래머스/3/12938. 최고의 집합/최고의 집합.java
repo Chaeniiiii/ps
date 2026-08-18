@@ -3,20 +3,19 @@ import java.util.*;
 class Solution {
     public int[] solution(int n, int s) {
         
-        if(n > s) return new int[]{-1};
-        int idx = n;
-        int[] result = new int[idx];                                                                      
+        if(s < n) return new int[]{-1};
         
-        Arrays.fill(result, s/n);
-        s %= n;
-        if(s == 0) return result;
+        int m = s / n;
+        int d = s % n;
         
-        for(int i = idx - 1; i >= idx - s; i--){
-            result[i] ++;
-        } 
+        int[] result = new int[n];
+        Arrays.fill(result,m);
+        
+        for(int i = 0; i < d; i++){
+            result[n - i - 1]++;
+        }
         
         return result;
-            
         
     }
 }
