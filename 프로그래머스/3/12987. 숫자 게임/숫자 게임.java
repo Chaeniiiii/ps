@@ -2,27 +2,25 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] A, int[] B) {
-         
-        int cnt = 0;
-        Arrays.sort(A);
-        Arrays.sort(B);
         
-        Deque<Integer> deque = new ArrayDeque<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for(int i = 0; i < B.length; i++){
-            deque.add(B[i]);
-        }
+            pq.add(B[i]);
+        }        
         
-        for(int i = A.length - 1; i >= 0; i--){
-            if(A[i] >= deque.peekLast()){
-                deque.poll();
-            }
-            else{
-                deque.pollLast();
-                cnt++;
-            }
-        }
+        int score = 0;
+        Arrays.sort(A);
         
-        return cnt;
+        for(int i = 0; i < A.length; i++){
+            if(pq.isEmpty()) break;
+            int cnt = pq.poll();
+            while(cnt <= A[i] && !pq.isEmpty()){
+                cnt = pq.poll();
+            }
+            if(cnt > A[i]) score++;
+        }
+
+        return score;
         
     }
 }
