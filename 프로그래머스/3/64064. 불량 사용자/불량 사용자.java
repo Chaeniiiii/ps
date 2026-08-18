@@ -1,60 +1,66 @@
 import java.util.*;
 
 class Solution {
-
-    private String[] user_id, banned_id;
+    
+    private String[] uId, bId;
+    private int cnt;
+    
     private boolean[] visited;
-    private Set<String> set;
+    private Map<String,Integer> map;
     
     public int solution(String[] user_id, String[] banned_id) {
         
-        this.user_id = user_id;
-        this.banned_id = banned_id;
+        cnt = 0;
+        this.uId = user_id;
+        this.bId = banned_id;
         
-        set = new HashSet<>();
-        visited = new boolean[user_id.length];
-        dfs(0,new ArrayList<>());
+        map = new HashMap<>();
+        visited = new boolean[uId.length];
         
-        return set.size();
+        dfs(0, new int[bId.length]);
+        
+        return cnt;
         
     }
     
-    private void dfs(int bndIdx, ArrayList<String> arr){
+    private void dfs(int dep, int[] arr){
         
-        if(bndIdx == banned_id.length){
+        if(dep == bId.length){
             
-            ArrayList<String> newArr = new ArrayList<>(arr);
-            newArr.sort((a,b) -> a.compareTo(b));
+            int[] newArr = arr.clone();
+            Arrays.sort(newArr);
+            
             StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < arr.length; i++) sb.append(newArr[i]);
             
-            for(String str : newArr){
-                sb.append(str);
+            if(map.getOrDefault(sb.toString(),0) == 0){
+                map.put(sb.toString(),1);
+                cnt++;
             }
             
-            if(set.contains(sb.toString())) return;
-            set.add(sb.toString());
-            
             return;
+            
         }
         
-        for(int i = 0; i < user_id.length; i++){
-            if(visited[i] || !isPossible(user_id[i],banned_id[bndIdx])) continue;
-            visited[i] = true;
-            arr.add(user_id[i]);
-            dfs(bndIdx+1,arr);
-            arr.remove(arr.size()-1);
-            visited[i] = false;
+        for(int i = 0; i < uId.length; i++){
+            if(visited[i]) continue;
+            if(isPossible(bId[dep],uId[i])){
+                visited[i] = true;
+                arr[dep] = i;
+                dfs(dep+1,arr);
+                visited[i] = false;
+            }
         }
         
     }
     
-    private boolean isPossible(String a, String b){
+    private boolean isPossible(String now, String target){
         
-        if(a.length() != b.length()) return false;
+        if(now.length() != target.length()) return false;
         
-        for(int i = 0; i < b.length(); i++){
-            if(b.charAt(i) == '*') continue;
-            if(a.charAt(i) != b.charAt(i)) return false;
+        for(int i = 0; i < now.length(); i++){
+            if(now.charAt(i) == '*') continue;
+            if(now.charAt(i) != target.charAt(i)) return false;
         }
         
         return true;
