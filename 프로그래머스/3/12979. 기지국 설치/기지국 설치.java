@@ -2,26 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] stations, int w) {
+
+        int st = 1, cnt = 0;
+        int arrow = w * 2 + 1;
         
-        int st = 1;
-        int idx = 0;
-        int inf = w * 2 + 1;
-        int result = 0;
-        
-        while(st <= n){
+        for(int i = 0; i < stations.length; i++){
+            int end = stations[i] - w - 1;
             
-            if(idx < stations.length && st >= stations[idx] - w){
-                st = stations[idx] + w + 1;
-                idx++;
+            if(st <= end){
+                int d = end - (st - 1);
+                cnt += d / arrow + (d % arrow != 0 ? 1 : 0);                
             }
-            else{
-                result++;
-                st += inf;
-            }
+            
+            st = stations[i] + w + 1;
             
         }
         
-        return result;
-
+        if(st <= n){
+            int d = n - st + 1;
+            cnt += d / arrow + (d % arrow != 0 ? 1 : 0);
+        }
+        
+        return cnt;
+        
     }
 }
