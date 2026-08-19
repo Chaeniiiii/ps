@@ -1,57 +1,64 @@
 import java.util.*;
 
 class Solution {
-    
     public int solution(int n, int[][] edge) {
         
-        Map<Integer,ArrayList<Integer>> child = new HashMap<>();
-        for(int i = 1; i<=n; i++) child.put(i,new ArrayList<>());
-
-        for(int i = 0; i<edge.length; i++){
-            
-            int [] info = edge[i];
-            
-            child.get(info[0]).add(info[1]);
-            child.get(info[1]).add(info[0]);
-            
+        List<Integer>[] graph = new ArrayList[n+1];
+        for(int i = 1; i <= n; i++){
+            graph[i] = new ArrayList<>();
         }
         
-        return bfs(n,child);
+        for(int[] eg : edge){
+            graph[eg[0]].add(eg[1]);
+            graph[eg[1]].add(eg[0]);
+        }
         
-    }
-    
-    private static int bfs(int n, Map<Integer,ArrayList<Integer>> arr){
+        int[] cost = bfs(n,1, graph);
         
-        Deque<Integer> deque = new ArrayDeque<>();
-        deque.add(1);
-        
-        boolean [] visited = new boolean[n+1];
-        visited[1] = true;
-        
+        int max = 0;
         int cnt = 0;
         
-        while(!deque.isEmpty()){
-            
-            int size = deque.size();
-            cnt = 0;
-            
-            for(int i = 0; i<size; i++){
-                
-                int node = deque.poll();
-                
-                for(int child : arr.get(node)) {
-                    if(!visited[child]) {
-                        visited[child] = true;
-                        deque.add(child);
-                    }
-                }
-                
-                cnt = size;
+        for(int i = 1; i < cost.length; i++){
+            if(cost[i] > max){
+                max = cost[i];
+                cnt = 1;
             }
+            else if(cost[i] == max) cnt++;
         }
         
         return cnt;
         
+    }
+    
+    private int[] bfs(int n, int st, List<Integer>[] graph){
+        
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.add(st);
+        
+        int[] cost = new int[n + 1];
+        Arrays.fill(cost,n);
+        cost[st] = 0;
+        
+        int cnt = 0;
+        while(!deque.isEmpty()){
+            
+            int size = deque.size();
+            for(int i = 0; i < size; i++){
+                
+                int now = deque.poll();
+                for(int child : graph[now]){
+                    if(cost[child] != n) continue;
+                    cost[child] = cnt + 1;
+                    deque.add(child);
+                }
+                
+            }
+            
+            cnt++;
+            
+        }
+        
+        return cost;
         
     }
 }
