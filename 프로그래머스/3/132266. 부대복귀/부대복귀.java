@@ -2,69 +2,56 @@ import java.util.*;
 
 class Solution {
     
-    private List<Integer>[] graph;
+    private Map<Integer,ArrayList<Integer>> map;
     
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
         
-        //1. 그래프 만들기
-        graph = new ArrayList[n+1];
+        map = new HashMap<>();
         for(int i = 1; i <= n; i++){
-            graph[i] = new ArrayList<>();
+            map.put(i,new ArrayList<>());
         }
         
-        for(int[] r : roads){
-            int v = r[0];
-            int u = r[1];
-            graph[v].add(u);
-            graph[u].add(v);
+        for(int i = 0; i < roads.length; i++){
+            int[] r = roads[i];
+            map.get(r[0]).add(r[1]);
+            map.get(r[1]).add(r[0]);
         }
         
-        //2. 다익스트라 실행
-        int[] dist = dijkstra(n,destination);
-        
+        int[] d = dijkstra(n, destination);
         int[] result = new int[sources.length];
-        //3.최단시간 구하기
         for(int i = 0; i < sources.length; i++){
-            if(dist[sources[i]] == Integer.MAX_VALUE) result[i] = -1;
-            else result[i] = dist[sources[i]];
+            if(d[sources[i]] == n) result[i] = -1;
+            else result[i] = d[sources[i]];
         }
         
         return result;
         
     }
     
-    private int[] dijkstra(int n, int dt){
+    private int[] dijkstra(int n, int destination){
         
-        int[] dist = new int[n+1];
-        Arrays.fill(dist,Integer.MAX_VALUE);
-        dist[dt] = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.add(destination);
         
-        boolean[] visited = new boolean[n+1];
-        
-        
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1] - b[1]);
-        pq.add(new int[]{dt,0});
+        int[] d = new int[n+1];
+        Arrays.fill(d, n);
+        d[destination] = 0;
         
         while(!pq.isEmpty()){
             
-            int[] now = pq.poll();
-            int node = now[0];
-            int d = now[1];
+            int st = pq.poll();
+            int cost = d[st];
             
-            visited[node] = true;
-            
-            for(int child : graph[node]){
-                if(visited[child]) continue;
-                if(d + 1 < dist[child]){
-                    dist[child] = d + 1;
-                    pq.add(new int[]{child,dist[child]});
-                }
+            for(int child : map.get(st)){
+                if(d[child] <= cost + 1) continue;
+                pq.add(child);
+                d[child] = cost + 1;
             }
             
         }
         
-        return dist;
-        
+        return d;
         
     }
+    
 }
