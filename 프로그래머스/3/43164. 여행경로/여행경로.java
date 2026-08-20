@@ -2,43 +2,51 @@ import java.util.*;
 
 class Solution {
     
-    private String[][] tickets;
-    
-    private String[] result;
+    private int n;
+    private String[] st, en, result;
     private boolean[] visited;
     
     public String[] solution(String[][] tickets) {
         
-        Arrays.sort(tickets,(a,b) -> a[1].compareTo(b[1]));
+        n = tickets.length;
+        st = new String[n];
+        en = new String[n];
+        result = new String[n + 1];
         
-        this.tickets = tickets;
-        result = new String[tickets.length + 1];
-        result[0] = "ICN";
+        visited = new boolean[n];
         
-        visited = new boolean[tickets.length];
-        dfs("ICN",new ArrayList<>());
-            
+        for(int i = 0; i < n; i++){
+            String[] tk = tickets[i];
+            st[i] = tk[0];
+            en[i] = tk[1];
+        }
+        
+        dfs(0,"ICN", new String[n + 1]);
         return result;
         
     }
     
-    private void dfs(String tk, ArrayList<String> routes){
+    private void dfs(int dep, String tk, String[] route){
         
-        if(routes.size() == tickets.length){
-            for(int i = 0; i < routes.size(); i++){
-                if(result[i+1] != null) return;
-                result[i+1] = routes.get(i);
+        route[dep] = tk;
+        if(dep == n){
+            for(int i = 0; i < n; i++){
+                if(result[i] == null || result[i].compareTo(route[i]) > 0){
+                    result = route.clone();
+                    return;
+                }
+                else if(result[i].compareTo(route[i]) < 0){
+                    return;
+                }
             }
             return;
         }
-        
-        for(int i = 0; i < tickets.length; i++){
-            if(visited[i] || !tickets[i][0].equals(tk)) continue;
+
+        for(int i = 0; i < n; i++){
+            if(visited[i] || !st[i].equals(tk)) continue;
             visited[i] = true;
-            routes.add(tickets[i][1]);
-            dfs(tickets[i][1],routes);
+            dfs(dep+1,en[i],route);
             visited[i] = false;
-            routes.remove(routes.size() - 1);
         }
         
     }
