@@ -2,47 +2,50 @@ import java.util.*;
 
 class Solution {
     
-    private static int [] parent;
+    private int[] parent;
     
-    private static void union(int x, int y){
+    private void union(int x, int y){
         
         x = find(x);
         y = find(y);
         
-        if(x != y) {
-            if(x < y) parent[x] = y;
-            else parent[y] = x;
+        if(x > y){
+            parent[x] = y;
         }
-        
+        else{
+            parent[y] = x;
+        }
     }
     
-    private static int find(int num){
-        
-        if(parent[num] != num) return parent[num] = find(parent[num]);
-        return num;
-        
+    private int find(int x){
+        if(x != parent[x]) return parent[x] = find(parent[x]);
+        return parent[x];
     }
     
     public int solution(int n, int[][] costs) {
-    
+        
         parent = new int[n];
-        for(int i = 0; i<n; i++) parent[i] = i;
+        for(int i = 0; i < n; i++){
+            parent[i] = i;
+        }
         
         Arrays.sort(costs,(a,b) -> a[2] - b[2]);
+        int cost = 0;
+        int edge = 0;
         
-        int cnt = 0;
-        boolean [] visited = new boolean[n];
-        
-        for(int [] cost : costs){
+        for(int i = 0; i < costs.length; i++){
+            int[] info = costs[i];
+            if(find(info[0]) == find(info[1])) continue;
+            union(info[0], info[1]);
             
-            if(find(cost[0]) != find(cost[1])) {
-                union(cost[0],cost[1]);
-                cnt += cost[2];
-            }
+            cost += info[2];
+            edge++;
             
-        }        
+            if(edge == n - 1) return cost;
+            
+        }
         
-        return cnt;
+        return cost;
         
     }
 }
