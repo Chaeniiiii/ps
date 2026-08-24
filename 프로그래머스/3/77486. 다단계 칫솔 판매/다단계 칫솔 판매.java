@@ -1,38 +1,47 @@
 import java.util.*;
+
 class Solution {
     
-    private static Map<String, String> parent;
-    private static Map<String, Integer> money;
+    private int[] result;
+    private String[] enroll;
+    private String[] referral;
+    private Map<String,Integer> map;
     
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
         
-        parent = new HashMap<>();
-        money = new HashMap<>();
+        this.enroll = enroll;
+        this.referral = referral;
+        result = new int[enroll.length];
         
-        for (int i = 0; i < enroll.length; i++) {
-            parent.put(enroll[i], referral[i]);
+        //각 판매원의 인덱스 저장
+        map = new HashMap<>();
+        for(int i = 0; i < enroll.length; i++){
+            map.put(enroll[i],i);
         }
-
-        for (int i = 0; i < seller.length; i++) {
-            share(seller[i], amount[i] * 100);
+        
+        //총 수익금 저장
+        for(int i = 0; i < amount.length; i++){
+            amount[i] *= 100;
         }
-
-        int[] result = new int[enroll.length];
-        for (int i = 0; i < enroll.length; i++) {
-            result[i] = money.getOrDefault(enroll[i], 0);
+        
+        //판매 이익 저장
+        for(int i = 0; i < seller.length; i++){
+            dfs(seller[i],amount[i]);
         }
-
-        return result;        
-      
+        
+        return result;
+        
     }
     
-    private static void share(String node, int sales) {
-        int nextSales = sales / 10;
-        money.put(node, money.getOrDefault(node, 0) + sales - nextSales);
+    private void dfs(String sel, int profit){
 
-        if (nextSales > 0 && parent.containsKey(node)) {
-            share(parent.get(node), nextSales);
-        }
+        if(sel.equals("-")) return;
+        
+        int idx = map.get(sel);
+        int pay = (int)(profit * 0.1);
+        
+        if(pay >= 1) dfs(referral[idx],pay);
+        result[idx] += (profit - pay);
+        
     }
-    
 }
