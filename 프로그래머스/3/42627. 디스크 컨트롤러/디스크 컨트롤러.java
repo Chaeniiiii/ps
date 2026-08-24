@@ -2,37 +2,65 @@ import java.util.*;
 
 class Solution {
     
+    private class Task{
+        int idx; //작업 번호
+        int st; //요청 시각
+        int cool; //소요 시간 
+        
+        private Task(int idx, int st, int cool){
+            this.idx = idx;
+            this.st = st;
+            this.cool = cool;
+        }
+    }
+    
     public int solution(int[][] jobs) {
         
-        Arrays.sort(jobs, (a,b) -> a[0] - b[0]);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+        int[] endTime = new int[jobs.length];
         
+        //우선순위대로 각 작업을 정렬
+        PriorityQueue<Task> pq = new PriorityQueue<>((a,b) -> {
+            if(a.cool == b.cool){
+                if(a.st == b.st){
+                    return a.idx - b.idx;
+                }
+                return a.st - b.st;
+            }
+            return a.cool - b.cool;
+        });
+        
+        //작업이 시작되는 순으로 배열 정렬
+        ArrayList<Task> arr = new ArrayList<>();
+        for(int i = 0; i < jobs.length; i++){
+            arr.add(new Task(i,jobs[i][0],jobs[i][1]));
+        }
+        
+        arr.sort((a,b) -> a.st - b.st);
         
         int idx = 0;
         int cnt = 0;
-        int sum = 0;
-        int endTime = 0;
+        int time = 0;
         
-        while(cnt < jobs.length){
+        while(cnt < arr.size()){
             
-            while(idx < jobs.length && jobs[idx][0] <= endTime){
-                pq.add(jobs[idx]);
+            while(idx < arr.size() && arr.get(idx).st <= time){
+                pq.add(arr.get(idx));
                 idx++;
             }
             
             if(pq.isEmpty()){
-                endTime = jobs[idx][0];
-                continue;
+                time = arr.get(idx).st;
             }
-            
-            int[] task = pq.poll();
-            sum += task[1] + (endTime - task[0]);
-            endTime += task[1];
-            cnt ++;
+            else{
+                Task now = pq.poll();
+                time += now.cool;
+                endTime[now.idx] = time - now.st;
+                cnt++;
+            }
             
         }
         
-        return sum/jobs.length;
+        return Arrays.stream(endTime).sum() / endTime.length;
         
     }
 }
