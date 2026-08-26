@@ -1,21 +1,18 @@
 import java.util.*;
 
 class Solution {
-    
-    private static int MAX = 1_000_000_007;
-    
     public int solution(int n, int[] money) {
         
-        int[] dp = new int[n+1];
+        int[] dp = new int[n + 1];
         dp[0] = 1;
         
-        for(int m : money){
-            for(int j = m; j<=n; j++){
-                dp[j] += dp[j-m]%MAX;
+        for(int coin : money){
+            for(int i = coin; i <= n; i++){
+                dp[i] += dp[i - coin] % 1_000_000_007;
             }
         }
         
-        return dp[n]%1000000007;
+        return dp[n];
         
     }
 }
