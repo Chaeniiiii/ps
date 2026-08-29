@@ -1,71 +1,36 @@
 import java.util.*;
 
 class Solution {
-
-    private static class Score {
-        int idx;
-        int attd;
-        int evl;
-        int total;
-
-        private Score(int idx, int attd, int evl) {
-            this.idx = idx;
-            this.attd = attd;
-            this.evl = evl;
-            this.total = attd + evl;
-        }
-    }
-
     public int solution(int[][] scores) {
-
-        int n = scores.length;
-
-        if (n == 1) return 1;
-
-        ArrayList<Score> arr = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            arr.add(new Score(i, scores[i][0], scores[i][1]));
+        
+        int[][] newScores = new int[scores.length][3];
+        for(int i = 0; i < scores.length; i++){
+            int[] score = scores[i];
+            newScores[i] = new int[]{i,score[0],score[1]};
+                        
         }
-
-        arr.sort((a, b) -> {
-            if (b.attd == a.attd) return a.evl - b.evl;
-            return b.attd - a.attd;
+        Arrays.sort(newScores,(a,b) -> {
+            if(a[1] == b[1]) return a[2] - b[2];
+            return b[1] - a[1];
         });
-
-        ArrayList<Score> valid = new ArrayList<>();
-        int maxEvl = 0;
-
-        for (Score now : arr) {
-            if (now.evl < maxEvl) {
-                if (now.idx == 0) return -1; 
-                continue;
-            }
-            maxEvl = Math.max(maxEvl, now.evl);
-            valid.add(now);
-        }
-
-        valid.sort((a, b) -> b.total - a.total); 
-
+        
+        int maxE = 0;
         int rank = 1;
-        int count = 1;
-        int prevTotal = valid.get(0).total;
-
-        if (valid.get(0).idx == 0) return 1;
-
-        for (int i = 1; i < valid.size(); i++) {
-            Score now = valid.get(i);
-            if (now.total < prevTotal) {
-                rank += count;
-                count = 1;
-            } else {
-                count++;
+        int wanho = scores[0][0] + scores[0][1];
+        
+        for(int i = 0; i < newScores.length; i++){
+            int[] score = newScores[i];
+            //지금까지 나온 동료평가 점수보다 낮으면 탈락 (앞서 나온 사원의 근무 태도 점수는 현재 사원의 근무 태도 점수보다 높음 )
+            if(score[2] < maxE){
+                if(score[0] == 0) return -1;
             }
-
-            if (now.idx == 0) return rank;
-            prevTotal = now.total;
-            
+            else{
+                maxE = Math.max(maxE,score[2]);
+                if(wanho < score[1] + score[2]) rank++;
+            }
         }
-
-        return -1; 
+        
+        return rank;
+        
     }
 }
