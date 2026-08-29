@@ -3,21 +3,29 @@ import java.util.*;
 class Solution {
     public int solution(int[] a) {
         
-        Set<Integer> set = new HashSet<>();
+        int n = a.length;
+        int[] prev = new int[n];
+        int[] next = new int[n];
         
-        int min = Integer.MAX_VALUE;
-        int min2 = Integer.MAX_VALUE;
+        int min = a[0];
+        prev[0] = min;
         
-        for(int i = 0; i<a.length; i++){
-            min = Math.min(min,a[i]);
-            min2 = Math.min(min2,a[a.length-1-i]);
-            
-            set.add(min);
-            set.add(min2);
+        for(int i = 0; i < n; i++){
+            if(a[i] < min) min = a[i];
+            prev[i] = min;    
         }
-
-        return set.size();
         
+        min = a[n - 1];
+        for(int i = n - 1; i >= 0; i--){
+            if(a[i] < min) min = a[i];
+            next[i] = min;
+        }
         
+        int result = 0;
+        for(int i = 0; i < n; i++){
+            if(prev[i] == a[i] || next[i] == a[i]) result++;   
+        }
+        
+        return result;
     }
 }
