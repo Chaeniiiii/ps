@@ -1,5 +1,4 @@
-select distinct cch.car_id
-from CAR_RENTAL_COMPANY_CAR cch join CAR_RENTAL_COMPANY_RENTAL_HISTORY arcc on cch.car_id = arcc.car_id
-where cch.car_type = '세단' and
-    arcc.start_date like "2022-10%"
-order by cch.car_id desc;
+select distinct cc.car_id
+from CAR_RENTAL_COMPANY_CAR cc join CAR_RENTAL_COMPANY_RENTAL_HISTORY ch on cc.car_id = ch.car_id
+where cc.car_type = "세단"  and ch.start_date between "2022-10-01" and "2022-10-31"
+order by cc.car_id desc;
