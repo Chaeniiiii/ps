@@ -2,21 +2,27 @@ import java.util.*;
 
 class Solution {
 
-    private static ArrayList<Integer>[] arr;
-    private static int result;
+    private int result;
+    private int[] info;
+    private ArrayList<Integer>[] arr;
 
     public int solution(int[] info, int[][] edges) {
-        arr = new ArrayList[info.length];
-        for (int i = 0; i < info.length; i++) arr[i] = new ArrayList<>();
+        
+        this.info = info;
+        int n = info.length;
+        
+        arr = new ArrayList[n];
+        for (int i = 0; i < n; i++) arr[i] = new ArrayList<>();
         for (int[] edge : edges) arr[edge[0]].add(edge[1]);
 
         ArrayList<Integer> nextList = new ArrayList<>();
         nextList.add(0);  // 시작 노드
-        dfs(0, 0, 0, nextList, info);
+        dfs(0, 0, 0, nextList);
         return result;
     }
 
-    private void dfs(int st, int sheep, int wolf, ArrayList<Integer> nxt, int[] info) {
+    private void dfs(int st, int sheep, int wolf, ArrayList<Integer> nxt) {
+        
         if (info[st] == 0) sheep++;
         else wolf++;
 
@@ -29,7 +35,7 @@ class Solution {
         nextNode.addAll(arr[st]);
 
         for (int node : nextNode) {
-            dfs(node, sheep, wolf, nextNode, info);
+            dfs(node, sheep, wolf, nextNode);
         }
     }
 }
