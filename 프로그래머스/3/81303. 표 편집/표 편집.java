@@ -2,87 +2,77 @@ import java.util.*;
 
 class Solution {
     
-    private static class Node{
-        Node prev = null;
-        Node next = null;
-        boolean isDelete = false;
+    private class Node{
+        private Node head = null;
+        private Node tail = null;
+        private boolean isDelete;
     }
-    
-    public String solution(int n, int k, String[] cmds) {
+    public String solution(int n, int k, String[] cmd) {
         
-        Node[] nodes = new Node[n];
-        nodes[0] = new Node();
-        
+        Node[] nodeArr = new Node[n];
+        nodeArr[0] = new Node();
         for(int i = 1; i < n; i++){
-            nodes[i] = new Node();
-            nodes[i].prev = nodes[i-1];
-            nodes[i-1].next = nodes[i];
+            nodeArr[i] = new Node();
+            nodeArr[i].head = nodeArr[i-1];
+            nodeArr[i-1].tail = nodeArr[i];
         }
         
-        Deque<Node> deque = new ArrayDeque<>(); //삭제된 node
-        Node now = nodes[k];
+        Deque<Node> deque = new ArrayDeque<>();
+        Node now = nodeArr[k];
         
-        for(String cmd : cmds){
-            
-            char c = cmd.charAt(0);
-            int d = 0;
-            
-            if(c == 'U'){
-                d = Integer.parseInt(cmd.substring(2));
-                while(d-- > 0){
-                    now = now.prev;
+        for(int i = 0; i < cmd.length; i++){
+            char c = cmd[i].charAt(0);
+            if(c =='U'){
+                int x = Integer.parseInt(cmd[i].split(" ")[1]);
+                for(int j = 0; j < x; j++){
+                    if(now.head == null) break;
+                    else now = now.head;
                 }
             }
             else if(c == 'D'){
-                d = Integer.parseInt(cmd.substring(2));
-                while(d-- > 0){
-                    now = now.next;
+                int x = Integer.parseInt(cmd[i].split(" ")[1]);
+                for(int j = 0; j < x; j++){
+                    if(now.tail == null) break;
+                    else now = now.tail;
                 }
             }
             else if(c == 'C'){
-                
-                deque.add(now);
                 now.isDelete = true;
-                
-                Node prev = now.prev;
-                Node next = now.next;
-                
-                if(prev != null){
-                    prev.next = next;
+                deque.add(now);
+
+                Node head = now.head;
+                Node tail = now.tail;
+
+                if(head != null){
+                    head.tail = tail;
                 }
-                if(next != null){
-                    next.prev = prev;
-                    now = next;
+                if(tail != null){
+                    tail.head = head;
+                    now = tail;
                 }
                 else{
-                    now = prev;
+                    now = head;
                 }
             }
             else{
                 Node node = deque.pollLast();
-                Node prev = node.prev;
-                Node next = node.next;
-                
                 node.isDelete = false;
-                if(prev != null){
-                    prev.next = node;
-                }
-                if(next != null){
-                    next.prev = node;
-                }
-            }
-        }
 
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < n; i++){
-            if(nodes[i].isDelete){
-                sb.append('X');
-            }
-            else{
-                sb.append('O');
+                Node head = node.head;
+                Node tail = node.tail;
+
+                if(head != null) head.tail = node;
+                if(tail != null) tail.head = node;
             }
         }
         
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < n; i++){
+            if(nodeArr[i].isDelete) sb.append("X");
+            else sb.append("O");
+        }
+        
         return sb.toString();
+        
     }
 }
