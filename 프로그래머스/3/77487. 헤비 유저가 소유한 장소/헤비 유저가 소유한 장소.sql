@@ -1,8 +1,14 @@
-select p1.id, p1.name, p1.host_id
-from places p1 join (
-    select host_id, count(*) as 'cnt'
+with heavy as (
+    select host_id
     from places
     group by host_id
-) p2 on p1.host_id = p2.host_id
-where p2.cnt >= 2
-order by p1.id;
+    having count(*) >= 2
+)
+
+select id, name,host_id
+from places 
+where host_id in(
+    select host_id
+    from heavy
+) 
+order by id;
