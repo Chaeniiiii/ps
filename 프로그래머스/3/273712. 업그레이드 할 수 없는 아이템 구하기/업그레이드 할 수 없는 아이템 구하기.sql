@@ -1,8 +1,5 @@
-select item_id, item_name, rarity
-from item_info 
-where item_id not in (
-    select distinct parent_item_id
-    from item_tree
-    where parent_item_id is not null
-)
-order by item_id desc;
+
+select distinct(ii.item_id), ii.item_name, ii.rarity
+from ITEM_INFO ii left join ITEM_TREE it on ii.item_id = it.parent_item_id
+where it.item_id is null
+order by ii.item_id desc;
