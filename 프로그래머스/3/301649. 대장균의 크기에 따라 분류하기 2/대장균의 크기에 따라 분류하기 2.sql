@@ -1,12 +1,12 @@
-with ntile_info as (
-    select *, ntile(4) over(order by SIZE_OF_COLONY) pc
-    from ecoli_data
+with percent as(
+    select id, ntile(4) over(order by size_of_colony desc) pc
+    from ECOLI_DATA
 )
 
-select id,
-    case when pc = 4 then 'CRITICAL'
-         when pc = 3 then 'HIGH'
-         when pc = 2 then 'MEDIUM'
-         else 'LOW' end 'COLONY_NAME'
-from ntile_info
+select id, 
+    case when pc = 1 then 'CRITICAL'
+        when pc = 2 then 'HIGH'
+        when pc = 3 then 'MEDIUM'
+        else 'LOW' end as 'COLONY_NAME'
+from percent
 order by id;
