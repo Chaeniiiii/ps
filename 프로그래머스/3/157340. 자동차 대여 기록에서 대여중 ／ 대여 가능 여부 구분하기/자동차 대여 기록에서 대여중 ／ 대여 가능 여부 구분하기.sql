@@ -1,14 +1,15 @@
-with rent as (
-    select ccrh.car_id
-    from CAR_RENTAL_COMPANY_RENTAL_HISTORY ccrh
-    where ccrh.start_date <= '2022-10-16' and ccrh.end_date >= '2022-10-16'
+with rental as (
+    select car_id
+    from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+    where start_date <= '2022-10-16' and end_date >= '2022-10-16'
 )
 
-select distinct(ccrh.car_id),
-    case when ccrh.car_id in (
-        select car_id
-        from rent
-        ) then "대여중"
-        else "대여 가능" end as "AVAILABILITY"
-from CAR_RENTAL_COMPANY_RENTAL_HISTORY ccrh
-order by ccrh.car_id desc;
+select distinct(car_id),
+    case when car_id in (
+        select *
+        from rental
+    ) then '대여중'
+    else '대여 가능' end as 'availavility'
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+order by car_id desc;
+
