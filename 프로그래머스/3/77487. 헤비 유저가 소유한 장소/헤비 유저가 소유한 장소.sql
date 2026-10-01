@@ -1,14 +1,14 @@
-with heavy as (
+with havy as (
     select host_id
     from places
     group by host_id
     having count(*) >= 2
 )
 
-select id, name,host_id
-from places 
-where host_id in(
+select *
+from places
+where host_id in (
     select host_id
-    from heavy
-) 
+    from havy
+)
 order by id;
