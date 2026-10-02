@@ -3,27 +3,32 @@ import java.util.*;
 class Solution {
     public int solution(int[] priorities, int location) {
         
-        int[] newP = priorities.clone();
-        Arrays.sort(newP);
+        Deque<int[]> deque = new ArrayDeque<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b - a);
         
-        Deque<Integer> deque = new ArrayDeque<>();
         for(int i = 0; i < priorities.length; i++){
-            deque.add(i);
+            deque.add(new int[]{i,priorities[i]});
+            pq.add(priorities[i]);
         }
         
-        int pIdx = newP.length - 1, idx, cnt = 0;
+        int max = pq.poll();
+        int cnt = 1;
+        
         while(!deque.isEmpty()){
             
-            idx = deque.poll();
-            if(idx == location && newP[pIdx] == priorities[idx]) return cnt + 1;
-            if(newP[pIdx] > priorities[idx]) deque.add(idx);
-            else{
-                pIdx--;
-                cnt++;
+            int[] now = deque.poll();
+            if(now[1] == max){
+                if(now[0] == location) return cnt;
+                cnt ++ ;
+                max = pq.poll();
             }
+            else{
+                deque.add(now);
+            }
+            
         }
         
-        return cnt;
+        return priorities.length - 1;
         
     }
 }
