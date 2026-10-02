@@ -1,49 +1,43 @@
 import java.util.*;
 
 class Solution {
-    public String[] solution(String[] strArr) {
+    public String[] solution(String[] s) {
         
-        int n = strArr.length;
-        String[] result = new String[n];
-        
-        for(int i = 0; i<n; i++){
-            
-            String str = strArr[i];
-            
-            StringBuilder newStr = new StringBuilder();
-            StringBuilder sb = new StringBuilder();
-            
-            int cnt = 0;
-            
-            for (char c : str.toCharArray()) {
-                sb.append(c);
-                while (sb.length() >= 3 && sb.substring(sb.length() - 3).equals("110")) {
-                    cnt++;
-                    sb.delete(sb.length() - 3, sb.length());
-                }
-            }
-            
-            newStr.append(sb.toString());
-            
-            if(cnt == 0){
-                result[i] = str;
-                continue;
-            }
-            
-            int idx = newStr.toString().lastIndexOf("0");
-            if(idx == -1){
-                newStr.insert(0,"110".repeat(cnt));    
-            }
-            else{
-                newStr.insert(idx+1,"110".repeat(cnt));    
-            }
-            
-            result[i] = newStr.toString();
-            
-        }
-        
+        String[] result = new String[s.length];
+        for(int t = 0; t < s.length; t++){
+            result[t] = solve(s[t]);
+        }        
         
         return result;
         
     }
+    
+    private String solve(String str){
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder ooz = new StringBuilder();
+        
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            sb.append(c);
+            if(sb.length() > 2 && sb.charAt(sb.length()-3)=='1' && sb.charAt(sb.length()-2)=='1'  && sb.charAt(sb.length()-1)=='0') {
+                sb.delete(sb.length() - 3, sb.length());
+                ooz.append("110");
+            }
+        }
+        
+        if(ooz.length() > 0){
+            int idx = sb.lastIndexOf("0");
+            if(idx == -1){
+                sb.insert(0,ooz.toString());
+            }
+            else{
+                sb.insert(idx+1, ooz.toString());
+            }
+        }
+        
+        return sb.toString();
+        
+    }
+    
 }
