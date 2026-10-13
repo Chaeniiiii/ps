@@ -1,4 +1,5 @@
 import java.util.*;
+import java.math.*;
 
 class Solution {
     public int[] solution(String s) {
@@ -14,7 +15,8 @@ class Solution {
             result[1] += cnt;
             s = s.replace("0","");
             
-            s = toBinary(s.length());
+            BigInteger num = new BigInteger(String.valueOf(s.length()));
+            s = num.toString(2);
             result[0]++;
         }
         
@@ -22,18 +24,4 @@ class Solution {
         
     }
     
-    private String toBinary(int num){
-        
-        StringBuilder sb = new StringBuilder();
-        
-        while(num > 0){
-                 
-            sb.append(num % 2);
-            num /= 2;
-            
-        }
-        
-        return sb.reverse().toString();
-        
-    }
 }
