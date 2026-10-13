@@ -1,22 +1,39 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(String s) {
         
-        int cycle = 0 , cnt = 0;
-        
+        int[] result = new int[2];
         while(!s.equals("1")){
             
-            int nowLen = s.length();
-            s = s.replaceAll("0","");
-            int nextLen = s.length();
+            int cnt = 0;
+            for(int i = 0; i < s.length(); i++){
+                if(s.charAt(i) == '0') cnt++;
+            }
             
-            cnt += (nowLen - nextLen);
-            s = Integer.toBinaryString(nextLen);
+            result[1] += cnt;
+            s = s.replace("0","");
             
-            cycle ++;
-            
-        }        
+            s = toBinary(s.length());
+            result[0]++;
+        }
         
-        return new int[]{cycle,cnt};
+        return result;
+        
+    }
+    
+    private String toBinary(int num){
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while(num > 0){
+                 
+            sb.append(num % 2);
+            num /= 2;
+            
+        }
+        
+        return sb.reverse().toString();
         
     }
 }
