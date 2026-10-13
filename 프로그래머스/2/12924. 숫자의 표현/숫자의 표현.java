@@ -4,17 +4,8 @@ class Solution {
     public int solution(int n) {
         
         int result = 0;
-        int lt = 1, sum = 0;
-        
-        for(int rt = 1; rt <= n; rt++){
-            sum += rt;
-            
-            while(sum > n){
-                sum -= lt++;
-            }
-            
-            if(sum == n) result++;
-            
+        for(int i = 1; i <= n; i++){
+            if(n % i == 0 && i % 2 == 1) result++;            
         }
         
         return result;
