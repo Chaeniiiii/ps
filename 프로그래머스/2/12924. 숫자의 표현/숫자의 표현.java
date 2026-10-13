@@ -1,25 +1,19 @@
+import java.util.*;
+
 class Solution {
     public int solution(int n) {
         
-        int cnt = 1,lt = 1,rt = lt+1, addNum = lt;
-        
-        while(lt < rt && rt < n){
-
-            addNum += rt;
-            
-            if(addNum < n){
-                rt ++;
+        int result = 0;
+        for(int i = 1; i <= n; i++){
+            int cnt = 0;
+            for(int j = i; j <= n; j++){
+                cnt += j;
+                if(cnt == n) result++;
+                else if(cnt > n) break;
             }
-            else {
-                lt ++;
-                rt = lt+1;
-                if(addNum == n) cnt ++;
-                addNum = lt;
-            }
-            
         }
         
-        return cnt;
+        return result;
         
     }
 }
