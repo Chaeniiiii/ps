@@ -1,48 +1,52 @@
 import java.util.*;
 
 class Solution {
+    
+    private Map<String,Integer> origin;
+    
     public int solution(String[] want, int[] number, String[] discount) {
         
-        Map<String,Integer> pch = new HashMap<>();
+        origin = new HashMap<>();
+        for(int i = 0; i < want.length; i++){
+            origin.put(want[i],number[i]);
+        }
+        
+        int max = 10;
+        int lt = 0, rt = lt + max;
+        
         Map<String,Integer> map = new HashMap<>();
+        for(int i = lt; i < rt; i++){
+            map.put(discount[i],map.getOrDefault(discount[i],0)+1);    
+        }
         
         int cnt = 0;
-        for(int i = 0; i < want.length; i++){
-            pch.put(want[i],number[i]);
-            cnt+=number[i];
-        }
-        if(cnt > discount.length) return 0;
-        
-        for(int i = 0; i < Math.min(10,discount.length); i++){
-            map.put(discount[i],map.getOrDefault(discount[i],0)+1);
-        }
-        
-        int lt = 0, rt = Math.min(10,discount.length)-1, result = 0;
         while(rt < discount.length){
             
-            boolean check = true;
-            for(String key : pch.keySet()){
-                if(!map.containsKey(key) || map.get(key) < pch.get(key)){
-                    check = false;
-                    break;
-                }
-            }
+            if(isPossible(map)) cnt++;
             
-            if(check){
-                result++;
-            }
-            
-            map.put(discount[lt],map.get(discount[lt])-1);
-            if(map.get(discount[lt]) == 0) map.remove(discount[lt]);
+            String name = discount[lt];
+            if(map.get(name) == 1) map.remove(name);
+            else map.put(name,map.get(name) - 1);
+
             lt++;
+            map.put(discount[rt],map.getOrDefault(discount[rt],0)+1);
             rt++;
-            if(rt < discount.length) map.put(discount[rt],map.getOrDefault(discount[rt],0)+1);
-            
             
         }
+
+        if(isPossible(map)) cnt++;
+        return cnt;
         
-        return result;
+    }
+    
+    private boolean isPossible(Map<String,Integer> map){
+     
+        if(map.keySet().size() != origin.keySet().size()) return false;
+        for(String key : map.keySet()){
+            if(map.get(key) != origin.get(key)) return false;
+        }
         
+        return true;
         
     }
 }
