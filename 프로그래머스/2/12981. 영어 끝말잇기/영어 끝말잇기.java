@@ -1,34 +1,25 @@
 import java.util.*;
 
 class Solution {
+    
     public int[] solution(int n, String[] words) {
 
-        ArrayList<String> arr = new ArrayList<>();
+        char prev = words[0].charAt(words[0].length() - 1);
         
-        int cnt = 0;
-        char now = words[0].charAt(words[0].length()-1);
+        Map<String,Integer> map = new HashMap<>();
+        map.put(words[0],1);
         
-        while(cnt < words.length){
+        for(int i = 1; i < words.length; i++){
             
-            for(int i = 0; i<n; i++){
-                String str = words[i+cnt];
-                
-                if(cnt != 0 || i != 0) {
-                    if(now != str.charAt(0)) return new int[]{i+1,cnt/n + 1};
-                }
-                
-                if(arr.contains(str)) return new int[]{i+1,cnt/n + 1};
-                arr.add(str);
-                now = str.charAt(str.length()-1);
-                
+            String word = words[i];
+            if(map.getOrDefault(word,0) != 0 || prev != word.charAt(0)){
+                return new int[]{i % n + 1, i / n + 1};
             }
-                
-            cnt +=n;
-            
+            map.put(word,map.getOrDefault(word,0)+1);
+            prev = word.charAt(word.length() - 1);
         }
-            
-            
+        
         return new int[]{0,0};
+        
     }
-
 }
