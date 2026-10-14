@@ -1,27 +1,32 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[] arr) {
         
-        if(arr.length == 1) return arr[0];
-        
-        int numGcd = gcd(arr[0],arr[1]);
-        int cnt = (arr[0] * arr[1])/numGcd;
-        
-        for(int i = 2; i<arr.length; i++){
-            
-            numGcd = gcd(cnt,arr[i]);
-            cnt = (cnt * arr[i])/numGcd;
-            
-        }
-        
-        return cnt;
+        return getLCM(arr);
         
     }
     
-    private static int gcd(int a, int b){
+    private int getLCM(int[] arr){
+        if(arr.length == 1) return arr[0];
         
-        int result = a % b;
-        if(result == 0) return b;
-        return gcd(b,result);
+        int gcd = getGCD(arr[0],arr[1]);
+        int lcm = (arr[0] * arr[1]) / gcd;
+        
+        for(int i = 2; i < arr.length; i++){
+            gcd = getGCD(lcm,arr[i]);
+            lcm = (lcm * arr[i]) / gcd;
+        }
+        
+        return lcm;
+            
         
     }
-} 
+    
+    private int getGCD(int a, int b){
+        
+        if(a % b == 0) return b;
+        return getGCD(b, a % b);
+        
+    }
+}
