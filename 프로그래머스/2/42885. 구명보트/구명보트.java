@@ -12,7 +12,7 @@ class Solution {
             
         while(lt <= rt){
             
-            int sum = people[rt] + people[lt];
+            int sum = people[rt] + (lt == rt ? 0 : people[lt]);
             if(sum <= limit){
                 lt++;
             }
