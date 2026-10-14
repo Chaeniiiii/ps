@@ -1,25 +1,25 @@
 import java.util.*;
 
 class Solution {
-    
-    private static final int SIZE = 10000000;
-    
     public int solution(int k, int[] tangerine) {
         
-        int [] arr = new int[SIZE+1];
-        for(int i : tangerine) arr[i]++;
+        Map<Integer,Integer> map = new HashMap<>();
         
-        Arrays.sort(arr);
+        for(int i = 0; i < tangerine.length; i++){
+            int n = tangerine[i];
+            map.put(n,map.getOrDefault(n,0)+1);
+        }
+        
+        ArrayList<Integer> arr = new ArrayList<>(map.keySet());
+        arr.sort((a,b) -> map.get(b) - map.get(a));
         
         int cnt = 0;
+        int idx = 0;
+        while(idx < arr.size() && cnt < k){
+            cnt += map.get(arr.get(idx++));
+        }
         
-        for(int i = SIZE; i>=0; i--){
-            k-=arr[i];
-            cnt ++;
-            if(k <=0) break;
-        }        
-        
-        return cnt;
+        return idx;
         
     }
 }
