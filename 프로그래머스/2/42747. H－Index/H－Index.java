@@ -29,14 +29,12 @@ class Solution {
     
     private boolean isPossible(int h){
         
-        int max = 0, min = 0;
+        int cnt = 0;
         for(int i = 0; i < citations.length; i++){
-            if(citations[i] >= h) max++;
-            else if(citations[i] <= h) min++;
+            if(citations[i] >= h) cnt++;
         }
         
-        if(max >= h && min <= h) return true;
-        return false;
+        return cnt >= h;
         
     }
     
