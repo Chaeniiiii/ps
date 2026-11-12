@@ -11,9 +11,7 @@ class Solution {
             if(citations[i] >= h) return h;
         }
         
-        
         return 0;
-        
         
     }
 }
