@@ -3,24 +3,48 @@ import java.util.*;
 class Solution {
     public int solution(int cacheSize, String[] cities) {
         
-        if(cacheSize == 0) return cities.length * 5;
+        int n = cities.length;
+        if(cacheSize == 0) return n * 5;
         
-        ArrayList<String> arr = new ArrayList<>();
         int cnt = 0;
-        for(int i = 0; i < cities.length; i++){
-            String city = cities[i].toUpperCase();
-            if(arr.contains(city)){
-                cnt++;
-                arr.remove(arr.indexOf(city));
+        List<String> list = new LinkedList<>();
+        
+        for(int i = 0; i < n; i++){
+            String now = cities[i].toLowerCase();
+            
+            if(list.size() == 0){
+                cnt += 5;
+                list.add(now);
+                continue;
+            }
+            
+            if(list.size() == cacheSize){
+                if(list.contains(now)){
+                    list.remove(now);
+                    list.add(now);
+                    cnt++;
+                }
+                else{
+                    list.remove(list.get(0));
+                    list.add(now);
+                    cnt+=5;
+                }
             }
             else{
-                cnt+=5;
-                if(arr.size() == cacheSize) arr.remove(0);
+                if(list.contains(now)){
+                    list.remove(now);
+                    list.add(now);
+                    cnt++;
+                }
+                else{
+                    list.add(now);
+                    cnt+=5;
+                }
             }
-            arr.add(city);
         }
         
         return cnt;
+        
         
     }
 }
