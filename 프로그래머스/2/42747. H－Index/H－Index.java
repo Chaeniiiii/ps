@@ -1,19 +1,42 @@
 import java.util.*;
 
 class Solution {
+    
+    private int[] citations;
+    
     public int solution(int[] citations) {
         
-        int n = citations.length;
-        int hIdx;
+        this.citations = citations;
+        int lt = 0 , rt = citations.length, result = 0;
         
-        Arrays.sort(citations);
-        
-        for(int i = 0; i < n; i++){
-            hIdx = n - i;
-            if(hIdx <= citations[i]) return hIdx;
+        while(lt <= rt){
+            
+            int mid = (lt + rt) / 2;
+            
+            if(isPossible(mid)){
+                result = mid;
+                lt = mid + 1;
+            }
+            else{
+                rt = mid - 1;
+            }
+            
         }
         
-        return 0;
+        return result;
         
     }
+    
+    private boolean isPossible(int h){
+        
+        int max = 0;
+        for(int i = 0; i < citations.length; i++){
+            if(citations[i] >= h) max++;
+        }
+        
+        if(max >= h ) return true;
+        return false;
+        
+    }
+    
 }
