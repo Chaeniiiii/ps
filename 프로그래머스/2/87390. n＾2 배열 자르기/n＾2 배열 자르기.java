@@ -3,17 +3,14 @@ import java.util.*;
 class Solution {
     public int[] solution(int n, long left, long right) {
         
-        int lt = (int)left;
-        int rt = (int)right;
-        
-        int[] result = new int[rt-lt+1];
+        int size = (int)(right - left);
+        int[] result = new int[size + 1];
+
         for(long i = left; i <= right; i++){
+            long m = (i / n);
+            long d = (i % n);
             
-            int p = (int)(i / n);
-            int d = (int)(i % n);
-            
-            result[(int)(i-left)] = Math.max(p,d) + 1;
-            
+            result[(int)(i - left)] = (int)Math.max(m,d) + 1;
         }
         
         return result;
