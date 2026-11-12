@@ -18,28 +18,17 @@ class Solution {
                 continue;
             }
             
-            if(list.size() == cacheSize){
-                if(list.contains(now)){
-                    list.remove(now);
-                    list.add(now);
-                    cnt++;
-                }
-                else{
-                    list.remove(list.get(0));
-                    list.add(now);
-                    cnt+=5;
-                }
+            if(list.contains(now)){
+                list.remove(now);
+                list.add(now);
+                cnt++;
             }
             else{
-                if(list.contains(now)){
-                    list.remove(now);
-                    list.add(now);
-                    cnt++;
+                if(list.size() == cacheSize){
+                    list.remove(list.get(0));
                 }
-                else{
-                    list.add(now);
-                    cnt+=5;
-                }
+                list.add(now);
+                cnt+=5;
             }
         }
         
