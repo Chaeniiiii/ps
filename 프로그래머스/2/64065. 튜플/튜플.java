@@ -3,27 +3,25 @@ import java.util.*;
 class Solution {
     public int[] solution(String s) {
         
-        String[] tuple = s.split("},");
-        Map<Integer,Integer> map = new HashMap<>();
+        s = s.substring(1,s.length() - 2);
+        s = s.replace("{","");
         
-        for(String str : tuple){
-            
-            str = str.replace("{","").replace("}","");
-            String[] newStr = str.split(",");
-            
-            for(int i = 0; i < newStr.length; i++){
-                int num = Integer.parseInt(newStr[i]);
-                map.put(num,map.getOrDefault(num,0)+1);
+        String[] tuple = s.split("},");
+        Arrays.sort(tuple,(a,b) -> a.length() - b.length());
+        
+        ArrayList<Integer> arr = new ArrayList<>();
+        
+        for(int i = 0; i < tuple.length; i++){
+            String[] now = tuple[i].split(",");
+            for(int j = 0; j < now.length ; j++){
+                int n = Integer.parseInt(now[j]);
+                if(!arr.contains(n)) arr.add(n);
             }
-            
         }
         
-        ArrayList<Integer> keySet = new ArrayList<>(map.keySet());
-        keySet.sort((a,b) -> map.get(b) - map.get(a));
-        
-        int[] result = new int[keySet.size()];
-        for(int i = 0; i < keySet.size(); i++){
-            result[i] = keySet.get(i);
+        int[] result = new int[arr.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = arr.get(i);
         }
         
         return result;
