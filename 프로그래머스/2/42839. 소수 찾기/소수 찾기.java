@@ -2,55 +2,55 @@ import java.util.*;
 
 class Solution {
     
-    private static int cnt;
-    private static String numbers;
-    
-    private static Set<Integer> set;
-    private static boolean[] visited;
+    private int cnt;
+    private Map<Integer,Integer> map;
+    private boolean[] visited;
     
     public int solution(String numbers) {
         
         cnt = 0;
-        set = new HashSet<>();
-        this.numbers = numbers;
+        map = new HashMap<>();
         visited = new boolean[numbers.length()];
         
-        dfs(0,new StringBuilder());
+        dfs(0,numbers, new StringBuilder());
         
         return cnt;
         
     }
     
-    private static void dfs(int dep, StringBuilder sb){
+    private void dfs(int dep, String numbers, StringBuilder sb){
         
-        if(dep > numbers.length()) return;
+        if(sb.length() != 0 && map.getOrDefault(Integer.parseInt(sb.toString()),0) == 0){
+            int num = Integer.parseInt(sb.toString());
+            map.put(num,1);
+            if(isPrime(Integer.parseInt(sb.toString()))) cnt++;
+        }
         
-        if(sb.length() > 0 && isPrime(sb.toString())) cnt++;
+        if(dep == numbers.length()){
+            return;    
+        }
         
         for(int i = 0; i < numbers.length(); i++){
             if(visited[i]) continue;
             visited[i] = true;
             sb.append(numbers.charAt(i));
-            dfs(dep+1,sb);
-            sb.deleteCharAt(sb.length()-1);
+            dfs(dep+1,numbers,sb);
+            sb.deleteCharAt(sb.length() - 1);
             visited[i] = false;
         }
         
     }
     
-    private static boolean isPrime(String str){
+    private boolean isPrime(int num){
         
-        int num = Integer.parseInt(str);
-        if(set.contains(num) || num == 0 || num == 1) return false;
-        set.add(num);
+        if(num < 2) return false;
         
-        for(int i = 2; i <= (int)Math.sqrt(num); i++){
+        for(int i = 2; i <= Math.sqrt(num); i++){
             if(num % i == 0) return false;
         }
         
         return true;
         
     }
-    
     
 }
