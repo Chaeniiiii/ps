@@ -2,23 +2,28 @@ import java.util.*;
 
 class Solution {
     
+    private int result, target;
+        
     public int solution(int[] numbers, int target) {
         
-        return dfs(numbers, 0,0,target);
-            
-    }
-    
-    private static int dfs(int[] numbers, int idx, int cnt, int target){
+        result = 0;
+        this.target = target;
         
-        int result = 0;
-        
-        if(idx == numbers.length) return result;
-        if(cnt == target) result ++;
-        
-        result += dfs(numbers, idx+1, cnt+numbers[idx], target);
-        result += dfs(numbers, idx+1, cnt-numbers[idx], target);
-        
+        dfs(0, numbers,0);
         return result;
         
     }
+    
+    private void dfs(int dep, int[] numbers, int cnt){
+        
+        if(dep == numbers.length){
+            if(cnt == target) result++;
+            return ;
+        }
+        
+        dfs(dep+1, numbers, cnt + numbers[dep]);
+        dfs(dep+1, numbers, cnt - numbers[dep]);
+        
+    }
+    
 }
