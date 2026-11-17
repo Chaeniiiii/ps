@@ -7,9 +7,7 @@ class Solution {
         Deque<Integer> deque = new ArrayDeque<>();
         
         for(int i = 0; i < prices.length; i++){
-            
-            int now = prices[i];
-            while(!deque.isEmpty() && prices[deque.peekLast()] > now){
+            while(!deque.isEmpty() && prices[deque.peekLast()] > prices[i]){
                 int idx = deque.pollLast();
                 result[idx] = i - idx;
             }
