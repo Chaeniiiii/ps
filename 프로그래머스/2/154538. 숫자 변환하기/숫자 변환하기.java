@@ -2,26 +2,52 @@ import java.util.*;
 
 class Solution {
     
-    private static int result;
+    private int result;
+    private boolean[] visited;
     
     public int solution(int x, int y, int n) {
-        result = Integer.MAX_VALUE;
-        dfs(x,y,n,0);
         
-        return result == Integer.MAX_VALUE ? -1 : result;
+        visited = new boolean[y+1];
+        result = Integer.MAX_VALUE;
+        return bfs(x,y,n);
+        
     }
     
-    private static void dfs(int x, int y, int n, int cnt){
+    private int bfs(int x, int y, int n){
         
-        if(x > y) return;
-        if(x == y){
-            result = Math.min(result,cnt);
-            return;
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.add(x);
+        
+        int cnt = 0;
+        visited[x] = true;
+            
+        while(!deque.isEmpty()){
+            
+            int size = deque.size();
+            for(int i = 0; i < size; i++){
+                int now = deque.poll();
+                
+                if(now == y) return cnt;
+                if(now > y) continue;
+                
+                if(now + n <= y && !visited[now+n]){
+                    visited[now+n] = true;
+                    deque.add(now + n);
+                }
+                if(now * 3 <= y && !visited[now*3]){
+                    visited[now*3] = true;
+                    deque.add(now * 3);
+                }
+                if(now * 2 <= y && !visited[now*2]){
+                    visited[now*2] = true;
+                    deque.add(now * 2);
+                }
+            }
+            
+            cnt++;
+            
         }
         
-        dfs(x*2,y,n,cnt+1);
-        dfs(x*3,y,n,cnt+1);
-        dfs(x+n,y,n,cnt+1);
-        
+        return -1;
     }
 }
