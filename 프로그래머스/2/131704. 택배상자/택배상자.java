@@ -3,23 +3,18 @@ import java.util.*;
 class Solution {
     public int solution(int[] order) {
         
+        int idx = 0;
         Deque<Integer> deque = new ArrayDeque<>();
-        int num = 1, cnt = 0;
-            
-        for(int i = 0 ; i < order.length; i++){
-            while(num <= order[i]){
-                deque.add(num);
-                num++;
+        
+        for(int i = 1; i <= order.length; i++){
+            deque.addFirst(i);
+            while(!deque.isEmpty() && deque.peek() == order[idx]){
+                idx++;
+                deque.poll();
             }
-            if(deque.isEmpty()) break;
-            if(deque.peekLast() == order[i]){
-                deque.pollLast();
-                cnt++;
-            }
-            else if(deque.peekLast() > order[i]) break;
         }
-            
-        return cnt;
+        
+        return idx;
         
     }
 }
