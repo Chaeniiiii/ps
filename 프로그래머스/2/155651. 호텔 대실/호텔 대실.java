@@ -17,15 +17,12 @@ class Solution {
         
         Arrays.sort(time,(a,b) -> a[0] - b[0]);
         for(int i = 0; i < time.length; i++){
-            if(pq.isEmpty()) pq.add(time[i][1]);
-            else if(pq.peek() > time[i][0]) pq.add(time[i][1]);
-            else if(pq.peek() + 10 <= time[i][0]){
+            
+            if(!pq.isEmpty() && pq.peek() + 10 <= time[i][0]){
                 pq.poll();
-                pq.add(time[i][1]);
             }
-            else{
-                pq.add(time[i][1]);
-            }
+            
+            pq.add(time[i][1]);
         }
         
         return pq.size();
