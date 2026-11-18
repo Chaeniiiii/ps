@@ -2,67 +2,41 @@ import java.util.*;
 
 class Solution {
     
-    private static int n;
-    private static int[][] arr;
-    
-    private static class Pos{
-
-        int x, y;
-        
-        private Pos(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-            
-    }
+    private int[] num;
     
     public int[] solution(int[][] arr) {
         
-        this.arr = arr;
-        n = arr.length;
-        int[] result = new int[2];
+        int size = arr.length;
+        num = new int[2];
         
-        Deque<Pos> deque = new ArrayDeque<>();
-        deque.add(new Pos(0,0));
+        quad(0,0,size,arr);
+        return num;
+    }
+    
+    private void quad(int x, int y, int size, int[][] arr){
         
-        while(!deque.isEmpty()){
-            
-            int size = deque.size();
-            
-            for(int t = 0; t < size; t++){
-                
-                Pos pos = deque.poll();
-                
-                if(div(pos)){
-                    result[arr[pos.x][pos.y]]++;
-                }
-                else{
-                    for(int i = pos.x; i < pos.x + n; i += n/2){
-                        for(int j = pos.y ; j < pos.y + n; j += n/2){
-                            deque.add(new Pos(i,j));
-                        }
-                    }
-                }
-            }
-            
-            n /= 2;
+        if(check(x,y,size,arr)){
+            num[arr[x][y]]++;
+            return;
         }
         
-        return result;
+        quad(x,y,size/2,arr);
+        quad(x + size / 2,y,size/2,arr);
+        quad(x,y + size / 2,size/2,arr);
+        quad(x+ size / 2,y+ size / 2,size/2,arr);
         
     }
     
-    private static boolean div(Pos pos){
+    private boolean check(int x, int y, int size, int[][]arr){
         
-        int origin = arr[pos.x][pos.y];
-        
-        for(int i = pos.x; i < pos.x + n; i++){
-            for(int j = pos.y; j < pos.y + n; j++){
-                if(arr[i][j] != origin) return false;
+        for(int i = x; i < x + size; i++){
+            for(int j = y; j < y + size; j++){
+                if(arr[i][j] != arr[x][y]) return false;
             }
         }
         
         return true;
         
     }
+    
 }
