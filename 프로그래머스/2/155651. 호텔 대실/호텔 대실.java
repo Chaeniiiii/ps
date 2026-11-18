@@ -3,49 +3,41 @@ import java.util.*;
 class Solution {
     public int solution(String[][] book_time) {
         
-        ArrayList<int[]> arr = new ArrayList<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> a - b);
         
-        for(String[] book : book_time){
+        int n = book_time.length;
+        int[][] time = new int[n][2];
+        for(int i = 0; i < n; i++){
+            int st = getTime(book_time[i][0]);
+            int en = getTime(book_time[i][1]);
             
-            int st = convert(book[0]);
-            int en = convert(book[1]) + 10;
-            
-            arr.add(new int[]{st,0});
-            arr.add(new int[]{en,1});
-            
+            time[i][0] = st;
+            time[i][1] = en;
         }
         
-        arr.sort((a,b) -> {
-            if(a[0] == b[0]){
-                return b[1]-a[1];
+        Arrays.sort(time,(a,b) -> a[0] - b[0]);
+        for(int i = 0; i < time.length; i++){
+            if(pq.isEmpty()) pq.add(time[i][1]);
+            else if(pq.peek() > time[i][0]) pq.add(time[i][1]);
+            else if(pq.peek() + 10 <= time[i][0]){
+                pq.poll();
+                pq.add(time[i][1]);
             }
-            return a[0]-b[0];
-        });
-        
-        int cnt = 0;
-        int result = 0;
-        
-        for(int[] info : arr){
-            if(info[1] == 0) cnt++;
             else{
-                result = Math.max(result,cnt);
-                cnt--;
+                pq.add(time[i][1]);
             }
         }
         
-        return result;
-        
+        return pq.size();
     }
     
-    private static int convert(String str){
+    private int getTime(String t){
         
-        String[] time = str.split(":");
-        
-        int h = Integer.parseInt(time[0]);
+        String[] time = t.split(":");
+        int h = Integer.parseInt(time[0]) * 60;
         int m = Integer.parseInt(time[1]);
         
-        return h*60+m;
-        
+        return h + m;
     }
     
 }
