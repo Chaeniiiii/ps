@@ -3,15 +3,21 @@ import java.util.*;
 class Solution {
     public String solution(String s) {
         
-        char[] str = s.toLowerCase().toCharArray();
         StringBuilder result = new StringBuilder();
-        
-        boolean flag = true;
-        
-        for(char c : str){
-            result.append(flag ? Character.toUpperCase(c) : c);
-            flag = (c == ' ' ? true : false);
-        }    
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if(Character.isAlphabetic(c)) c = Character.toLowerCase(c);
+            sb.append(c);
+            
+            if(c == ' ' || i == s.length() - 1){
+                char nxtc = sb.charAt(0);
+                if(Character.isAlphabetic(nxtc)) sb.setCharAt(0,Character.toUpperCase(nxtc));
+                result.append(sb.toString());
+                sb = new StringBuilder();
+                continue;
+            }
+        }
         
         return result.toString();
         
