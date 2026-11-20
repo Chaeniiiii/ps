@@ -1,29 +1,25 @@
 import java.util.*;
 
 class Solution {
-    public int solution(int[] people, int limit) {
+    public int solution(int[] people, int k) {
         
         Arrays.sort(people);
+        Deque<Integer> deque = new ArrayDeque<>();
+        for(int i = 0; i < people.length; i++){
+            deque.add(people[i]);
+        }
         
-        int len = people.length;
-        
-        int lt = 0, rt = len - 1;
-        int result = 0;
+        int w = 0, result = 0;
+        while(!deque.isEmpty()){
+            w += deque.pollLast();
+            if(!deque.isEmpty() && deque.peek() + w <= k) deque.poll();
             
-        while(lt <= rt){
-            
-            int sum = people[rt] + (lt == rt ? 0 : people[lt]);
-            if(sum <= limit){
-                lt++;
-            }
-            
-            rt--;
+            w = 0;    
             result++;
-            
         }
         
         return result;
         
-         
+        
     }
 }
